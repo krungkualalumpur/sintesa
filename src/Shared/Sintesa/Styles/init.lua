@@ -17,27 +17,14 @@ type CanBeState<T> = ColdFusion8.CanBeState<T>
 --references
 --local functions
 --class
-local button = {}
+local Styles = {}
 
-button.ColdFusion = {}
+Styles.ColdFusion = {}
 
-function button.ColdFusion.new(
-    text : CanBeState<string>
-
-)
-    local _maid = Maid.new()
-
-    local _fuse = ColdFusion8.fuse(_maid)
-    local _new = _fuse.new
-    local _import = _fuse.import 
-
-    local textState = _import(text, "")
+function Styles.ColdFusion.new(
     
-
-    local out  = _new("TextButton")({
-        Text = text
-    })
-    return out
+)
+    
 end
 
-return button
+return Styles

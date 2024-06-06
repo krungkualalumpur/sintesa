@@ -1,0 +1,30 @@
+{
+  "name": "sintesa",
+  "tree": {
+    "$className": "DataModel",
+
+    "ReplicatedStorage": {
+      "Shared": {
+        "$path": "src/Shared"
+      },
+      "Client": {
+        "$path": "src/Client"
+      },
+      "Packages": {
+        "$path": "Packages"
+      }
+    },
+
+    "ServerScriptService": {
+      "Server": {
+        "$path": "src/Server"
+      }
+    },
+
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+          "$path": "src/StarterPlayerScripts"
+      }
+    }
+  }
+}

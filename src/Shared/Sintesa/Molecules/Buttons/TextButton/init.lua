@@ -22,7 +22,9 @@ local button = {}
 button.ColdFusion = {}
 
 function button.ColdFusion.new(
-    text : CanBeState<string>
+    text : CanBeState<string>,
+    colorData : ColorData,
+    elevationData : ElevationData
 
 )
     local _maid = Maid.new()

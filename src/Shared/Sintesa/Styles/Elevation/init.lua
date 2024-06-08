@@ -1,0 +1,4 @@
+--!strict
+--services
+--types
+--local functions

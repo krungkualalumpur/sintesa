@@ -4,18 +4,24 @@
 --packages
 --modules
 --types
-export type CustomEnum <N> = {
+type CustomEnum <N> = {
 	Name : N,
 	GetEnumItems : (self : CustomEnum<N>) -> {[number] : CustomEnumItem<CustomEnum<N>, string>}
 }
 
-export type CustomEnumItem <E, N> = {
-	Name : string,
+type CustomEnumItem <E, N> = {
+	Name : N,
 	Value : number,
 	EnumType : E
 }
-type EasingsEnum = CustomEnum<"Easings">
-export type Easings = CustomEnumItem<EasingsEnum, string>
+type ColorRoleEnum = CustomEnum<"ColorRole">
+export type ColorRole = CustomEnumItem<ColorRoleEnum, string>
+
+type ElevationRestingEnum = CustomEnum<"ElevationResting">
+export type ElevationResting = CustomEnumItem<ElevationRestingEnum, string>
+
+type EasingEnum = CustomEnum<"Easing">
+export type Easing = CustomEnumItem<EasingEnum, string>
 
 type TransitionDurationEnum = CustomEnum<"TransitionDuration">
 export type TransitionDuration = CustomEnumItem<TransitionDurationEnum, string>
@@ -31,14 +37,71 @@ export type TypographyStyle = CustomEnumItem<TypographyStyleEnum, string>
 
 export type CustomEnums = {
 
-	Easings : 	{		
-		Emphasized : CustomEnumItem <EasingsEnum, "Emphasized">,
-		EmphasizedDecelerate : CustomEnumItem <EasingsEnum, "EmphasizedDecelerate">,
-		EphasizedAccelerate : CustomEnumItem <EasingsEnum, "EphasizedAccelerate">,
-		Standard : CustomEnumItem <EasingsEnum, "Standard">,
-		StandardDecelerate : CustomEnumItem <EasingsEnum, "StandardDecelerate">,
-		StandardAccelerate : CustomEnumItem <EasingsEnum, "StandardAccelerate">,
-	} & EasingsEnum,
+	ColorRole : 	{		
+		Primary : CustomEnumItem <ColorRoleEnum, "Primary">,
+		Secondary : CustomEnumItem <ColorRoleEnum, "Secondary">,
+		Tertiary : CustomEnumItem <ColorRoleEnum, "Tertiary">,
+		Error : CustomEnumItem <ColorRoleEnum, "Error">,
+		OnPrimary : CustomEnumItem <ColorRoleEnum, "OnPrimary">,
+		OnSecondary : CustomEnumItem <ColorRoleEnum, "OnSecondary">,
+		OnTertiary : CustomEnumItem <ColorRoleEnum, "OnTertiary">,
+		OnError : CustomEnumItem <ColorRoleEnum, "OnError">,
+		PrimaryContainer : CustomEnumItem <ColorRoleEnum, "PrimaryContainer">,
+		SecondaryContainer : CustomEnumItem <ColorRoleEnum, "SecondaryContainer">,
+		TertiaryContainer : CustomEnumItem <ColorRoleEnum, "TertiaryContainer">,
+		ErrorContainer : CustomEnumItem <ColorRoleEnum, "ErrorContainer">,
+		OnPrimaryContainer : CustomEnumItem <ColorRoleEnum, "OnPrimaryContainer">,
+		OnSecondaryContainer : CustomEnumItem <ColorRoleEnum, "OnSecondaryContainer">,
+		OnTertiaryContainer : CustomEnumItem <ColorRoleEnum, "OnTertiaryContainer">,
+		OnErrorContainer : CustomEnumItem <ColorRoleEnum, "OnErrorContainer">,
+		PrimaryFixed : CustomEnumItem <ColorRoleEnum, "PrimaryFixed">,
+		PrimaryFixedDim : CustomEnumItem <ColorRoleEnum, "PrimaryFixedDim">,
+		SecondaryFixed : CustomEnumItem <ColorRoleEnum, "SecondaryFixed">,
+		SecondaryFixedDim : CustomEnumItem <ColorRoleEnum, "SecondaryFixedDim">,
+		TertiaryFixed : CustomEnumItem <ColorRoleEnum, "TertiaryFixed">,
+		TertiaryFixedDim : CustomEnumItem <ColorRoleEnum, "TertiaryFixedDim">,
+		OnPrimaryFixed : CustomEnumItem <ColorRoleEnum, "OnPrimaryFixed">,
+		OnSecondaryFixed : CustomEnumItem <ColorRoleEnum, "OnSecondaryFixed">,
+		OnTertiaryFixed : CustomEnumItem <ColorRoleEnum, "OnTertiaryFixed">,
+		OnPrimaryFixedVariant : CustomEnumItem <ColorRoleEnum, "OnPrimaryFixedVariant">,
+		OnSecondaryFixedVariant : CustomEnumItem <ColorRoleEnum, "OnSecondaryFixedVariant">,
+		OnTertiaryFixedVariant : CustomEnumItem <ColorRoleEnum, "OnTertiaryFixedVariant">,
+		SurfaceDim : CustomEnumItem <ColorRoleEnum, "SurfaceDim">,
+		Surface : CustomEnumItem <ColorRoleEnum, "Surface">,
+		SurfaceBright : CustomEnumItem <ColorRoleEnum, "SurfaceBright">,
+		InverseSurface : CustomEnumItem <ColorRoleEnum, "InverseSurface">,
+		InverseOnSurface : CustomEnumItem <ColorRoleEnum, "InverseOnSurface">,
+		SurfaceContainerLowest : CustomEnumItem <ColorRoleEnum, "SurfaceContainerLowest">,
+		SurfaceContainerLow : CustomEnumItem <ColorRoleEnum, "SurfaceContainerLow">,
+		SurfaceContainer : CustomEnumItem <ColorRoleEnum, "SurfaceContainer">,
+		SurfaceContainerHigh : CustomEnumItem <ColorRoleEnum, "SurfaceContainerHigh">,
+		SurfaceContainerHighest : CustomEnumItem <ColorRoleEnum, "SurfaceContainerHighest">,
+		InversePrimary : CustomEnumItem <ColorRoleEnum, "InversePrimary">,
+		OnSurface : CustomEnumItem <ColorRoleEnum, "OnSurface">,
+		OnSurfaceVariant : CustomEnumItem <ColorRoleEnum, "OnSurfaceVariant">,
+		Outline : CustomEnumItem <ColorRoleEnum, "Outline">,
+		OutlineVariant : CustomEnumItem <ColorRoleEnum, "OutlineVariant">,
+		Scrim : CustomEnumItem <ColorRoleEnum, "Scrim">,
+		Shadow : CustomEnumItem <ColorRoleEnum, "Shadow">,
+	} & ColorRoleEnum,
+
+	ElevationResting : 	{		
+		Level0 : CustomEnumItem <ElevationRestingEnum, "Level0">,
+		Level1 : CustomEnumItem <ElevationRestingEnum, "Level1">,
+		Level2 : CustomEnumItem <ElevationRestingEnum, "Level2">,
+		Level3 : CustomEnumItem <ElevationRestingEnum, "Level3">,
+		Level4 : CustomEnumItem <ElevationRestingEnum, "Level4">,
+		Level5 : CustomEnumItem <ElevationRestingEnum, "Level5">,
+	} & ElevationRestingEnum,
+
+	Easing : 	{		
+		Emphasized : CustomEnumItem <EasingEnum, "Emphasized">,
+		EmphasizedDecelerate : CustomEnumItem <EasingEnum, "EmphasizedDecelerate">,
+		EphasizedAccelerate : CustomEnumItem <EasingEnum, "EphasizedAccelerate">,
+		Standard : CustomEnumItem <EasingEnum, "Standard">,
+		StandardDecelerate : CustomEnumItem <EasingEnum, "StandardDecelerate">,
+		StandardAccelerate : CustomEnumItem <EasingEnum, "StandardAccelerate">,
+	} & EasingEnum,
 
 	TransitionDuration : 	{		
 		Short1 : CustomEnumItem <TransitionDurationEnum, "Short1">,
@@ -96,8 +159,8 @@ export type CustomEnums = {
 --local function
 
 
-local Easings = {
-	Name = "Easings",
+local ColorRole = {
+	Name = "ColorRole",
 	GetEnumItems = function(self)
 		local t = {}
 		for _,v in pairs(self) do
@@ -109,40 +172,372 @@ local Easings = {
 	end,
 }
 
-Easings.Emphasized = {
+ColorRole.Primary = {
+	Name = "Primary",
+	Value = 1,
+	EnumType = ColorRole
+}
+
+ColorRole.Secondary = {
+	Name = "Secondary",
+	Value = 2,
+	EnumType = ColorRole
+}
+
+ColorRole.Tertiary = {
+	Name = "Tertiary",
+	Value = 3,
+	EnumType = ColorRole
+}
+
+ColorRole.Error = {
+	Name = "Error",
+	Value = 4,
+	EnumType = ColorRole
+}
+
+ColorRole.OnPrimary = {
+	Name = "OnPrimary",
+	Value = 5,
+	EnumType = ColorRole
+}
+
+ColorRole.OnSecondary = {
+	Name = "OnSecondary",
+	Value = 6,
+	EnumType = ColorRole
+}
+
+ColorRole.OnTertiary = {
+	Name = "OnTertiary",
+	Value = 7,
+	EnumType = ColorRole
+}
+
+ColorRole.OnError = {
+	Name = "OnError",
+	Value = 8,
+	EnumType = ColorRole
+}
+
+ColorRole.PrimaryContainer = {
+	Name = "PrimaryContainer",
+	Value = 9,
+	EnumType = ColorRole
+}
+
+ColorRole.SecondaryContainer = {
+	Name = "SecondaryContainer",
+	Value = 10,
+	EnumType = ColorRole
+}
+
+ColorRole.TertiaryContainer = {
+	Name = "TertiaryContainer",
+	Value = 11,
+	EnumType = ColorRole
+}
+
+ColorRole.ErrorContainer = {
+	Name = "ErrorContainer",
+	Value = 12,
+	EnumType = ColorRole
+}
+
+ColorRole.OnPrimaryContainer = {
+	Name = "OnPrimaryContainer",
+	Value = 13,
+	EnumType = ColorRole
+}
+
+ColorRole.OnSecondaryContainer = {
+	Name = "OnSecondaryContainer",
+	Value = 14,
+	EnumType = ColorRole
+}
+
+ColorRole.OnTertiaryContainer = {
+	Name = "OnTertiaryContainer",
+	Value = 15,
+	EnumType = ColorRole
+}
+
+ColorRole.OnErrorContainer = {
+	Name = "OnErrorContainer",
+	Value = 16,
+	EnumType = ColorRole
+}
+
+ColorRole.PrimaryFixed = {
+	Name = "PrimaryFixed",
+	Value = 17,
+	EnumType = ColorRole
+}
+
+ColorRole.PrimaryFixedDim = {
+	Name = "PrimaryFixedDim",
+	Value = 18,
+	EnumType = ColorRole
+}
+
+ColorRole.SecondaryFixed = {
+	Name = "SecondaryFixed",
+	Value = 19,
+	EnumType = ColorRole
+}
+
+ColorRole.SecondaryFixedDim = {
+	Name = "SecondaryFixedDim",
+	Value = 20,
+	EnumType = ColorRole
+}
+
+ColorRole.TertiaryFixed = {
+	Name = "TertiaryFixed",
+	Value = 21,
+	EnumType = ColorRole
+}
+
+ColorRole.TertiaryFixedDim = {
+	Name = "TertiaryFixedDim",
+	Value = 22,
+	EnumType = ColorRole
+}
+
+ColorRole.OnPrimaryFixed = {
+	Name = "OnPrimaryFixed",
+	Value = 23,
+	EnumType = ColorRole
+}
+
+ColorRole.OnSecondaryFixed = {
+	Name = "OnSecondaryFixed",
+	Value = 24,
+	EnumType = ColorRole
+}
+
+ColorRole.OnTertiaryFixed = {
+	Name = "OnTertiaryFixed",
+	Value = 25,
+	EnumType = ColorRole
+}
+
+ColorRole.OnPrimaryFixedVariant = {
+	Name = "OnPrimaryFixedVariant",
+	Value = 26,
+	EnumType = ColorRole
+}
+
+ColorRole.OnSecondaryFixedVariant = {
+	Name = "OnSecondaryFixedVariant",
+	Value = 27,
+	EnumType = ColorRole
+}
+
+ColorRole.OnTertiaryFixedVariant = {
+	Name = "OnTertiaryFixedVariant",
+	Value = 28,
+	EnumType = ColorRole
+}
+
+ColorRole.SurfaceDim = {
+	Name = "SurfaceDim",
+	Value = 29,
+	EnumType = ColorRole
+}
+
+ColorRole.Surface = {
+	Name = "Surface",
+	Value = 30,
+	EnumType = ColorRole
+}
+
+ColorRole.SurfaceBright = {
+	Name = "SurfaceBright",
+	Value = 31,
+	EnumType = ColorRole
+}
+
+ColorRole.InverseSurface = {
+	Name = "InverseSurface",
+	Value = 32,
+	EnumType = ColorRole
+}
+
+ColorRole.InverseOnSurface = {
+	Name = "InverseOnSurface",
+	Value = 33,
+	EnumType = ColorRole
+}
+
+ColorRole.SurfaceContainerLowest = {
+	Name = "SurfaceContainerLowest",
+	Value = 34,
+	EnumType = ColorRole
+}
+
+ColorRole.SurfaceContainerLow = {
+	Name = "SurfaceContainerLow",
+	Value = 35,
+	EnumType = ColorRole
+}
+
+ColorRole.SurfaceContainer = {
+	Name = "SurfaceContainer",
+	Value = 36,
+	EnumType = ColorRole
+}
+
+ColorRole.SurfaceContainerHigh = {
+	Name = "SurfaceContainerHigh",
+	Value = 37,
+	EnumType = ColorRole
+}
+
+ColorRole.SurfaceContainerHighest = {
+	Name = "SurfaceContainerHighest",
+	Value = 38,
+	EnumType = ColorRole
+}
+
+ColorRole.InversePrimary = {
+	Name = "InversePrimary",
+	Value = 39,
+	EnumType = ColorRole
+}
+
+ColorRole.OnSurface = {
+	Name = "OnSurface",
+	Value = 40,
+	EnumType = ColorRole
+}
+
+ColorRole.OnSurfaceVariant = {
+	Name = "OnSurfaceVariant",
+	Value = 41,
+	EnumType = ColorRole
+}
+
+ColorRole.Outline = {
+	Name = "Outline",
+	Value = 42,
+	EnumType = ColorRole
+}
+
+ColorRole.OutlineVariant = {
+	Name = "OutlineVariant",
+	Value = 43,
+	EnumType = ColorRole
+}
+
+ColorRole.Scrim = {
+	Name = "Scrim",
+	Value = 44,
+	EnumType = ColorRole
+}
+
+ColorRole.Shadow = {
+	Name = "Shadow",
+	Value = 45,
+	EnumType = ColorRole
+}
+
+local ElevationResting = {
+	Name = "ElevationResting",
+	GetEnumItems = function(self)
+		local t = {}
+		for _,v in pairs(self) do
+			if type(v) == "table" then 
+				 table.insert(t, v)  
+			end
+		end
+		return t
+	end,
+}
+
+ElevationResting.Level0 = {
+	Name = "Level0",
+	Value = 1,
+	EnumType = ElevationResting
+}
+
+ElevationResting.Level1 = {
+	Name = "Level1",
+	Value = 2,
+	EnumType = ElevationResting
+}
+
+ElevationResting.Level2 = {
+	Name = "Level2",
+	Value = 3,
+	EnumType = ElevationResting
+}
+
+ElevationResting.Level3 = {
+	Name = "Level3",
+	Value = 4,
+	EnumType = ElevationResting
+}
+
+ElevationResting.Level4 = {
+	Name = "Level4",
+	Value = 5,
+	EnumType = ElevationResting
+}
+
+ElevationResting.Level5 = {
+	Name = "Level5",
+	Value = 6,
+	EnumType = ElevationResting
+}
+
+local Easing = {
+	Name = "Easing",
+	GetEnumItems = function(self)
+		local t = {}
+		for _,v in pairs(self) do
+			if type(v) == "table" then 
+				 table.insert(t, v)  
+			end
+		end
+		return t
+	end,
+}
+
+Easing.Emphasized = {
 	Name = "Emphasized",
 	Value = 1,
-	EnumType = Easings
+	EnumType = Easing
 }
 
-Easings.EmphasizedDecelerate = {
+Easing.EmphasizedDecelerate = {
 	Name = "EmphasizedDecelerate",
 	Value = 2,
-	EnumType = Easings
+	EnumType = Easing
 }
 
-Easings.EphasizedAccelerate = {
+Easing.EphasizedAccelerate = {
 	Name = "EphasizedAccelerate",
 	Value = 3,
-	EnumType = Easings
+	EnumType = Easing
 }
 
-Easings.Standard = {
+Easing.Standard = {
 	Name = "Standard",
 	Value = 4,
-	EnumType = Easings
+	EnumType = Easing
 }
 
-Easings.StandardDecelerate = {
+Easing.StandardDecelerate = {
 	Name = "StandardDecelerate",
 	Value = 5,
-	EnumType = Easings
+	EnumType = Easing
 }
 
-Easings.StandardAccelerate = {
+Easing.StandardAccelerate = {
 	Name = "StandardAccelerate",
 	Value = 6,
-	EnumType = Easings
+	EnumType = Easing
 }
 
 local TransitionDuration = {
@@ -426,7 +821,9 @@ TypographyStyle.LabelSmall = {
 }
 
 local CustomEnum = {	
-	Easings = Easings :: any,
+	ColorRole = ColorRole :: any,
+	ElevationResting = ElevationResting :: any,
+	Easing = Easing :: any,
 	TransitionDuration = TransitionDuration :: any,
 	ShapeStyle = ShapeStyle :: any,
 	ShapeSymmetry = ShapeSymmetry :: any,

@@ -1,5 +1,16 @@
 {
-    "Easings" : ["Emphasized", "EmphasizedDecelerate", "EphasizedAccelerate", "Standard", "StandardDecelerate", "StandardAccelerate"],
+    "ColorRole" : ["Primary", "Secondary", "Tertiary", "Error", 
+                    "OnPrimary", "OnSecondary", "OnTertiary", "OnError", 
+                    "PrimaryContainer", "SecondaryContainer", "TertiaryContainer", "ErrorContainer",
+                    "OnPrimaryContainer", "OnSecondaryContainer", "OnTertiaryContainer", "OnErrorContainer",
+                    "PrimaryFixed", "PrimaryFixedDim", "SecondaryFixed", "SecondaryFixedDim", "TertiaryFixed", "TertiaryFixedDim",
+                    "OnPrimaryFixed", "OnSecondaryFixed", "OnTertiaryFixed", 
+                    "OnPrimaryFixedVariant", "OnSecondaryFixedVariant", "OnTertiaryFixedVariant", "SurfaceDim", "Surface", "SurfaceBright", "InverseSurface", "InverseOnSurface",
+                    "SurfaceContainerLowest", "SurfaceContainerLow", "SurfaceContainer", "SurfaceContainerHigh", "SurfaceContainerHighest", "InversePrimary",
+                    "OnSurface", "OnSurfaceVariant", "Outline", "OutlineVariant", "Scrim", "Shadow"
+                    ],
+    "ElevationResting" : ["Level0", "Level1", "Level2", "Level3", "Level4", "Level5"],
+    "Easing" : ["Emphasized", "EmphasizedDecelerate", "EphasizedAccelerate", "Standard", "StandardDecelerate", "StandardAccelerate"],
     "TransitionDuration" : ["Short1", "Short2", "Short3", "Short4", "Medium1", "Medium2", "Medium3", "Medium4", "Long1", "Long2", "Long3", "Long4"],
     "ShapeStyle" : ["None", "ExtraSmall", "Small", "Medium", "Large", "ExtraLarge", "Full"],
     "ShapeSymmetry" : ["Top", "Bottom", "Start", "End"],

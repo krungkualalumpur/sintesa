@@ -5,6 +5,7 @@ local _Packages = game:GetService("ReplicatedStorage"):WaitForChild("Packages")
 local Maid = require(_Packages:WaitForChild("Maid"))
 local ColdFusion8 = require(_Packages:WaitForChild("ColdFusion8"))
 --modules
+local Types = require(script.Parent:WaitForChild("Types"))
 --types
 type Maid = Maid.Maid
 
@@ -12,6 +13,8 @@ type Fuse = ColdFusion8.Fuse
 type State<T> = ColdFusion8.State<T>
 type ValueState<T> = ColdFusion8.ValueState<T>
 type CanBeState<T> = ColdFusion8.CanBeState<T>
+
+type AppearanceData = Types.AppearanceData
 --constants
 --variables
 --references
@@ -23,9 +26,7 @@ button.ColdFusion = {}
 
 function button.ColdFusion.new(
     text : CanBeState<string>,
-    colorData : ColorData,
-    elevationData : ElevationData
-
+    appearance : AppearanceData
 )
     local _maid = Maid.new()
 

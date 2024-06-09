@@ -1,3 +1,13 @@
 {
-    "Easings" : ["Emphasized", "EmphasizedDecelerate", "EphasizedAccelerate", "Standard", "StandardDecelerate", "StandardAccelerate"]
+    "Easings" : ["Emphasized", "EmphasizedDecelerate", "EphasizedAccelerate", "Standard", "StandardDecelerate", "StandardAccelerate"],
+    "TransitionDuration" : ["Short1", "Short2", "Short3", "Short4", "Medium1", "Medium2", "Medium3", "Medium4", "Long1", "Long2", "Long3", "Long4"],
+    "ShapeStyle" : ["None", "ExtraSmall", "Small", "Medium", "Large", "ExtraLarge", "Full"],
+    "ShapeSymmetry" : ["Top", "Bottom", "Start", "End"],
+    "TypographyStyle" : [
+        "DisplayLarge", "DisplayMedium", "DisplaySmall", 
+        "HeadlineLarge", "HeadlineMedium", "HeadlineSmall", 
+        "TitleLarge", "TitleMedium", "TitleSmall", 
+        "BodyLarge", "BodyMedium", "BodySmall", 
+        "LabelLarge", "LabelMedium", "LabelSmall"
+    ]
 }

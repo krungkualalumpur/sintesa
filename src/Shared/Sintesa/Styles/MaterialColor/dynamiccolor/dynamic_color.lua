@@ -18,8 +18,8 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local Contrast = TS.import(script, script.Parent.Parent, "contrast", "contrast").Contrast
-local mathUtils = TS.import(script, script.Parent.Parent, "utils", "math_utils")
+local Contrast = require(script.Parent.Parent:WaitForChild("contrast"):WaitForChild("contrast")).Contrast
+local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("math_utils"))
 --[[
 	*
 	 * @param name The name of the dynamic color. Defaults to empty.

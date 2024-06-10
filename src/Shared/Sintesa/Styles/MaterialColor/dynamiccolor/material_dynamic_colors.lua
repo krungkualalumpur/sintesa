@@ -18,12 +18,12 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local DislikeAnalyzer = TS.import(script, script.Parent.Parent, "dislike", "dislike_analyzer").DislikeAnalyzer
-local Hct = TS.import(script, script.Parent.Parent, "hct", "hct").Hct
-local ContrastCurve = TS.import(script, script.Parent, "contrast_curve").ContrastCurve
-local DynamicColor = TS.import(script, script.Parent, "dynamic_color").DynamicColor
-local ToneDeltaPair = TS.import(script, script.Parent, "tone_delta_pair").ToneDeltaPair
-local Variant = TS.import(script, script.Parent, "variant").Variant
+local DislikeAnalyzer = require(script.Parent.Parent:WaitForChild("dislike"):WaitForChild("dislike_analyzer")).DislikeAnalyzer
+local Hct = require(script.Parent.Parent:WaitForChild("hct"):WaitForChild("hct")).Hct
+local ContrastCurve = require(script.Parent:WaitForChild("contrast_curve")).ContrastCurve
+local DynamicColor = require(script.Parent:WaitForChild("dynamic_color")).DynamicColor
+local ToneDeltaPair = require(script.Parent:WaitForChild("tone_delta_pair")).ToneDeltaPair
+local Variant = require(script.Parent:WaitForChild("variant")).Variant
 local function isFidelity(scheme)
 	return scheme.variant == Variant.FIDELITY or scheme.variant == Variant.CONTENT
 end

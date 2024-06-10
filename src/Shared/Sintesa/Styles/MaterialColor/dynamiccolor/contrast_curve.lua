@@ -18,7 +18,7 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local mathUtils = TS.import(script, script.Parent.Parent, "utils", "math_utils")
+local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("math_utils"))
 --[[
 	*
 	 * A class containing a value that changes with the contrast level.

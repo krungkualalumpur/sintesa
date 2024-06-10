@@ -18,7 +18,7 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local Hct = TS.import(script, script.Parent.Parent, "hct", "hct").Hct
+local Hct = require(script.Parent.Parent:WaitForChild("hct"):WaitForChild("hct")).Hct
 -- material_color_utilities is designed to have a consistent API across
 -- platforms and modular components that can be moved around easily. Using a
 -- class as a namespace facilitates this.

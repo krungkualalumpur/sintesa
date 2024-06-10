@@ -18,10 +18,29 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local Hct = TS.import(script, script.Parent.Parent, "hct", "hct").Hct
-local TonalPalette = TS.import(script, script.Parent.Parent, "palettes", "tonal_palette").TonalPalette
-local mathUtils = TS.import(script, script.Parent.Parent, "utils", "math_utils")
-local MaterialDynamicColors = TS.import(script, script.Parent, "material_dynamic_colors").MaterialDynamicColors
+
+
+local Hct = require(script.Parent.Parent:WaitForChild("hct"):WaitForChild("hct")).Hct
+local Variant = require(script.Parent:WaitForChild("variant"))
+local TonalPalette_Raw = require(script.Parent.Parent:WaitForChild("palettes"):WaitForChild("tonal_palette"))
+local TonalPalette = TonalPalette_Raw.TonalPalette
+local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("math_utils"))
+local MaterialDynamicColors = require(script.Parent:WaitForChild("material_dynamic_colors")).MaterialDynamicColors
+
+--types
+type TonalPalette = TonalPalette_Raw.TonalPalette
+export type DynamicSchemeOptions = {
+    sourceColorArgb: any;
+    variant: Variant.Variant;
+    contrastLevel: number;
+    isDark: boolean;
+    primaryPalette: TonalPalette;
+    secondaryPalette: TonalPalette;
+    tertiaryPalette: TonalPalette;
+    neutralPalette: TonalPalette;
+    neutralVariantPalette: TonalPalette;
+}
+--
 --[[
 	*
 	 * @param sourceColorArgb The source color of the theme as an ARGB 32-bit
@@ -65,11 +84,11 @@ do
 		end,
 	})
 	DynamicScheme.__index = DynamicScheme
-	function DynamicScheme.new(...)
+	function DynamicScheme.new(dynamicScheme : DynamicSchemeOptions)
 		local self = setmetatable({}, DynamicScheme)
-		return self:constructor(...) or self
+		return self:constructor(dynamicScheme) or self
 	end
-	function DynamicScheme:constructor(args)
+	function DynamicScheme:constructor(args : DynamicSchemeOptions)
 		self.sourceColorArgb = args.sourceColorArgb
 		self.variant = args.variant
 		self.contrastLevel = args.contrastLevel

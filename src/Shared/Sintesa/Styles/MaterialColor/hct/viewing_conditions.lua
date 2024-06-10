@@ -18,8 +18,8 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local utils = TS.import(script, script.Parent.Parent, "utils", "color_utils")
-local mathUtils = TS.import(script, script.Parent.Parent, "utils", "math_utils")
+local utils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("color_utils"))
+local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("math_utils"))
 --[[
 	*
 	 * In traditional color spaces, a color can be identified solely by the

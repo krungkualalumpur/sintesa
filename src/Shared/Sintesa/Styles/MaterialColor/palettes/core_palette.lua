@@ -18,8 +18,8 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local Hct = TS.import(script, script.Parent.Parent, "hct", "hct").Hct
-local TonalPalette = TS.import(script, script.Parent, "tonal_palette").TonalPalette
+local Hct = require(script.Parent.Parent:WaitForChild("hct"):WaitForChild("hct")).Hct
+local TonalPalette = require(script.Parent:WaitForChild("tonal_palette")).TonalPalette
 --[[
 	*
 	 * Set of colors to generate a [CorePalette] from

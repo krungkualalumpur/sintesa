@@ -18,13 +18,21 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local Hct = TS.import(script, script.Parent.Parent, "hct", "hct").Hct
+local Hct = require(script.Parent.Parent:WaitForChild("hct"):WaitForChild("hct")).Hct
 --[[
 	*
 	 *  A convenience class for retrieving colors that are constant in hue and
 	 *  chroma, but vary in tone.
 	 
 ]]
+
+export type TonalPalette = {
+	hue : any,
+	chroma : any,
+	keyColor : any,
+	cache : any,
+	[string] : (... any) -> ... any
+}
 local KeyColor
 local TonalPalette
 do
@@ -33,6 +41,10 @@ do
 			return "TonalPalette"
 		end,
 	})
+	function TonalPalette.createKeyColor(hue, requestedChroma)
+		return KeyColor.new(hue, requestedChroma)
+	end
+
 	TonalPalette.__index = TonalPalette
 	function TonalPalette.new(...)
 		local self = setmetatable({}, TonalPalette)

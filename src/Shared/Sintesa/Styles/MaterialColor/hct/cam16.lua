@@ -18,9 +18,9 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local utils = TS.import(script, script.Parent.Parent, "utils", "color_utils")
-local mathUtils = TS.import(script, script.Parent.Parent, "utils", "math_utils")
-local ViewingConditions = TS.import(script, script.Parent, "viewing_conditions").ViewingConditions
+local utils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("color_utils"))
+local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("math_utils"))
+local ViewingConditions =  require(script.Parent:WaitForChild("viewing_conditions")).ViewingConditions
 --[[
 	*
 	 * CAM16, a color appearance model. Colors are not just defined by their hex

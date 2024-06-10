@@ -15,25 +15,25 @@ type CustomEnumItem <E, N> = {
 	EnumType : E
 }
 type ColorRoleEnum = CustomEnum<"ColorRole">
-export type ColorRole = CustomEnumItem<ColorRoleEnum, string>
+export type ColorRole = CustomEnumItem<ColorRoleEnum, "Primary"|"Secondary"|"Tertiary"|"Error"|"OnPrimary"|"OnSecondary"|"OnTertiary"|"OnError"|"PrimaryContainer"|"SecondaryContainer"|"TertiaryContainer"|"ErrorContainer"|"OnPrimaryContainer"|"OnSecondaryContainer"|"OnTertiaryContainer"|"OnErrorContainer"|"PrimaryFixed"|"PrimaryFixedDim"|"SecondaryFixed"|"SecondaryFixedDim"|"TertiaryFixed"|"TertiaryFixedDim"|"OnPrimaryFixed"|"OnSecondaryFixed"|"OnTertiaryFixed"|"OnPrimaryFixedVariant"|"OnSecondaryFixedVariant"|"OnTertiaryFixedVariant"|"SurfaceDim"|"Surface"|"SurfaceBright"|"InverseSurface"|"InverseOnSurface"|"SurfaceContainerLowest"|"SurfaceContainerLow"|"SurfaceContainer"|"SurfaceContainerHigh"|"SurfaceContainerHighest"|"InversePrimary"|"OnSurface"|"OnSurfaceVariant"|"Outline"|"OutlineVariant"|"Scrim"|"Shadow">
 
 type ElevationRestingEnum = CustomEnum<"ElevationResting">
-export type ElevationResting = CustomEnumItem<ElevationRestingEnum, string>
+export type ElevationResting = CustomEnumItem<ElevationRestingEnum, "Level0"|"Level1"|"Level2"|"Level3"|"Level4"|"Level5">
 
 type EasingEnum = CustomEnum<"Easing">
-export type Easing = CustomEnumItem<EasingEnum, string>
+export type Easing = CustomEnumItem<EasingEnum, "Emphasized"|"EmphasizedDecelerate"|"EphasizedAccelerate"|"Standard"|"StandardDecelerate"|"StandardAccelerate">
 
 type TransitionDurationEnum = CustomEnum<"TransitionDuration">
-export type TransitionDuration = CustomEnumItem<TransitionDurationEnum, string>
+export type TransitionDuration = CustomEnumItem<TransitionDurationEnum, "Short1"|"Short2"|"Short3"|"Short4"|"Medium1"|"Medium2"|"Medium3"|"Medium4"|"Long1"|"Long2"|"Long3"|"Long4">
 
 type ShapeStyleEnum = CustomEnum<"ShapeStyle">
-export type ShapeStyle = CustomEnumItem<ShapeStyleEnum, string>
+export type ShapeStyle = CustomEnumItem<ShapeStyleEnum, "None"|"ExtraSmall"|"Small"|"Medium"|"Large"|"ExtraLarge"|"Full">
 
 type ShapeSymmetryEnum = CustomEnum<"ShapeSymmetry">
-export type ShapeSymmetry = CustomEnumItem<ShapeSymmetryEnum, string>
+export type ShapeSymmetry = CustomEnumItem<ShapeSymmetryEnum, "Top"|"Bottom"|"Start"|"End"|"None">
 
 type TypographyStyleEnum = CustomEnum<"TypographyStyle">
-export type TypographyStyle = CustomEnumItem<TypographyStyleEnum, string>
+export type TypographyStyle = CustomEnumItem<TypographyStyleEnum, "DisplayLarge"|"DisplayMedium"|"DisplaySmall"|"HeadlineLarge"|"HeadlineMedium"|"HeadlineSmall"|"TitleLarge"|"TitleMedium"|"TitleSmall"|"BodyLarge"|"BodyMedium"|"BodySmall"|"LabelLarge"|"LabelMedium"|"LabelSmall">
 
 export type CustomEnums = {
 
@@ -133,6 +133,7 @@ export type CustomEnums = {
 		Bottom : CustomEnumItem <ShapeSymmetryEnum, "Bottom">,
 		Start : CustomEnumItem <ShapeSymmetryEnum, "Start">,
 		End : CustomEnumItem <ShapeSymmetryEnum, "End">,
+		None : CustomEnumItem <ShapeSymmetryEnum, "None">,
 	} & ShapeSymmetryEnum,
 
 	TypographyStyle : 	{		
@@ -714,6 +715,12 @@ ShapeSymmetry.Start = {
 ShapeSymmetry.End = {
 	Name = "End",
 	Value = 4,
+	EnumType = ShapeSymmetry
+}
+
+ShapeSymmetry.None = {
+	Name = "None",
+	Value = 5,
 	EnumType = ShapeSymmetry
 }
 

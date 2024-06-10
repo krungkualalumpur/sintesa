@@ -23,8 +23,8 @@ local TS = _G[script]
 -- class as a namespace facilitates this.
 --
 -- tslint:disable:class-as-namespace
-local utils = TS.import(script, script.Parent.Parent, "utils", "color_utils")
-local mathUtils = TS.import(script, script.Parent.Parent, "utils", "math_utils")
+local utils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("color_utils"))
+local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("math_utils"))
 --[[
 	*
 	 * Utility methods for calculating contrast given two colors, or calculating a

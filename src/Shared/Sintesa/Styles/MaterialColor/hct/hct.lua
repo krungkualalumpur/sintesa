@@ -35,10 +35,10 @@ local TS = _G[script]
 	 * and a difference of 50 guarantees a contrast ratio >= 4.5.
 	 
 ]]
-local utils = TS.import(script, script.Parent.Parent, "utils", "color_utils")
-local Cam16 = TS.import(script, script.Parent, "cam16").Cam16
-local HctSolver = TS.import(script, script.Parent, "hct_solver").HctSolver
-local ViewingConditions = TS.import(script, script.Parent, "viewing_conditions").ViewingConditions
+local utils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("color_utils"))
+local Cam16 = require(script.Parent:WaitForChild("cam16")).Cam16
+local HctSolver = require(script.Parent:WaitForChild("hct_solver")).HctSolver
+local ViewingConditions = require(script.Parent:WaitForChild("viewing_conditions")).ViewingConditions
 --[[
 	*
 	 * HCT, hue, chroma, and tone. A color system that provides a perceptually

@@ -24,12 +24,25 @@
 	 * colors corresponding to the theme.
 	 
 ]]
-local Variant
+
+export type Variant = {
+	[number] : string,
+	MONOCHROME : number,
+	NEUTRAL : number,
+	TONAL_SPOT : number,
+	VIBRANT : number,
+	EXPRESSIVE : number,
+	FIDELITY : number,
+	CONTENT : number,
+	RAINBOW : number,
+	FRUIT_SALAD : number
+}
+local Variant : Variant
 do
 	local _inverse = {}
 	Variant = setmetatable({}, {
 		__index = _inverse,
-	})
+	}) :: any
 	Variant.MONOCHROME = 0
 	_inverse[0] = "MONOCHROME"
 	Variant.NEUTRAL = 1

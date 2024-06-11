@@ -18,6 +18,19 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
+local ContrastCurve = require(script.Parent:WaitForChild("contrast_curve"))
+local TonalPalette = require(script.Parent.Parent:WaitForChild("palettes"):WaitForChild("tonal_palette"))
+local ToneDeltaPair = require(script.Parent:WaitForChild("tone_delta_pair"))
+local Types = require(script.Parent:WaitForChild("Types"))
+local hct = require(script.Parent.Parent:WaitForChild("hct"):WaitForChild("hct"))
+
+type ToneDeltaPair = Types.ToneDeltaPair
+type TonalPalette = TonalPalette.TonalPalette
+type DynamicScheme = any
+type ContrastCurve = ContrastCurve.ContrastCurve
+type Hct = any
+
+
 local Contrast = require(script.Parent.Parent:WaitForChild("contrast"):WaitForChild("contrast")).Contrast
 local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("math_utils"))
 --[[
@@ -87,7 +100,7 @@ do
 			error(`Color {name} has background` .. `defined, but contrastCurve is not defined.`)
 		end
 	end
-	function DynamicColor:fromPalette(args)
+	function DynamicColor.fromPalette(args)
 		local _condition = args.name
 		if _condition == nil then
 			_condition = ""
@@ -299,5 +312,5 @@ do
 	end
 end
 return {
-	DynamicColor = DynamicColor,
+	DynamicColor = DynamicColor :: Types.DynamicColor,
 }

@@ -5,10 +5,8 @@ local _Packages = game:GetService("ReplicatedStorage"):WaitForChild("Packages")
 local Maid = require(_Packages:WaitForChild("Maid"))
 local ColdFusion8 = require(_Packages:WaitForChild("ColdFusion8"))
 --modules
-local DynamicScheme = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor"):WaitForChild("dynamiccolor"):WaitForChild("dynamic_scheme"))
-local DynamicColor = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor"):WaitForChild("dynamiccolor"):WaitForChild("dynamic_color"))
-local ColorUtil = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor"):WaitForChild("utils"):WaitForChild("color_utils"))
 local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
+local MaterialColor = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor"))
 --types
 type Maid = Maid.Maid
 
@@ -45,24 +43,9 @@ function button.ColdFusion.new(
 
     local primaryColorState = _import(appearance.PrimaryColor, PRIMARY_COLOR)
 
-    local dynamicColor = DynamicColor.DynamicColor.new()
-    
-    local dynamic_Scheme = DynamicScheme.DynamicScheme.new({
-        ColorUtil.argbFromRgb(primaryColorState:Get().R, primaryColorState:Get().G, primaryColorState:Get().B);
-        variant: Variant.Variant;
-        contrastLevel: number;
-        isDark: boolean;
-        primaryPalette: TonalPalette;
-        secondaryPalette: TonalPalette;
-        tertiaryPalette: TonalPalette;
-        neutralPalette: TonalPalette;
-        neutralVariantPalette: TonalPalette;
-    })
-    local argb = dynamicColor:getArgb(dynamic_Scheme)
-    print(argb)
-
+    print(MaterialColor.getDynamicColor(primaryColorState:Get(), Color3.fromRGB(164, 209, 138),Color3.fromRGB(31, 101, 194),Color3.fromRGB(255,255,255),Color3.fromRGB(255,255,255)))
     local out  = _new("TextButton")({
-        BackgroundColor = primaryColorState,
+        BackgroundColor3 = primaryColorState,
         Text = textState,
     })
     return out

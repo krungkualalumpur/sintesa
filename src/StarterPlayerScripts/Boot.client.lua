@@ -12,4 +12,4 @@ local textButton = require(ReplicatedStorage:WaitForChild("Shared"):WaitForChild
 --references
 --local functions
 --class
-textButton.ColdFusion.new("Test", types.createAppearanceData(Color3.fromRGB(255,255,255)))
+textButton.ColdFusion.new("Test", types.createAppearanceData(Color3.fromRGB(200,155,155)))

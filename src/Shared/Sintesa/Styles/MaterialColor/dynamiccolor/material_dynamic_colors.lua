@@ -79,7 +79,7 @@ do
 		return if s.isDark then MaterialDynamicColors.surfaceBright else MaterialDynamicColors.surfaceDim
 	end
 	MaterialDynamicColors.contentAccentToneDelta = 15.0
-	MaterialDynamicColors.primaryPaletteKeyColor = DynamicColor:fromPalette({
+	MaterialDynamicColors.primaryPaletteKeyColor = DynamicColor.fromPalette({
 		name = "primary_palette_key_color",
 		palette = function(s)
 			return s.primaryPalette
@@ -88,7 +88,7 @@ do
 			return s.primaryPalette.keyColor:get_tone()
 		end,
 	})
-	MaterialDynamicColors.secondaryPaletteKeyColor = DynamicColor:fromPalette({
+	MaterialDynamicColors.secondaryPaletteKeyColor = DynamicColor.fromPalette({
 		name = "secondary_palette_key_color",
 		palette = function(s)
 			return s.secondaryPalette
@@ -97,7 +97,7 @@ do
 			return s.secondaryPalette.keyColor:get_tone()
 		end,
 	})
-	MaterialDynamicColors.tertiaryPaletteKeyColor = DynamicColor:fromPalette({
+	MaterialDynamicColors.tertiaryPaletteKeyColor = DynamicColor.fromPalette({
 		name = "tertiary_palette_key_color",
 		palette = function(s)
 			return s.tertiaryPalette
@@ -106,7 +106,7 @@ do
 			return s.tertiaryPalette.keyColor:get_tone()
 		end,
 	})
-	MaterialDynamicColors.neutralPaletteKeyColor = DynamicColor:fromPalette({
+	MaterialDynamicColors.neutralPaletteKeyColor = DynamicColor.fromPalette({
 		name = "neutral_palette_key_color",
 		palette = function(s)
 			return s.neutralPalette
@@ -115,7 +115,7 @@ do
 			return s.neutralPalette.keyColor:get_tone()
 		end,
 	})
-	MaterialDynamicColors.neutralVariantPaletteKeyColor = DynamicColor:fromPalette({
+	MaterialDynamicColors.neutralVariantPaletteKeyColor = DynamicColor.fromPalette({
 		name = "neutral_variant_palette_key_color",
 		palette = function(s)
 			return s.neutralVariantPalette
@@ -124,7 +124,7 @@ do
 			return s.neutralVariantPalette.keyColor:get_tone()
 		end,
 	})
-	MaterialDynamicColors.background = DynamicColor:fromPalette({
+	MaterialDynamicColors.background = DynamicColor.fromPalette({
 		name = "background",
 		palette = function(s)
 			return s.neutralPalette
@@ -134,7 +134,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.onBackground = DynamicColor:fromPalette({
+	MaterialDynamicColors.onBackground = DynamicColor.fromPalette({
 		name = "on_background",
 		palette = function(s)
 			return s.neutralPalette
@@ -147,7 +147,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(3, 3, 4.5, 7),
 	})
-	MaterialDynamicColors.surface = DynamicColor:fromPalette({
+	MaterialDynamicColors.surface = DynamicColor.fromPalette({
 		name = "surface",
 		palette = function(s)
 			return s.neutralPalette
@@ -157,7 +157,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.surfaceDim = DynamicColor:fromPalette({
+	MaterialDynamicColors.surfaceDim = DynamicColor.fromPalette({
 		name = "surface_dim",
 		palette = function(s)
 			return s.neutralPalette
@@ -167,7 +167,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.surfaceBright = DynamicColor:fromPalette({
+	MaterialDynamicColors.surfaceBright = DynamicColor.fromPalette({
 		name = "surface_bright",
 		palette = function(s)
 			return s.neutralPalette
@@ -177,7 +177,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.surfaceContainerLowest = DynamicColor:fromPalette({
+	MaterialDynamicColors.surfaceContainerLowest = DynamicColor.fromPalette({
 		name = "surface_container_lowest",
 		palette = function(s)
 			return s.neutralPalette
@@ -187,7 +187,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.surfaceContainerLow = DynamicColor:fromPalette({
+	MaterialDynamicColors.surfaceContainerLow = DynamicColor.fromPalette({
 		name = "surface_container_low",
 		palette = function(s)
 			return s.neutralPalette
@@ -197,7 +197,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.surfaceContainer = DynamicColor:fromPalette({
+	MaterialDynamicColors.surfaceContainer = DynamicColor.fromPalette({
 		name = "surface_container",
 		palette = function(s)
 			return s.neutralPalette
@@ -207,7 +207,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.surfaceContainerHigh = DynamicColor:fromPalette({
+	MaterialDynamicColors.surfaceContainerHigh = DynamicColor.fromPalette({
 		name = "surface_container_high",
 		palette = function(s)
 			return s.neutralPalette
@@ -217,7 +217,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.surfaceContainerHighest = DynamicColor:fromPalette({
+	MaterialDynamicColors.surfaceContainerHighest = DynamicColor.fromPalette({
 		name = "surface_container_highest",
 		palette = function(s)
 			return s.neutralPalette
@@ -227,7 +227,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.onSurface = DynamicColor:fromPalette({
+	MaterialDynamicColors.onSurface = DynamicColor.fromPalette({
 		name = "on_surface",
 		palette = function(s)
 			return s.neutralPalette
@@ -240,7 +240,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.surfaceVariant = DynamicColor:fromPalette({
+	MaterialDynamicColors.surfaceVariant = DynamicColor.fromPalette({
 		name = "surface_variant",
 		palette = function(s)
 			return s.neutralVariantPalette
@@ -250,7 +250,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.onSurfaceVariant = DynamicColor:fromPalette({
+	MaterialDynamicColors.onSurfaceVariant = DynamicColor.fromPalette({
 		name = "on_surface_variant",
 		palette = function(s)
 			return s.neutralVariantPalette
@@ -263,7 +263,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(3, 4.5, 7, 11),
 	})
-	MaterialDynamicColors.inverseSurface = DynamicColor:fromPalette({
+	MaterialDynamicColors.inverseSurface = DynamicColor.fromPalette({
 		name = "inverse_surface",
 		palette = function(s)
 			return s.neutralPalette
@@ -272,7 +272,7 @@ do
 			return if s.isDark then 90 else 20
 		end,
 	})
-	MaterialDynamicColors.inverseOnSurface = DynamicColor:fromPalette({
+	MaterialDynamicColors.inverseOnSurface = DynamicColor.fromPalette({
 		name = "inverse_on_surface",
 		palette = function(s)
 			return s.neutralPalette
@@ -285,7 +285,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.outline = DynamicColor:fromPalette({
+	MaterialDynamicColors.outline = DynamicColor.fromPalette({
 		name = "outline",
 		palette = function(s)
 			return s.neutralVariantPalette
@@ -298,7 +298,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(1.5, 3, 4.5, 7),
 	})
-	MaterialDynamicColors.outlineVariant = DynamicColor:fromPalette({
+	MaterialDynamicColors.outlineVariant = DynamicColor.fromPalette({
 		name = "outline_variant",
 		palette = function(s)
 			return s.neutralVariantPalette
@@ -311,7 +311,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(1, 1, 3, 4.5),
 	})
-	MaterialDynamicColors.shadow = DynamicColor:fromPalette({
+	MaterialDynamicColors.shadow = DynamicColor.fromPalette({
 		name = "shadow",
 		palette = function(s)
 			return s.neutralPalette
@@ -320,7 +320,7 @@ do
 			return 0
 		end,
 	})
-	MaterialDynamicColors.scrim = DynamicColor:fromPalette({
+	MaterialDynamicColors.scrim = DynamicColor.fromPalette({
 		name = "scrim",
 		palette = function(s)
 			return s.neutralPalette
@@ -329,7 +329,7 @@ do
 			return 0
 		end,
 	})
-	MaterialDynamicColors.surfaceTint = DynamicColor:fromPalette({
+	MaterialDynamicColors.surfaceTint = DynamicColor.fromPalette({
 		name = "surface_tint",
 		palette = function(s)
 			return s.primaryPalette
@@ -339,7 +339,7 @@ do
 		end,
 		isBackground = true,
 	})
-	MaterialDynamicColors.primary = DynamicColor:fromPalette({
+	MaterialDynamicColors.primary = DynamicColor.fromPalette({
 		name = "primary",
 		palette = function(s)
 			return s.primaryPalette
@@ -359,7 +359,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.primaryContainer, MaterialDynamicColors.primary, 10, "nearer", false)
 		end,
 	})
-	MaterialDynamicColors.onPrimary = DynamicColor:fromPalette({
+	MaterialDynamicColors.onPrimary = DynamicColor.fromPalette({
 		name = "on_primary",
 		palette = function(s)
 			return s.primaryPalette
@@ -375,7 +375,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.primaryContainer = DynamicColor:fromPalette({
+	MaterialDynamicColors.primaryContainer = DynamicColor.fromPalette({
 		name = "primary_container",
 		palette = function(s)
 			return s.primaryPalette
@@ -398,7 +398,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.primaryContainer, MaterialDynamicColors.primary, 10, "nearer", false)
 		end,
 	})
-	MaterialDynamicColors.onPrimaryContainer = DynamicColor:fromPalette({
+	MaterialDynamicColors.onPrimaryContainer = DynamicColor.fromPalette({
 		name = "on_primary_container",
 		palette = function(s)
 			return s.primaryPalette
@@ -417,7 +417,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.inversePrimary = DynamicColor:fromPalette({
+	MaterialDynamicColors.inversePrimary = DynamicColor.fromPalette({
 		name = "inverse_primary",
 		palette = function(s)
 			return s.primaryPalette
@@ -430,7 +430,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(3, 4.5, 7, 7),
 	})
-	MaterialDynamicColors.secondary = DynamicColor:fromPalette({
+	MaterialDynamicColors.secondary = DynamicColor.fromPalette({
 		name = "secondary",
 		palette = function(s)
 			return s.secondaryPalette
@@ -447,7 +447,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.secondaryContainer, MaterialDynamicColors.secondary, 10, "nearer", false)
 		end,
 	})
-	MaterialDynamicColors.onSecondary = DynamicColor:fromPalette({
+	MaterialDynamicColors.onSecondary = DynamicColor.fromPalette({
 		name = "on_secondary",
 		palette = function(s)
 			return s.secondaryPalette
@@ -464,7 +464,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.secondaryContainer = DynamicColor:fromPalette({
+	MaterialDynamicColors.secondaryContainer = DynamicColor.fromPalette({
 		name = "secondary_container",
 		palette = function(s)
 			return s.secondaryPalette
@@ -488,7 +488,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.secondaryContainer, MaterialDynamicColors.secondary, 10, "nearer", false)
 		end,
 	})
-	MaterialDynamicColors.onSecondaryContainer = DynamicColor:fromPalette({
+	MaterialDynamicColors.onSecondaryContainer = DynamicColor.fromPalette({
 		name = "on_secondary_container",
 		palette = function(s)
 			return s.secondaryPalette
@@ -504,7 +504,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.tertiary = DynamicColor:fromPalette({
+	MaterialDynamicColors.tertiary = DynamicColor.fromPalette({
 		name = "tertiary",
 		palette = function(s)
 			return s.tertiaryPalette
@@ -524,7 +524,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.tertiaryContainer, MaterialDynamicColors.tertiary, 10, "nearer", false)
 		end,
 	})
-	MaterialDynamicColors.onTertiary = DynamicColor:fromPalette({
+	MaterialDynamicColors.onTertiary = DynamicColor.fromPalette({
 		name = "on_tertiary",
 		palette = function(s)
 			return s.tertiaryPalette
@@ -540,7 +540,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.tertiaryContainer = DynamicColor:fromPalette({
+	MaterialDynamicColors.tertiaryContainer = DynamicColor.fromPalette({
 		name = "tertiary_container",
 		palette = function(s)
 			return s.tertiaryPalette
@@ -564,7 +564,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.tertiaryContainer, MaterialDynamicColors.tertiary, 10, "nearer", false)
 		end,
 	})
-	MaterialDynamicColors.onTertiaryContainer = DynamicColor:fromPalette({
+	MaterialDynamicColors.onTertiaryContainer = DynamicColor.fromPalette({
 		name = "on_tertiary_container",
 		palette = function(s)
 			return s.tertiaryPalette
@@ -583,7 +583,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.error = DynamicColor:fromPalette({
+	MaterialDynamicColors.error = DynamicColor.fromPalette({
 		name = "error",
 		palette = function(s)
 			return s.errorPalette
@@ -600,7 +600,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.errorContainer, MaterialDynamicColors.error, 10, "nearer", false)
 		end,
 	})
-	MaterialDynamicColors.onError = DynamicColor:fromPalette({
+	MaterialDynamicColors.onError = DynamicColor.fromPalette({
 		name = "on_error",
 		palette = function(s)
 			return s.errorPalette
@@ -613,7 +613,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.errorContainer = DynamicColor:fromPalette({
+	MaterialDynamicColors.errorContainer = DynamicColor.fromPalette({
 		name = "error_container",
 		palette = function(s)
 			return s.errorPalette
@@ -630,7 +630,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.errorContainer, MaterialDynamicColors.error, 10, "nearer", false)
 		end,
 	})
-	MaterialDynamicColors.onErrorContainer = DynamicColor:fromPalette({
+	MaterialDynamicColors.onErrorContainer = DynamicColor.fromPalette({
 		name = "on_error_container",
 		palette = function(s)
 			return s.errorPalette
@@ -643,7 +643,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.primaryFixed = DynamicColor:fromPalette({
+	MaterialDynamicColors.primaryFixed = DynamicColor.fromPalette({
 		name = "primary_fixed",
 		palette = function(s)
 			return s.primaryPalette
@@ -660,7 +660,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.primaryFixed, MaterialDynamicColors.primaryFixedDim, 10, "lighter", true)
 		end,
 	})
-	MaterialDynamicColors.primaryFixedDim = DynamicColor:fromPalette({
+	MaterialDynamicColors.primaryFixedDim = DynamicColor.fromPalette({
 		name = "primary_fixed_dim",
 		palette = function(s)
 			return s.primaryPalette
@@ -677,7 +677,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.primaryFixed, MaterialDynamicColors.primaryFixedDim, 10, "lighter", true)
 		end,
 	})
-	MaterialDynamicColors.onPrimaryFixed = DynamicColor:fromPalette({
+	MaterialDynamicColors.onPrimaryFixed = DynamicColor.fromPalette({
 		name = "on_primary_fixed",
 		palette = function(s)
 			return s.primaryPalette
@@ -693,7 +693,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.onPrimaryFixedVariant = DynamicColor:fromPalette({
+	MaterialDynamicColors.onPrimaryFixedVariant = DynamicColor.fromPalette({
 		name = "on_primary_fixed_variant",
 		palette = function(s)
 			return s.primaryPalette
@@ -709,7 +709,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(3, 4.5, 7, 11),
 	})
-	MaterialDynamicColors.secondaryFixed = DynamicColor:fromPalette({
+	MaterialDynamicColors.secondaryFixed = DynamicColor.fromPalette({
 		name = "secondary_fixed",
 		palette = function(s)
 			return s.secondaryPalette
@@ -726,7 +726,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.secondaryFixed, MaterialDynamicColors.secondaryFixedDim, 10, "lighter", true)
 		end,
 	})
-	MaterialDynamicColors.secondaryFixedDim = DynamicColor:fromPalette({
+	MaterialDynamicColors.secondaryFixedDim = DynamicColor.fromPalette({
 		name = "secondary_fixed_dim",
 		palette = function(s)
 			return s.secondaryPalette
@@ -743,7 +743,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.secondaryFixed, MaterialDynamicColors.secondaryFixedDim, 10, "lighter", true)
 		end,
 	})
-	MaterialDynamicColors.onSecondaryFixed = DynamicColor:fromPalette({
+	MaterialDynamicColors.onSecondaryFixed = DynamicColor.fromPalette({
 		name = "on_secondary_fixed",
 		palette = function(s)
 			return s.secondaryPalette
@@ -759,7 +759,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.onSecondaryFixedVariant = DynamicColor:fromPalette({
+	MaterialDynamicColors.onSecondaryFixedVariant = DynamicColor.fromPalette({
 		name = "on_secondary_fixed_variant",
 		palette = function(s)
 			return s.secondaryPalette
@@ -775,7 +775,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(3, 4.5, 7, 11),
 	})
-	MaterialDynamicColors.tertiaryFixed = DynamicColor:fromPalette({
+	MaterialDynamicColors.tertiaryFixed = DynamicColor.fromPalette({
 		name = "tertiary_fixed",
 		palette = function(s)
 			return s.tertiaryPalette
@@ -792,7 +792,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.tertiaryFixed, MaterialDynamicColors.tertiaryFixedDim, 10, "lighter", true)
 		end,
 	})
-	MaterialDynamicColors.tertiaryFixedDim = DynamicColor:fromPalette({
+	MaterialDynamicColors.tertiaryFixedDim = DynamicColor.fromPalette({
 		name = "tertiary_fixed_dim",
 		palette = function(s)
 			return s.tertiaryPalette
@@ -809,7 +809,7 @@ do
 			return ToneDeltaPair.new(MaterialDynamicColors.tertiaryFixed, MaterialDynamicColors.tertiaryFixedDim, 10, "lighter", true)
 		end,
 	})
-	MaterialDynamicColors.onTertiaryFixed = DynamicColor:fromPalette({
+	MaterialDynamicColors.onTertiaryFixed = DynamicColor.fromPalette({
 		name = "on_tertiary_fixed",
 		palette = function(s)
 			return s.tertiaryPalette
@@ -825,7 +825,7 @@ do
 		end,
 		contrastCurve = ContrastCurve.new(4.5, 7, 11, 21),
 	})
-	MaterialDynamicColors.onTertiaryFixedVariant = DynamicColor:fromPalette({
+	MaterialDynamicColors.onTertiaryFixedVariant = DynamicColor.fromPalette({
 		name = "on_tertiary_fixed_variant",
 		palette = function(s)
 			return s.tertiaryPalette

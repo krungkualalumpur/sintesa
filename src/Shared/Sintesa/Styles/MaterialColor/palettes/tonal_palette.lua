@@ -18,23 +18,44 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
-local Hct = require(script.Parent.Parent:WaitForChild("hct"):WaitForChild("hct")).Hct
+local Hct = require(script.Parent.Parent:WaitForChild("hct"):WaitForChild("hct"))
 --[[
 	*
 	 *  A convenience class for retrieving colors that are constant in hue and
 	 *  chroma, but vary in tone.
 	 
 ]]
+type Hct = Hct.Hct
+
+type SpecialKeyColor = {
+	__index : SpecialKeyColor,
+	new : (hue : number, requestedChroma : number) -> SpecialKeyColor,
+	constructor : (SpecialKeyColor, hue : number, requestedChroma : number) -> (),
+	
+	create : (self : SpecialKeyColor) -> Hct,
+	maxChroma : (self : SpecialKeyColor, tone : number) -> number
+}
 
 export type TonalPalette = {
-	hue : any,
-	chroma : any,
-	keyColor : any,
-	cache : any,
-	[string] : (... any) -> ... any
+	__index : TonalPalette,
+
+	hue : number,
+	chroma : number,
+	keyColor : Hct,
+	cache : {number},
+
+	createKeyColor : (hue : number, requestedChroma : number) -> SpecialKeyColor,
+	new : (hue : number, chroma : number, keyColor : Hct) -> TonalPalette,
+	constructor : (self : TonalPalette, hue : number, chroma : number, keyColor : Hct) -> (),
+
+	fromInt : (argb : number) -> TonalPalette,
+	fromHct : (hct : Hct) -> TonalPalette,
+	fromHueAndChroma : (hue : number, chroma : number) -> TonalPalette,
+	tone : (self : TonalPalette, tone : number) -> number,
+	getHct : (self : TonalPalette) -> Hct,
 }
 local KeyColor
-local TonalPalette
+local TonalPalette : any
 do
 	TonalPalette = setmetatable({}, {
 		__tostring = function()
@@ -56,14 +77,14 @@ do
 		self.keyColor = keyColor
 		self.cache = {}
 	end
-	function TonalPalette:fromInt(argb)
-		local hct = Hct:fromInt(argb)
+	function TonalPalette.fromInt(argb)
+		local hct = Hct.Hct:fromInt(argb)
 		return TonalPalette:fromHct(hct)
 	end
-	function TonalPalette:fromHct(hct)
+	function TonalPalette.fromHct(hct)
 		return TonalPalette.new(hct:get_hue(), hct:get_chroma(), hct)
 	end
-	function TonalPalette:fromHueAndChroma(hue, chroma)
+	function TonalPalette.fromHueAndChroma(hue : number, chroma: number)
 		local keyColor = KeyColor.new(hue, chroma):create()
 		return TonalPalette.new(hue, chroma, keyColor)
 	end
@@ -72,7 +93,7 @@ do
 		local _tone = tone
 		local argb = _cache[_tone]
 		if argb == nil then
-			argb = Hct:from(self.hue, self.chroma, tone):toInt()
+			argb = Hct.Hct:from(self.hue, self.chroma, tone):toInt()
 			local _cache_1 = self.cache
 			local _tone_1 = tone
 			local _argb = argb
@@ -81,7 +102,7 @@ do
 		return argb
 	end
 	function TonalPalette:getHct(tone)
-		return Hct:fromInt(self:tone(tone))
+		return Hct.Hct:fromInt(self:tone(tone))
 	end
 end
 --[[
@@ -100,7 +121,8 @@ do
 		local self = setmetatable({}, KeyColor)
 		return self:constructor(...) or self
 	end
-	function KeyColor:constructor(hue, requestedChroma)
+	function KeyColor:constructor(hue : number, requestedChroma : number)
+		assert(type(hue) == "number" and type(requestedChroma) == "number", "Hue or chroma must be nambee nakrab!")
 		self.hue = hue
 		self.requestedChroma = requestedChroma
 		self.chromaCache = {}
@@ -128,7 +150,7 @@ do
 					upperTone = midTone
 				else
 					if lowerTone == midTone then
-						return Hct:from(self.hue, self.requestedChroma, lowerTone)
+						return Hct.Hct:from(self.hue, self.requestedChroma, lowerTone)
 					end
 					lowerTone = midTone
 				end
@@ -143,7 +165,7 @@ do
 				end
 			end
 		end
-		return Hct:from(self.hue, self.requestedChroma, lowerTone)
+		return Hct.Hct:from(self.hue, self.requestedChroma, lowerTone)
 	end
 	function KeyColor:maxChroma(tone)
 		local _chromaCache = self.chromaCache
@@ -153,7 +175,7 @@ do
 			local _tone_1 = tone
 			return _chromaCache_1[_tone_1]
 		end
-		local chroma = Hct:from(self.hue, self.maxChromaValue, tone):get_chroma()
+		local chroma = Hct.Hct:from(self.hue, self.maxChromaValue, tone):get_chroma()
 		local _chromaCache_1 = self.chromaCache
 		local _tone_1 = tone
 		_chromaCache_1[_tone_1] = chroma
@@ -161,5 +183,5 @@ do
 	end
 end
 return {
-	TonalPalette = TonalPalette,
+	TonalPalette = TonalPalette :: TonalPalette,
 }

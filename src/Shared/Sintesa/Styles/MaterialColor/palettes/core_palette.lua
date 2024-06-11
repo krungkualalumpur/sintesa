@@ -49,33 +49,33 @@ do
 		local hue = hct:get_hue()
 		local chroma = hct:get_chroma()
 		if isContent then
-			self.a1 = TonalPalette:fromHueAndChroma(hue, chroma)
-			self.a2 = TonalPalette:fromHueAndChroma(hue, chroma / 3)
-			self.a3 = TonalPalette:fromHueAndChroma(hue + 60, chroma / 2)
-			self.n1 = TonalPalette:fromHueAndChroma(hue, math.min(chroma / 12, 4))
-			self.n2 = TonalPalette:fromHueAndChroma(hue, math.min(chroma / 6, 8))
+			self.a1 = TonalPalette.fromHueAndChroma(hue, chroma)
+			self.a2 = TonalPalette.fromHueAndChroma(hue, chroma / 3)
+			self.a3 = TonalPalette.fromHueAndChroma(hue + 60, chroma / 2)
+			self.n1 = TonalPalette.fromHueAndChroma(hue, math.min(chroma / 12, 4))
+			self.n2 = TonalPalette.fromHueAndChroma(hue, math.min(chroma / 6, 8))
 		else
-			self.a1 = TonalPalette:fromHueAndChroma(hue, math.max(48, chroma))
-			self.a2 = TonalPalette:fromHueAndChroma(hue, 16)
-			self.a3 = TonalPalette:fromHueAndChroma(hue + 60, 24)
-			self.n1 = TonalPalette:fromHueAndChroma(hue, 4)
-			self.n2 = TonalPalette:fromHueAndChroma(hue, 8)
+			self.a1 = TonalPalette.fromHueAndChroma(hue, math.max(48, chroma))
+			self.a2 = TonalPalette.fromHueAndChroma(hue, 16)
+			self.a3 = TonalPalette.fromHueAndChroma(hue + 60, 24)
+			self.n1 = TonalPalette.fromHueAndChroma(hue, 4)
+			self.n2 = TonalPalette.fromHueAndChroma(hue, 8)
 		end
-		self.error = TonalPalette:fromHueAndChroma(25, 84)
+		self.error = TonalPalette.fromHueAndChroma(25, 84)
 	end
-	function CorePalette:of(argb)
+	function CorePalette.of(argb)
 		return CorePalette.new(argb, false)
 	end
-	function CorePalette:contentOf(argb)
+	function CorePalette.contentOf(argb)
 		return CorePalette.new(argb, true)
 	end
-	function CorePalette:fromColors(colors)
+	function CorePalette.fromColors(colors)
 		return CorePalette:createPaletteFromColors(false, colors)
 	end
-	function CorePalette:contentFromColors(colors)
+	function CorePalette.contentFromColors(colors)
 		return CorePalette:createPaletteFromColors(true, colors)
 	end
-	function CorePalette:createPaletteFromColors(content, colors)
+	function CorePalette.createPaletteFromColors(content, colors)
 		local palette = CorePalette.new(colors.primary, content)
 		local _value = colors.secondary
 		if _value ~= 0 and _value == _value and _value then

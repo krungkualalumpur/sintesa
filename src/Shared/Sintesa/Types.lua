@@ -6,6 +6,7 @@ local Maid = require(_Packages:WaitForChild("Maid"))
 local ColdFusion = require(_Packages:WaitForChild("ColdFusion8"))
 --modules
 local Enums = require(script.Parent:WaitForChild("Enums"))
+local DynamicColorTypes = require(script.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor"):WaitForChild("dynamiccolor"):WaitForChild("Types"))
 --types
 type Fuse = ColdFusion.Fuse
 type State<T> = ColdFusion.State<T>
@@ -23,9 +24,7 @@ export type AppearanceData = {
     Elevation : Enums.ElevationResting
 }
 
-export type TransitionData = {
-
-}
+export type DynamicScheme = DynamicColorTypes.DynamicScheme
 
 --constants
 --remotes

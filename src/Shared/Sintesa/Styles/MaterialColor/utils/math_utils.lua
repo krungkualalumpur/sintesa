@@ -89,7 +89,7 @@ end
 	 * (exclusive).
 	 
 ]]
-local function sanitizeDegreesInt(degrees)
+local function sanitizeDegreesInt(degrees : number)
 	degrees = degrees % 360
 	if degrees < 0 then
 		degrees = degrees + 360
@@ -104,7 +104,7 @@ end
 	 * (exclusive).
 	 
 ]]
-local function sanitizeDegreesDouble(degrees)
+local function sanitizeDegreesDouble(degrees : number)
 	degrees = degrees % 360.0
 	if degrees < 0 then
 		degrees = degrees + 360.0

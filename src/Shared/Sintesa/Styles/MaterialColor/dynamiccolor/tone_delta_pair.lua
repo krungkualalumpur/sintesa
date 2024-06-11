@@ -32,6 +32,10 @@
 	 * don't have a background / foreground relationship or a contrast guarantee.
 	 
 ]]
+local Types = require(script.Parent:WaitForChild("Types"))
+
+export type ToneDeltaPair = Types.ToneDeltaPair
+
 local ToneDeltaPair
 do
 	ToneDeltaPair = setmetatable({}, {

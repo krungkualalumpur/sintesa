@@ -26,20 +26,16 @@ local TonalPalette_Raw = require(script.Parent.Parent:WaitForChild("palettes"):W
 local TonalPalette = TonalPalette_Raw.TonalPalette
 local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("math_utils"))
 local MaterialDynamicColors = require(script.Parent:WaitForChild("material_dynamic_colors")).MaterialDynamicColors
-
+local DynamicColor = require(script.Parent:WaitForChild("dynamic_color"))
+local Types = require(script.Parent:WaitForChild("Types"))
 --types
+type Hct = any
+
+type DynamicSchemeOptions = Types.DynamicSchemeOptions
+type DynamicColor = Types.DynamicColor
 type TonalPalette = TonalPalette_Raw.TonalPalette
-export type DynamicSchemeOptions = {
-    sourceColorArgb: any;
-    variant: Variant.Variant;
-    contrastLevel: number;
-    isDark: boolean;
-    primaryPalette: TonalPalette;
-    secondaryPalette: TonalPalette;
-    tertiaryPalette: TonalPalette;
-    neutralPalette: TonalPalette;
-    neutralVariantPalette: TonalPalette;
-}
+
+
 --
 --[[
 	*
@@ -99,7 +95,7 @@ do
 		self.tertiaryPalette = args.tertiaryPalette
 		self.neutralPalette = args.neutralPalette
 		self.neutralVariantPalette = args.neutralVariantPalette
-		self.errorPalette = TonalPalette:fromHueAndChroma(25.0, 84.0)
+		self.errorPalette = TonalPalette.fromHueAndChroma(25.0, 84.0)
 	end
 	function DynamicScheme:getRotatedHue(sourceColor, hues, rotations)
 		local sourceHue = sourceColor:get_hue()
@@ -303,5 +299,5 @@ do
 	end
 end
 return {
-	DynamicScheme = DynamicScheme,
+	DynamicScheme = DynamicScheme :: Types.DynamicScheme,
 }

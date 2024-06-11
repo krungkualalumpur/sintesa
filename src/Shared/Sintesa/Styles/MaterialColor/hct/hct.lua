@@ -38,7 +38,7 @@ local TS = _G[script]
 local utils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("color_utils"))
 local Cam16 = require(script.Parent:WaitForChild("cam16")).Cam16
 local HctSolver = require(script.Parent:WaitForChild("hct_solver")).HctSolver
-local ViewingConditions = require(script.Parent:WaitForChild("viewing_conditions")).ViewingConditions
+local ViewingConditions = require(script.Parent:WaitForChild("viewing_conditions"))
 --[[
 	*
 	 * HCT, hue, chroma, and tone. A color system that provides a perceptually
@@ -46,6 +46,34 @@ local ViewingConditions = require(script.Parent:WaitForChild("viewing_conditions
 	 * will appear as in different lighting environments.
 	 
 ]]
+type ViewingConditions = ViewingConditions.ViewingConditions
+export type Hct = {
+	__index : Hct,
+	
+	internalHue : number,
+	internalChrome : number,
+	internalTone : number,
+	argb : number,
+
+
+	
+	new : (argb : number) -> Hct,
+	constructor : (self : Hct, argb : number) -> (),
+	
+	from : (self : Hct, hue : number, chrome : number, tone : number) -> Hct,
+	fromInt : (self : Hct, argb : number) -> Hct,
+	toInt : (self : Hct) -> number,
+	
+	get_hue : (self : Hct) -> number;
+    set_hue : (self : Hct, newHue: number) -> ();
+    get_chroma : (self : Hct) -> number;
+    set_chroma : (self : Hct, newChroma: number) -> ();
+    get_tone : (self : Hct) -> number;
+    set_tone : (self : Hct, newTone: number) -> ();
+	setInternalState : (self : Hct, argb : number) -> (),
+	inViewingConditions : (self : Hct, vc : ViewingConditions) -> Hct
+}
+
 local Hct
 do
 	Hct = setmetatable({}, {
@@ -105,7 +133,7 @@ do
 		local cam = Cam16:fromInt(self:toInt())
 		local viewedInVc = cam:xyzInViewingConditions(vc)
 		-- 2. Create CAM16 of those XYZ coordinates in default VC.
-		local recastInVc = Cam16:fromXyzInViewingConditions(viewedInVc[1], viewedInVc[2], viewedInVc[3], ViewingConditions:make())
+		local recastInVc = Cam16:fromXyzInViewingConditions(viewedInVc[1], viewedInVc[2], viewedInVc[3], ViewingConditions.ViewingConditions:make())
 		-- 3. Create HCT from:
 		-- - CAM16 using default VC with XYZ coordinates in specified VC.
 		-- - L* converted from Y in XYZ coordinates in specified VC.
@@ -114,5 +142,5 @@ do
 	end
 end
 return {
-	Hct = Hct,
+	Hct = Hct :: Hct,
 }

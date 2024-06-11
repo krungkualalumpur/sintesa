@@ -35,6 +35,25 @@ local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChil
 	 * depend only on viewing conditions, enabling speed ups.
 	 
 ]]
+export type ViewingConditions = {
+	__index : ViewingConditions,
+	new : (... any) -> ... any,
+	constructor : (
+		n : number, 
+		aw : number, 
+		nbb : number, 
+		ncb : number, 
+		c : number, 
+		nc : number, 
+		rgbD : {number}, 
+		f1 : number, 
+		fLRoot : number, 
+		z : number
+	) -> (),
+	make : (self : ViewingConditions, whitePoint : {number}?, adaptingLuminance : number?, backgroundLstar : number?, surround:number?, discountingIlluminant : boolean?) -> ()
+
+}
+
 local ViewingConditions
 do
 	ViewingConditions = setmetatable({}, {

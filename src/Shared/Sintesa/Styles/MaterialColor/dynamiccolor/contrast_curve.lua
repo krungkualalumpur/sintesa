@@ -18,6 +18,17 @@ local TS = _G[script]
 	 * limitations under the License.
 	 
 ]]
+export type ContrastCurve = {
+	__index : ContrastCurve,
+	low : number,
+	normal : number,
+	medium : number,
+	high : number,
+
+	new : (... any) -> (... any),
+	constructor : (self : any, low : number, normal : number, medium : number, high : number) -> (),
+	get : (contrastLevel : number) -> number
+}
 local mathUtils = require(script.Parent.Parent:WaitForChild("utils"):WaitForChild("math_utils"))
 --[[
 	*

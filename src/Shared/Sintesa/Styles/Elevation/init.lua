@@ -1,39 +1,22 @@
 --!strict
 --services
 --packages
+local Enums = require(script.Parent.Parent:WaitForChild("Enums"))
 --modules
 --types
-export type Level = "Level 0" | "Level 1" 
-                        | "Level 2" | "Level 3"
-                            | "Level 4" | "Level 5"
 export type LevelData = {
-    [Level] : {dp : number}
-}
-export type ElevationData = {
-    Level : Level,
+    [Enums.ElevationResting] : number
 }
 --constants
 --remotes
 --variables
 local LevelData : LevelData = {
-    ["Level 0"] = {
-        dp = 0
-    },
-    ["Level 1"] = {
-        dp = 1
-    },
-    ["Level 2"] = {
-        dp = 3
-    },
-    ["Level 3"] = {
-        dp = 6
-    },
-    ["Level 4"] = {
-        dp = 8
-    },
-    ["Level 5"] = {
-        dp = 12
-    },
+    [Enums.ElevationResting.Level0] = 0,
+    [Enums.ElevationResting.Level1] = 1,
+    [Enums.ElevationResting.Level2] = 3,
+    [Enums.ElevationResting.Level3] = 6,
+    [Enums.ElevationResting.Level4] = 8,
+    [Enums.ElevationResting.Level5] = 12,
 }
 --references
 --local functions

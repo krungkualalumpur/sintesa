@@ -30,10 +30,13 @@ type ShapeStyleEnum = CustomEnum<"ShapeStyle">
 export type ShapeStyle = CustomEnumItem<ShapeStyleEnum, "None"|"ExtraSmall"|"Small"|"Medium"|"Large"|"ExtraLarge"|"Full">
 
 type ShapeSymmetryEnum = CustomEnum<"ShapeSymmetry">
-export type ShapeSymmetry = CustomEnumItem<ShapeSymmetryEnum, "Top"|"Bottom"|"Start"|"End"|"None">
+export type ShapeSymmetry = CustomEnumItem<ShapeSymmetryEnum, "Top"|"Bottom"|"Start"|"End"|"Full">
 
 type TypographyStyleEnum = CustomEnum<"TypographyStyle">
 export type TypographyStyle = CustomEnumItem<TypographyStyleEnum, "DisplayLarge"|"DisplayMedium"|"DisplaySmall"|"HeadlineLarge"|"HeadlineMedium"|"HeadlineSmall"|"TitleLarge"|"TitleMedium"|"TitleSmall"|"BodyLarge"|"BodyMedium"|"BodySmall"|"LabelLarge"|"LabelMedium"|"LabelSmall">
+
+type ButtonStateEnum = CustomEnum<"ButtonState">
+export type ButtonState = CustomEnumItem<ButtonStateEnum, "Enabled"|"Disabled"|"Hovered"|"Focused"|"Pressed">
 
 export type CustomEnums = {
 
@@ -133,7 +136,7 @@ export type CustomEnums = {
 		Bottom : CustomEnumItem <ShapeSymmetryEnum, "Bottom">,
 		Start : CustomEnumItem <ShapeSymmetryEnum, "Start">,
 		End : CustomEnumItem <ShapeSymmetryEnum, "End">,
-		None : CustomEnumItem <ShapeSymmetryEnum, "None">,
+		Full : CustomEnumItem <ShapeSymmetryEnum, "Full">,
 	} & ShapeSymmetryEnum,
 
 	TypographyStyle : 	{		
@@ -153,6 +156,14 @@ export type CustomEnums = {
 		LabelMedium : CustomEnumItem <TypographyStyleEnum, "LabelMedium">,
 		LabelSmall : CustomEnumItem <TypographyStyleEnum, "LabelSmall">,
 	} & TypographyStyleEnum,
+
+	ButtonState : 	{		
+		Enabled : CustomEnumItem <ButtonStateEnum, "Enabled">,
+		Disabled : CustomEnumItem <ButtonStateEnum, "Disabled">,
+		Hovered : CustomEnumItem <ButtonStateEnum, "Hovered">,
+		Focused : CustomEnumItem <ButtonStateEnum, "Focused">,
+		Pressed : CustomEnumItem <ButtonStateEnum, "Pressed">,
+	} & ButtonStateEnum,
 
 }
 --constants
@@ -718,8 +729,8 @@ ShapeSymmetry.End = {
 	EnumType = ShapeSymmetry
 }
 
-ShapeSymmetry.None = {
-	Name = "None",
+ShapeSymmetry.Full = {
+	Name = "Full",
 	Value = 5,
 	EnumType = ShapeSymmetry
 }
@@ -827,6 +838,49 @@ TypographyStyle.LabelSmall = {
 	EnumType = TypographyStyle
 }
 
+local ButtonState = {
+	Name = "ButtonState",
+	GetEnumItems = function(self)
+		local t = {}
+		for _,v in pairs(self) do
+			if type(v) == "table" then 
+				 table.insert(t, v)  
+			end
+		end
+		return t
+	end,
+}
+
+ButtonState.Enabled = {
+	Name = "Enabled",
+	Value = 1,
+	EnumType = ButtonState
+}
+
+ButtonState.Disabled = {
+	Name = "Disabled",
+	Value = 2,
+	EnumType = ButtonState
+}
+
+ButtonState.Hovered = {
+	Name = "Hovered",
+	Value = 3,
+	EnumType = ButtonState
+}
+
+ButtonState.Focused = {
+	Name = "Focused",
+	Value = 4,
+	EnumType = ButtonState
+}
+
+ButtonState.Pressed = {
+	Name = "Pressed",
+	Value = 5,
+	EnumType = ButtonState
+}
+
 local CustomEnum = {	
 	ColorRole = ColorRole :: any,
 	ElevationResting = ElevationResting :: any,
@@ -835,6 +889,7 @@ local CustomEnum = {
 	ShapeStyle = ShapeStyle :: any,
 	ShapeSymmetry = ShapeSymmetry :: any,
 	TypographyStyle = TypographyStyle :: any,
+	ButtonState = ButtonState :: any,
 } :: CustomEnums
 
 return CustomEnum

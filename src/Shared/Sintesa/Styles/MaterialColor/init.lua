@@ -12,10 +12,11 @@ local Hct = require(script:WaitForChild("hct"):WaitForChild("hct"))
 local TonalPalette = require(script:WaitForChild("palettes"):WaitForChild("tonal_palette"))
 
 local ColorUtil = require(script:WaitForChild("utils"):WaitForChild("color_utils"))
+local MaterialTypes = require(script:WaitForChild("dynamiccolor"):WaitForChild("Types"))
 --types
 --constants
-type DynamicScheme = any
-type DynamicColor = any
+type DynamicScheme = MaterialTypes.DynamicScheme
+type DynamicColor = MaterialTypes.DynamicColor
 type TonalPalette = TonalPalette.TonalPalette
 type ToneDeltaPair = ToneDeltaPair.ToneDeltaPair
 type ContrastCurve = ContrastCurve.ContrastCurve
@@ -33,13 +34,14 @@ end
 local MaterialColor = {}
 
 
-function MaterialColor.getDynamicColor(
+function MaterialColor.getDynamicScheme(
     primary : Color3,
     secondary : Color3,
     tertiary : Color3,
 
     neutral : Color3,
-    neutralVariant : Color3): DynamicScheme
+    neutralVariant : Color3,
+    isDarkMode : boolean?): DynamicScheme
    -- print(primary.R*255, primary.G*255, primary.B*255) 
 
     local primaryR, primaryG, primaryB = getRGBComponentsFromColor3(Color3.fromRGB(primary.R, primary.G, primary.B))
@@ -149,7 +151,7 @@ function MaterialColor.getDynamicColor(
 
     local dynamic_Scheme = DynamicScheme.DynamicScheme.new({
         sourceColorArgb = sourceColor,
-        isDark = true,
+        isDark = if isDarkMode ~= nil then isDarkMode else false,
         contrastLevel = 0,
         variant = Variant.Variant,
         primaryPalette = primaryPalette,
@@ -164,7 +166,7 @@ function MaterialColor.getDynamicColor(
    -- local secondary_argb = dynamic_Scheme:getArgb(secondary_dynamicColor)
    -- print(ColorUtil.rgbaFromArgb(primary_argb), "\n", ColorUtil.rgbaFromArgb(secondary_argb), "\n", ColorUtil.rgbaFromArgb(primary_dynamicColor:getArgb(dynamic_Scheme)))
     
-    return dynamic_Scheme
+    return dynamic_Scheme :: DynamicScheme
 end
 
 return MaterialColor

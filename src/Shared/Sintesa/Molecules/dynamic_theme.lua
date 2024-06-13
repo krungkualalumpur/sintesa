@@ -1,9 +1,10 @@
 --!strict
---services  
+--services
 --packages
 --modules
 --types
 --constants
+--remotes
 --variables
 --references
 --local functions

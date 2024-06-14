@@ -33,6 +33,10 @@ end
 --class
 local MaterialColor = {}
 
+function MaterialColor.Color3FromARGB(argb : number)
+    local R,G,B = getRGBComponentsFromColor3(ColorUtil.rgbaFromArgb(argb))
+    return Color3.fromRGB(R, G, B)
+end
 
 function MaterialColor.getDynamicScheme(
     primary : Color3,

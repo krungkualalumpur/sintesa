@@ -11,36 +11,31 @@ local Typography = require(script.Parent:WaitForChild("Styles"):WaitForChild("Ty
 local Motions = require(script.Parent:WaitForChild("Styles"):WaitForChild("Motions"))
 
 --types
-type Fuse = ColdFusion.Fuse
-type State<T> = ColdFusion.State<T>
-type ValueState<T> = ColdFusion.ValueState<T>
-type CanBeState<T> = ColdFusion.CanBeState<T>
-
 export type TypeScaleData = Typography.TypeScaleData
 export type AppearanceData = {
-    Symmetry : CanBeState<Enums.ShapeSymmetry>,
-    Style : CanBeState<Enums.ShapeStyle>,
-    Elevation : CanBeState<Enums.ElevationResting>,
-    Height : CanBeState<number>,
+    Symmetry : Enums.ShapeSymmetry,
+    Style : Enums.ShapeStyle,
+    Elevation : Enums.ElevationResting,
+    Height : number,
     --SurfaceColor : Enums.ColorRole,
-    PrimaryColor : CanBeState<Color3>,
-    SecondaryColor : CanBeState<Color3>,
-    TertiaryColor : CanBeState<Color3>,
-    NeutralColor : CanBeState<Color3>,
-    NeutralVariantColor : CanBeState<Color3>,
+    PrimaryColor : Color3,
+    SecondaryColor : Color3,
+    TertiaryColor : Color3,
+    NeutralColor : Color3,
+    NeutralVariantColor : Color3,
 
-    ShadowColor : CanBeState<Color3>
+    ShadowColor : Color3
 }
 
-export type DynamicScheme = CanBeState<DynamicColorTypes.DynamicScheme>
+export type DynamicScheme = DynamicColorTypes.DynamicScheme
 
 export type TypographyData = {
-    TypeScale : CanBeState<TypeScaleData>,
+    TypeScale : TypeScaleData,
 }
 
 export type TransitionData = {
-    Easing : CanBeState<Enums.Easing>,
-    Duration : CanBeState<Enums.TransitionDuration>
+    Easing : Enums.Easing,
+    Duration : Enums.TransitionDuration
 }
 
 --constants
@@ -51,20 +46,20 @@ export type TransitionData = {
 --class
 local data = {}
 function data.createAppearanceData(
-    primaryColor : CanBeState<Color3>,
+    primaryColor : Color3,
 
-    secondaryColor : CanBeState<Color3>,
-    tertiaryColor : CanBeState<Color3>,
+    secondaryColor : Color3,
+    tertiaryColor : Color3,
 
-    neutralColor : CanBeState<Color3>,
-    neutralVariantColor : CanBeState<Color3>,
+    neutralColor : Color3,
+    neutralVariantColor : Color3,
 
-    shadowColor : CanBeState<Color3>,
+    shadowColor : Color3,
     
-    elevation : CanBeState<Enums.ElevationResting>,
-    symmetry : CanBeState<Enums.ShapeSymmetry>,
-    style : CanBeState<Enums.ShapeStyle>,
-    height : CanBeState<number>
+    elevation : Enums.ElevationResting,
+    symmetry : Enums.ShapeSymmetry,
+    style : Enums.ShapeStyle,
+    height : number
 ) : AppearanceData
     local data = {
         PrimaryColor = primaryColor,
@@ -83,7 +78,7 @@ function data.createAppearanceData(
 end
 
 function data.createTypographyData(
-    typeScale : CanBeState<Typography.TypeScaleData>
+    typeScale : Typography.TypeScaleData
     ) : TypographyData
     return {
         TypeScale = typeScale
@@ -91,8 +86,8 @@ function data.createTypographyData(
 end
 
 function data.createTransitionData(
-    easing : CanBeState<Enums.Easing>,
-    duration : CanBeState<Enums.TransitionDuration>
+    easing : Enums.Easing,
+    duration : Enums.TransitionDuration
     ) : TransitionData
 
     return {

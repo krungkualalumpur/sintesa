@@ -52,62 +52,55 @@ function interface.ColdFusion.new(
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local state : ValueState<Enums.ButtonState>  = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState) 
+    local buttonState : ValueState<Enums.ButtonState>  = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState) 
 
     local elevationState : ValueState<Enums.ElevationResting> = _Value(Enums.ElevationResting.Level0 :: Enums.ElevationResting) 
     local symmetryState : ValueState<Enums.ShapeSymmetry> = _Value(Enums.ShapeSymmetry.Full :: Enums.ShapeSymmetry)
     local styleState : ValueState<Enums.ShapeStyle> = _Value(Enums.ShapeStyle.ExtraLarge :: Enums.ShapeStyle)
     local heightState : ValueState<number> = _Value(24)
 
-    local primaryColor = DynamicTheme.Color[Enums.ColorRole.Primary]
-    local secondaryColor = DynamicTheme.Color[Enums.ColorRole.Secondary]
-    local tertiaryColor = DynamicTheme.Color[Enums.ColorRole.Tertiary]
+    local primaryColorState = _import(DynamicTheme.Color[Enums.ColorRole.Primary], DEFAULT_COLOR)
+    local secondaryColorState = _import(DynamicTheme.Color[Enums.ColorRole.Secondary], DEFAULT_COLOR)
+    local tertiaryColorState = _import(DynamicTheme.Color[Enums.ColorRole.Tertiary], DEFAULT_COLOR)
     
-    local neutralColor = DynamicTheme.Color[Enums.ColorRole.Surface]
-    local neutralVariantColor = DynamicTheme.Color[Enums.ColorRole.SurfaceDim]
-    local shadowColor = DynamicTheme.Color[Enums.ColorRole.SurfaceDim]
+    local neutralColorState = _import(DynamicTheme.Color[Enums.ColorRole.Surface], DEFAULT_COLOR)
+    local neutralVariantColorState = _import(DynamicTheme.Color[Enums.ColorRole.SurfaceDim], DEFAULT_COLOR)
+    local shadowColorState = _import(DynamicTheme.Color[Enums.ColorRole.SurfaceDim], DEFAULT_COLOR)
 
-    local primaryColorState = _import(primaryColor, DEFAULT_COLOR)
-    local secondaryColorState = _import(secondaryColor, DEFAULT_COLOR)
-    local tertiaryColorState = _import(tertiaryColor, DEFAULT_COLOR)
 
-    local neutralColorState = _import(neutralColor, DEFAULT_COLOR)
-    local neutralVariantColorState = _import(neutralVariantColor, DEFAULT_COLOR)
-    local shadowColorState = _import(shadowColor, DEFAULT_COLOR)
+    local appearanceDataState = _Value(Types.createAppearanceData(
+        DynamicTheme.Color[Enums.ColorRole.Primary],
+        DynamicTheme.Color[Enums.ColorRole.Secondary],
+        DynamicTheme.Color[Enums.ColorRole.Tertiary],
 
-    local DynamicScheme = MaterialColor.getDynamicScheme(primaryColorState:Get(), Color3.fromRGB(164, 209, 138),Color3.fromRGB(31, 101, 194),Color3.fromRGB(255,255,255),Color3.fromRGB(255,255,255))
+        DynamicTheme.Color[Enums.ColorRole.Surface],
+        DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
+        DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
 
-    local appearanceData = Types.createAppearanceData(
-        primaryColorState,
-        secondaryColorState,
-        tertiaryColorState,
-
-        neutralColorState,
-        neutralVariantColorState,
-        shadowColorState,
-
-        elevationState,
-        symmetryState,
-        styleState,
-        heightState
-    )
+        Enums.ElevationResting.Level0,
+        Enums.ShapeSymmetry.Full,
+        Enums.ShapeStyle.ExtraLarge,
+        24
+    ))
     
-    local typographyData = Types.createTypographyData(
+    local typographyDataState = _Value(Types.createTypographyData(
         Styles.Typography.getTypographyTypeScales()[Enums.TypographyStyle.BodyLarge]
-    )
+    ))
 
 
     local base = Base.ColdFusion.new(
         maid, 
         text,
 
-        appearanceData,
-        typographyData
+        appearanceDataState,
+        typographyDataState,
+
+        buttonState
     )
 
     local out = _bind(base)({
         Name = "Elevated",
-        BackgroundColor3 = primaryColorState,
+        --BackgroundColor3 = primaryColorState,
         Text = text,
     })
 

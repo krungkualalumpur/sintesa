@@ -25,9 +25,12 @@ local _Value = _fuse.Value
 
 return {
     Color = {
-        [Enums.ColorRole.OnPrimary] = _Value(Color3.new(0.713725, 0.129412, 0.945098)),
-        [Enums.ColorRole.OnSecondary] = _Value(Color3.new(0.627451, 0.549020, 0.713725)),
-        [Enums.ColorRole.OnTertiary] = _Value(Color3.new(0.203922, 0.411765, 0.686275)),
+        [Enums.ColorRole.Primary] = _Value(Color3.new(0.713725, 0.129412, 0.945098)),
+        [Enums.ColorRole.Secondary] = _Value(Color3.new(0.627451, 0.549020, 0.713725)),
+        [Enums.ColorRole.Tertiary] = _Value(Color3.new(0.203922, 0.411765, 0.686275)),
+        [Enums.ColorRole.Surface] = _Value(Color3.fromRGB(220,220,220)), --neutral colors in general
+        [Enums.ColorRole.SurfaceDim] = _Value(Color3.fromRGB(180,180,180)), -- neutral variant colors in general
+        [Enums.ColorRole.Shadow] = _Value(Color3.new(0.011765, 0.011765, 0.011765))
     },
     
 } :: {

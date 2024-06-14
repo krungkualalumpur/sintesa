@@ -15,6 +15,7 @@ local Types = require(script.Parent.Parent.Parent.Parent:WaitForChild("Types"))
 local Styles = require(script.Parent.Parent.Parent.Parent:WaitForChild("Styles"))
 local Enums = require(script.Parent.Parent.Parent.Parent:WaitForChild("Enums"))
 
+local DynamicTheme = require(script.Parent.Parent.Parent:WaitForChild("dynamic_theme"))
 --types
 type Maid = Maid.Maid
 
@@ -58,22 +59,13 @@ function interface.ColdFusion.new(
     local styleState : ValueState<Enums.ShapeStyle> = _Value(Enums.ShapeStyle.ExtraLarge :: Enums.ShapeStyle)
     local heightState : ValueState<number> = _Value(24)
 
-    local appearanceData = Types.createAppearanceData(
-        primaryColor,
-        secondaryColor,
-        tertiaryColor,
-
-        neutralColor,
-        neutralVariantColor,
-
-        elevationState,
-        symmetryState,
-        styleState,
-        heightState
-    )
-    local typographyData = Types.createTypographyData(
-        Styles.Typography.getTypographyTypeScales()[Enums.TypographyStyle.BodyLarge]
-    )
+    local primaryColor = DynamicTheme.Color[Enums.ColorRole.Primary]
+    local secondaryColor = DynamicTheme.Color[Enums.ColorRole.Secondary]
+    local tertiaryColor = DynamicTheme.Color[Enums.ColorRole.Tertiary]
+    
+    local neutralColor = DynamicTheme.Color[Enums.ColorRole.Surface]
+    local neutralVariantColor = DynamicTheme.Color[Enums.ColorRole.SurfaceDim]
+    local shadowColor = DynamicTheme.Color[Enums.ColorRole.SurfaceDim]
 
     local primaryColorState = _import(primaryColor, DEFAULT_COLOR)
     local secondaryColorState = _import(secondaryColor, DEFAULT_COLOR)
@@ -81,8 +73,29 @@ function interface.ColdFusion.new(
 
     local neutralColorState = _import(neutralColor, DEFAULT_COLOR)
     local neutralVariantColorState = _import(neutralVariantColor, DEFAULT_COLOR)
+    local shadowColorState = _import(shadowColor, DEFAULT_COLOR)
 
     local DynamicScheme = MaterialColor.getDynamicScheme(primaryColorState:Get(), Color3.fromRGB(164, 209, 138),Color3.fromRGB(31, 101, 194),Color3.fromRGB(255,255,255),Color3.fromRGB(255,255,255))
+
+    local appearanceData = Types.createAppearanceData(
+        primaryColorState,
+        secondaryColorState,
+        tertiaryColorState,
+
+        neutralColorState,
+        neutralVariantColorState,
+        shadowColorState,
+
+        elevationState,
+        symmetryState,
+        styleState,
+        heightState
+    )
+    
+    local typographyData = Types.createTypographyData(
+        Styles.Typography.getTypographyTypeScales()[Enums.TypographyStyle.BodyLarge]
+    )
+
 
     local base = Base.ColdFusion.new(
         maid, 

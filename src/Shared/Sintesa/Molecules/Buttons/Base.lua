@@ -8,6 +8,9 @@ local ColdFusion = require(_Packages:WaitForChild("ColdFusion8"))
 local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
 local Enums = require(script.Parent.Parent.Parent:WaitForChild("Enums"))
 
+local MaterialColor = require(
+    script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
+) 
 --types
 type Maid = Maid.Maid
 
@@ -51,6 +54,8 @@ function interface.ColdFusion.new(
     local _clone = _fuse.clone
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
+
+    local DynamicScheme = MaterialColor.getDynamicScheme(primaryColorState:Get(), Color3.fromRGB(164, 209, 138),Color3.fromRGB(31, 101, 194),Color3.fromRGB(255,255,255),Color3.fromRGB(255,255,255))
 
     local out = _new("TextButton")({
         Text = text

@@ -44,8 +44,8 @@ function interface.ColdFusion.new(
     maid : Maid,
     text : CanBeState<string>,
 
-    appearanceData : CanBeState<AppearanceData>,
-    typographyData : CanBeState<TypographyData>
+    isDark : CanBeState<boolean>?,
+    textSize : CanBeState<number>?
     )
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -57,7 +57,7 @@ function interface.ColdFusion.new(
 
     local buttonState : ValueState<Enums.ButtonState>  = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState) 
 
-    --[[local elevationState : ValueState<Enums.ElevationResting> = _Value(Enums.ElevationResting.Level0 :: Enums.ElevationResting) 
+    local elevationState : ValueState<Enums.ElevationResting> = _Value(Enums.ElevationResting.Level0 :: Enums.ElevationResting) 
     local symmetryState : ValueState<Enums.ShapeSymmetry> = _Value(Enums.ShapeSymmetry.Full :: Enums.ShapeSymmetry)
     local styleState : ValueState<Enums.ShapeStyle> = _Value(Enums.ShapeStyle.ExtraLarge :: Enums.ShapeStyle)
     local heightState : ValueState<number> = _Value(24)
@@ -70,6 +70,7 @@ function interface.ColdFusion.new(
     local neutralVariantColorState = _import(DynamicTheme.Color[Enums.ColorRole.SurfaceDim], DEFAULT_COLOR)
     local shadowColorState = _import(DynamicTheme.Color[Enums.ColorRole.SurfaceDim], DEFAULT_COLOR)
 
+    local isDarkState = _import(isDark, isDark)
 
     local appearanceDataState = _Value(Types.createAppearanceData(
         DynamicTheme.Color[Enums.ColorRole.Primary],
@@ -83,14 +84,36 @@ function interface.ColdFusion.new(
         Enums.ElevationResting.Level0,
         Enums.ShapeSymmetry.Full,
         Enums.ShapeStyle.ExtraLarge,
-        24
+        24,
+
+        isDarkState:Get()
     ))
+
+    _Computed(function(dark : boolean)
+        appearanceDataState:Set(Types.createAppearanceData(
+            DynamicTheme.Color[Enums.ColorRole.Primary],
+            DynamicTheme.Color[Enums.ColorRole.Secondary],
+            DynamicTheme.Color[Enums.ColorRole.Tertiary],
     
-    local typographyDataState = _Value(Types.createTypographyData(
+            DynamicTheme.Color[Enums.ColorRole.Surface],
+            DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
+            DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
+    
+            Enums.ElevationResting.Level0,
+            Enums.ShapeSymmetry.Full,
+            Enums.ShapeStyle.ExtraLarge,
+            24,
+    
+            dark
+        ))
+        return isDarkState
+    end)
+    
+    --[[local typographyDataState = _Value(Types.createTypographyData(
         Styles.Typography.getTypographyTypeScales()[Enums.TypographyStyle.BodyLarge]
     ))]]
-    local appearanceDataState = _import(appearanceData, appearanceData)
-    local typographyDataState = _import(typographyData, typographyData)
+   -- local appearanceDataState = _import(appearanceData, appearanceData)
+    local typographyDataState = _Value(Types.createTypographyData())
 
     local base = Base.ColdFusion.new(
         maid, 

@@ -18,6 +18,7 @@ export type AppearanceData = {
     Elevation : Enums.ElevationResting,
     Height : number,
     --SurfaceColor : Enums.ColorRole,
+    IsDark : boolean,
     PrimaryColor : Color3,
     SecondaryColor : Color3,
     TertiaryColor : Color3,
@@ -55,11 +56,13 @@ function data.createAppearanceData(
     neutralVariantColor : Color3,
 
     shadowColor : Color3,
-    
+
     elevation : Enums.ElevationResting,
     symmetry : Enums.ShapeSymmetry,
     style : Enums.ShapeStyle,
-    height : number
+    height : number,
+
+    isDark : boolean
 ) : AppearanceData
     local data = {
         PrimaryColor = primaryColor,
@@ -68,6 +71,8 @@ function data.createAppearanceData(
         NeutralColor = neutralColor,
         NeutralVariantColor = neutralVariantColor,
         ShadowColor = shadowColor,
+        
+        IsDark = isDark,
 
         Elevation = elevation or Enums.ElevationResting.Level0,
         Symmetry = symmetry or Enums.ShapeSymmetry.Full,

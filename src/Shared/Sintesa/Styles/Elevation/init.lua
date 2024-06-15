@@ -22,8 +22,10 @@ local LevelData : LevelData = {
 --local functions
 --class
 local Elevation = {}
-
-function Elevation.getLevelData(): LevelData
+function Elevation.getLevelData(elevation : Enums.ElevationResting): number
+    return LevelData[elevation]
+end
+function Elevation.getLevelsData(): LevelData
     return table.freeze(LevelData)
 end
 

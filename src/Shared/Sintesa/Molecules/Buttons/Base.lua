@@ -15,6 +15,7 @@ local MaterialColor = require(
 local DynamicTheme = require(script.Parent.Parent:WaitForChild("dynamic_theme"))
 
 local ShapeStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Shape"))
+local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
 
 --types
 type Maid = Maid.Maid
@@ -107,6 +108,23 @@ function interface.ColdFusion.new(
             ):get_onPrimary())
         end, appearanceDataState, buttonState),
 
+        TextSize = _Computed(function(typography : TypographyData)
+            return typography.TypeScale.Size
+        end, typographyDataState),
+
+        LineHeight = _Computed(function(typography : TypographyData)
+            return typography.TypeScale.LineHeight
+        end, typographyDataState),
+
+        FontFace = _Computed(function(typography : TypographyData)
+            for _,fontWeight : Enum.FontWeight in pairs(Enum.FontWeight:GetEnumItems()) do
+                if typography.TypeScale.Weight == fontWeight.Value then
+                    return Font.fromName(typography.TypeScale.Font.Name, fontWeight)
+                end
+            end
+            return Font.fromName(typography.TypeScale.Font.Name, Enum.FontWeight.Regular) 
+        end, typographyDataState),
+
         Text = text,
 
         Children = {
@@ -117,10 +135,26 @@ function interface.ColdFusion.new(
                         ShapeStyle.get(appearance.Style)
                     )
                 end, appearanceDataState, buttonState)
+            }),
+            _new("Frame")({
+                Name = "Shadow",
+                AnchorPoint = Vector2.new(0.5, 0.5),
+                BackgroundColor3 = _Computed(function(appearance : AppearanceData, _state : Enums.ButtonState)
+                    return appearance.ShadowColor
+                end, appearanceDataState),
+
+                BackgroundTransparency = _Computed(function(appearance : AppearanceData, _state : Enums.ButtonState)
+                    return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
+                end, appearanceDataState, buttonState),
+
+                Size = UDim2.fromScale(1.15, 1.15),
+                Position = UDim2.fromScale(0.5, 0.5),
+
+                
             })
         }
     })
-    return out 
+    return out :: TextButton
 end
 
 

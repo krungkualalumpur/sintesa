@@ -42,7 +42,10 @@ local interface = {}
 interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
-    text : CanBeState<string>
+    text : CanBeState<string>,
+
+    appearanceData : CanBeState<AppearanceData>,
+    typographyData : CanBeState<TypographyData>
     )
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -54,7 +57,7 @@ function interface.ColdFusion.new(
 
     local buttonState : ValueState<Enums.ButtonState>  = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState) 
 
-    local elevationState : ValueState<Enums.ElevationResting> = _Value(Enums.ElevationResting.Level0 :: Enums.ElevationResting) 
+    --[[local elevationState : ValueState<Enums.ElevationResting> = _Value(Enums.ElevationResting.Level0 :: Enums.ElevationResting) 
     local symmetryState : ValueState<Enums.ShapeSymmetry> = _Value(Enums.ShapeSymmetry.Full :: Enums.ShapeSymmetry)
     local styleState : ValueState<Enums.ShapeStyle> = _Value(Enums.ShapeStyle.ExtraLarge :: Enums.ShapeStyle)
     local heightState : ValueState<number> = _Value(24)
@@ -85,8 +88,9 @@ function interface.ColdFusion.new(
     
     local typographyDataState = _Value(Types.createTypographyData(
         Styles.Typography.getTypographyTypeScales()[Enums.TypographyStyle.BodyLarge]
-    ))
-
+    ))]]
+    local appearanceDataState = _import(appearanceData, appearanceData)
+    local typographyDataState = _import(typographyData, typographyData)
 
     local base = Base.ColdFusion.new(
         maid, 
@@ -100,8 +104,25 @@ function interface.ColdFusion.new(
 
     local out = _bind(base)({
         Name = "Elevated",
-        --BackgroundColor3 = primaryColorState,
-        Text = text,
+        BackgroundColor3 = _Computed(function(appearance : AppearanceData, _state : Enums.ButtonState)
+            return  MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
+                appearance.PrimaryColor, 
+                appearance.SecondaryColor, 
+                appearance.TertiaryColor, 
+                appearance.NeutralColor, 
+                appearance.NeutralVariantColor
+            ):get_surfaceContainerLow())
+            
+        end, appearanceDataState, buttonState),
+        TextColor3 = _Computed(function(appearance : AppearanceData, _state : Enums.ButtonState)
+            return MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
+                appearance.PrimaryColor, 
+                appearance.SecondaryColor, 
+                appearance.TertiaryColor, 
+                appearance.NeutralColor, 
+                appearance.NeutralVariantColor
+            ):get_primary())
+        end, appearanceDataState),
     })
 
     return out

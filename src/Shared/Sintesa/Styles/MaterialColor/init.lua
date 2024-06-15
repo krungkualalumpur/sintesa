@@ -150,7 +150,7 @@ function MaterialColor.getDynamicScheme(
         neutralVariant_hct:get_chroma(), 
         neutralVariantKeyColor:create()
     )
-
+ 
     local sourceColor = ColorUtil.argbFromRgb(primaryR,primaryG, primaryB)
 
     local dynamic_Scheme = DynamicScheme.DynamicScheme.new({

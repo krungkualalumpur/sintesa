@@ -113,7 +113,15 @@ function interface.ColdFusion.new(
         Styles.Typography.getTypographyTypeScales()[Enums.TypographyStyle.BodyLarge]
     ))]]
    -- local appearanceDataState = _import(appearanceData, appearanceData)
-    local typographyDataState = _Value(Types.createTypographyData())
+    local typographyDataState = _Value(Types.createTypographyData(
+        {
+            Font = Enum.Font.Roboto,
+            LineHeight = 40, 
+            Size = ,
+            Tracking = ,
+            Weight = ,
+        }
+    ))
 
     local base = Base.ColdFusion.new(
         maid, 

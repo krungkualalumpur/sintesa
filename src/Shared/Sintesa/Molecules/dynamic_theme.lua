@@ -29,56 +29,18 @@ local _Value = _fuse.Value
 
 local DynamicScheme: DynamicScheme-- = _Value(MaterialColor.getDynamicScheme(Color3))
 local ColorState = {
-    [Enums.ColorRole.Primary :: Enums.ColorRole] = Color3.new(0.713725, 0.129412, 0.945098),
-    [Enums.ColorRole.Secondary] = Color3.new(0.627451, 0.549020, 0.713725),
-    [Enums.ColorRole.Tertiary] = Color3.new(0.203922, 0.411765, 0.686275),
-    [Enums.ColorRole.Surface] = Color3.fromRGB(220,220,220), --neutral colors in general
-    [Enums.ColorRole.SurfaceDim] = Color3.fromRGB(180,180,180), -- neutral variant colors in general
+    [Enums.ColorRole.Primary :: Enums.ColorRole] = Color3.new(0.639216, 0.341176, 0.666667),
+    [Enums.ColorRole.Secondary] = Color3.new(0.400000, 0.392157, 0.780392),
+    [Enums.ColorRole.Tertiary] = Color3.new(0.384314, 0.564706, 0.800000),
+    [Enums.ColorRole.Surface] = Color3.new(0.580392, 0.580392, 0.580392), --neutral colors in general
+    [Enums.ColorRole.SurfaceDim] = Color3.new(0.368627, 0.368627, 0.368627), -- neutral variant colors in general
     [Enums.ColorRole.Shadow] = Color3.new(0.011765, 0.011765, 0.011765)
 }
 --references
 --local functions
-local function get() : DynamicScheme
-    return MaterialColor.getDynamicScheme(
-        ColorState[Enums.ColorRole.Primary],
-        ColorState[Enums.ColorRole.Secondary],
-        ColorState[Enums.ColorRole.Tertiary],
-        ColorState[Enums.ColorRole.Surface],
-        ColorState[Enums.ColorRole.SurfaceDim]
-    )
-end
 --class
 local theme = {}
 
 theme.Color = ColorState
-theme.getDynamicScheme = function()
-    if not DynamicScheme then
-        DynamicScheme = get()
-        assert(DynamicScheme)
-        DynamicScheme:Set(get())
-    end
-
-    return DynamicScheme
-end
-theme.setDynamicScheme = function(
-    primaryColor : Color3,
-    secondaryColor : Color3,
-    tertiaryColor : Color3,
-    neutral : Color3,
-    neutralVariant : Color3,
-    shadowColor : Color3
-    ) 
-    
-    Color3[Enums.ColorRole.Primary]:Set(primaryColor)
-    Color3[Enums.ColorRole.Secondary]:Set(secondaryColor)
-    Color3[Enums.ColorRole.Tertiary]:Set(tertiaryColor)
-    Color3[Enums.ColorRole.Surface]:Set(neutral)
-    Color3[Enums.ColorRole.SurfaceDim]:Set(neutralVariant)
-    Color3[Enums.ColorRole.Shadow]:Set(shadowColor)
-
-    theme.getDynamicScheme()
-    return 
-end
-
 
 return theme 

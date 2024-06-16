@@ -68,8 +68,8 @@ function interface.ColdFusion.new(
 
             DynamicTheme.Color[Enums.ColorRole.Surface],
             DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
-            DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
-
+            DynamicTheme.Color[Enums.ColorRole.Shadow],
+ 
             if _buttonState == Enums.ButtonState.Enabled then 
                 Enums.ElevationResting.Level1 
             elseif _buttonState == Enums.ButtonState.Disabled then
@@ -110,38 +110,37 @@ function interface.ColdFusion.new(
     )
 
     local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
-        local surfaceContainerLow = MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
+        local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
             appearance.TertiaryColor, 
             appearance.NeutralColor, 
             appearance.NeutralVariantColor,
             appearance.IsDark
-        ):get_surfaceContainerLow())
-        local onSurface = MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
-            appearance.PrimaryColor, 
-            appearance.SecondaryColor, 
-            appearance.TertiaryColor, 
-            appearance.NeutralColor, 
-            appearance.NeutralVariantColor,
-            appearance.IsDark
-        ):get_onSurface())
+        )
+        local surfaceContainerLow = MaterialColor.Color3FromARGB(dynamicScheme:get_surfaceContainerLow())
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+
         return (if _buttonState == Enums.ButtonState.Enabled then surfaceContainerLow 
             elseif _buttonState == Enums.ButtonState.Disabled then onSurface
-            elseif _buttonState == Enums.ButtonState.Hovered then onSurface
         else surfaceContainerLow)
     end, appearanceDataState, buttonState)
 
-    local labelTextColorState = _Computed(function(appearance : AppearanceData)
-        return MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
+    local labelTextColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+        local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
             appearance.TertiaryColor, 
             appearance.NeutralColor, 
             appearance.NeutralVariantColor,
             appearance.IsDark
-        ):get_primary())
-    end, appearanceDataState)
+        )
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+            
+        return if _buttonState == Enums.ButtonState.Enabled then primary elseif _buttonState == Enums.ButtonState.Disabled then onSurface else primary
+    end, appearanceDataState, buttonState)
 
     local out = _bind(base)({
         Name = "Elevated",

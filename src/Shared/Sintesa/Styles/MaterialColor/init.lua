@@ -28,15 +28,16 @@ local function getRGBComponentsFromColor3(
     color3 : Color3)
     
     local R, G, B = color3.R*255, color3.G*255, color3.B*255
-    return R*255, G*255, B*255
+    return R, G, B
 end
 --class
 local MaterialColor = {}
 
 function MaterialColor.Color3FromARGB(argb : number)
-    local R,G,B = getRGBComponentsFromColor3(ColorUtil.rgbaFromArgb(argb))
-    return Color3.fromRGB(R, G, B)
-end
+    local color3 = ColorUtil.rgbaFromArgb(argb) 
+    local R,G,B = getRGBComponentsFromColor3(Color3.fromRGB(color3.r, color3.g, color3.b))
+    return Color3.fromRGB(R, G, B) 
+end 
 
 function MaterialColor.getDynamicScheme(
     primary : Color3,
@@ -47,13 +48,12 @@ function MaterialColor.getDynamicScheme(
     neutralVariant : Color3,
     isDarkMode : boolean?): DynamicScheme
    -- print(primary.R*255, primary.G*255, primary.B*255) 
-
-    local primaryR, primaryG, primaryB = getRGBComponentsFromColor3(Color3.fromRGB(primary.R, primary.G, primary.B))
-    local secondaryR, secondaryG, secondaryB = getRGBComponentsFromColor3(Color3.fromRGB(secondary.R, secondary.G, secondary.B))
-    local tertiaryR, tertiaryG, tertiaryB = getRGBComponentsFromColor3(Color3.fromRGB(tertiary.R, tertiary.G, tertiary.B))
+    local primaryR, primaryG, primaryB = getRGBComponentsFromColor3(primary)
+    local secondaryR, secondaryG, secondaryB = getRGBComponentsFromColor3(secondary)
+    local tertiaryR, tertiaryG, tertiaryB = getRGBComponentsFromColor3(tertiary)
     
-    local neutralR, neutralG, neutralB = getRGBComponentsFromColor3(Color3.fromRGB(tertiary.R, tertiary.G, tertiary.B))
-    local neutralVariantR, neutralVariantG, neutralVariantB = getRGBComponentsFromColor3(Color3.fromRGB(tertiary.R, tertiary.G, tertiary.B))
+    local neutralR, neutralG, neutralB = getRGBComponentsFromColor3(neutral)
+    local neutralVariantR, neutralVariantG, neutralVariantB = getRGBComponentsFromColor3(neutralVariant)
 
     local primary_hct = Hct.Hct.new(ColorUtil.argbFromRgb(primaryR, primaryG, primaryB))
     local secondary_hct = Hct.Hct.new(ColorUtil.argbFromRgb(secondaryR, secondaryG, secondaryB))

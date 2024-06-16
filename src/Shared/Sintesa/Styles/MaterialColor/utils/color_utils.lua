@@ -293,7 +293,7 @@ end
 	 * @return RGBA representation of a int32 color.
 	 
 ]]
-local function rgbaFromArgb(argb)
+local function rgbaFromArgb(argb) : {r : number, g : number, b: number, a : number}
 	local r = redFromArgb(argb)
 	local g = greenFromArgb(argb)
 	local b = blueFromArgb(argb)

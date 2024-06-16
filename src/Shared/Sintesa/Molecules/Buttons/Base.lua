@@ -66,6 +66,7 @@ function interface.ColdFusion.new(
 
     
     local out = _new("TextButton")({
+
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return  MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
                 appearance.PrimaryColor, 
@@ -78,15 +79,23 @@ function interface.ColdFusion.new(
             
         end, appearanceDataState),
 
+        BorderColor3 = _Computed(function(appearance : AppearanceData)
+            return appearance.ShadowColor
+        end, appearanceDataState),
+
+        BorderSizePixel = 2,
+
         TextColor3 = _Computed(function(appearance : AppearanceData): Color3
-            return MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
+            local onPrimary = MaterialColor.getDynamicScheme(
                 appearance.PrimaryColor, 
                 appearance.SecondaryColor, 
                 appearance.TertiaryColor, 
                 appearance.NeutralColor, 
                 appearance.NeutralVariantColor,
                 appearance.IsDark
-            ):get_onPrimary())
+            ):get_onPrimary()
+
+            return MaterialColor.Color3FromARGB(onPrimary)
         end, appearanceDataState),
 
         TextSize = _Computed(function(typography : TypographyData)
@@ -115,12 +124,22 @@ function interface.ColdFusion.new(
                         0,  
                         ShapeStyle.get(appearance.Style)
                     )
-                end, appearanceDataState)
+                end, appearanceDataState),
             }),
-            _new("Frame")({
+    
+
+            _new("UIStroke")({
                 Name = "Shadow",
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                BackgroundColor3 = _Computed(function(appearance : AppearanceData)
+                Thickness = 6,
+                Color = _Computed(function(appearance : AppearanceData)
+                    return appearance.ShadowColor
+                end, appearanceDataState),
+                ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+                Transparency =  _Computed(function(appearance : AppearanceData)
+                    return (40 - ElevationStyle.getLevelData(appearance.Elevation))/40
+                end, appearanceDataState)
+                --[[ AnchorPoint = Vector2.new(0.5, 0.5),
+               BackgroundColor3 = _Computed(function(appearance : AppearanceData)
                     return appearance.ShadowColor
                 end, appearanceDataState),
 
@@ -129,9 +148,8 @@ function interface.ColdFusion.new(
                 end, appearanceDataState),
 
                 Size = UDim2.fromScale(1.15, 1.15),
-                Position = UDim2.fromScale(0.5, 0.5),
+                Position = UDim2.fromScale(0.5, 0.5),]]
 
-                
             })
         }
     })

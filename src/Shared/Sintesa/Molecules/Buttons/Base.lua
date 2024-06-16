@@ -36,7 +36,6 @@ export type ButtonStates = {
     }
 }
 --constants
-local DEFAULT_COLOR = Color3.fromRGB(200,200,200)
 --remotes
 --variables
 --references
@@ -52,9 +51,7 @@ function interface.ColdFusion.new(
     text : CanBeState<string>,
 
     appearanceData : CanBeState<AppearanceData>,
-    typographyData : CanBeState<TypographyData>,
-
-    state : CanBeState<Enums.ButtonState>)
+    typographyData : CanBeState<TypographyData>)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -64,49 +61,33 @@ function interface.ColdFusion.new(
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local buttonState : State<Enums.ButtonState> = _import(state :: Enums.ButtonState, Enums.ButtonState.Enabled)
-
     local appearanceDataState = _import(appearanceData, appearanceData)
     local typographyDataState = _import(typographyData, typographyData)
 
-    --[[local function getCurrentPrimary(
-        primaryColor : Color3,
-        secondaryColor : Color3,
-        tertiaryColor : Color3,
-        neutralColor : Color3,
-        neutralVariantColor : Color3)
-
-        local DynamicScheme = MaterialColor.getDynamicScheme(
-            primaryColor,   
-            secondaryColor,
-            tertiaryColor,
-            neutralColor,
-            neutralVariantColor
-        )
-
-        return DynamicScheme:get_primaryContainer()
-    end]]
+    
     local out = _new("TextButton")({
-        BackgroundColor3 = _Computed(function(appearance : AppearanceData, _state : Enums.ButtonState)
+        BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return  MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
                 appearance.PrimaryColor, 
                 appearance.SecondaryColor, 
                 appearance.TertiaryColor, 
                 appearance.NeutralColor, 
-                appearance.NeutralVariantColor
+                appearance.NeutralVariantColor,
+                appearance.IsDark
             ):get_primary())
             
-        end, appearanceDataState, buttonState),
+        end, appearanceDataState),
 
-        TextColor3 = _Computed(function(appearance : AppearanceData, _state : Enums.ButtonState)
+        TextColor3 = _Computed(function(appearance : AppearanceData): Color3
             return MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
                 appearance.PrimaryColor, 
                 appearance.SecondaryColor, 
                 appearance.TertiaryColor, 
                 appearance.NeutralColor, 
-                appearance.NeutralVariantColor
+                appearance.NeutralVariantColor,
+                appearance.IsDark
             ):get_onPrimary())
-        end, appearanceDataState, buttonState),
+        end, appearanceDataState),
 
         TextSize = _Computed(function(typography : TypographyData)
             return typography.TypeScale.Size
@@ -129,23 +110,23 @@ function interface.ColdFusion.new(
 
         Children = {
             _new("UICorner")({
-                CornerRadius = _Computed(function(appearance : AppearanceData, _state : Enums.ButtonState) 
+                CornerRadius = _Computed(function(appearance : AppearanceData) 
                     return UDim.new(
                         0,  
                         ShapeStyle.get(appearance.Style)
                     )
-                end, appearanceDataState, buttonState)
+                end, appearanceDataState)
             }),
             _new("Frame")({
                 Name = "Shadow",
                 AnchorPoint = Vector2.new(0.5, 0.5),
-                BackgroundColor3 = _Computed(function(appearance : AppearanceData, _state : Enums.ButtonState)
+                BackgroundColor3 = _Computed(function(appearance : AppearanceData)
                     return appearance.ShadowColor
                 end, appearanceDataState),
 
-                BackgroundTransparency = _Computed(function(appearance : AppearanceData, _state : Enums.ButtonState)
+                BackgroundTransparency = _Computed(function(appearance : AppearanceData)
                     return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
-                end, appearanceDataState, buttonState),
+                end, appearanceDataState),
 
                 Size = UDim2.fromScale(1.15, 1.15),
                 Position = UDim2.fromScale(0.5, 0.5),

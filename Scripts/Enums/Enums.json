@@ -24,6 +24,6 @@
     
     "ButtonState" : [
         "Enabled", "Disabled", "Hovered", 
-        "Focused", "Pressed"
+        "Focused", "Pressed", "Dragged"
     ]
 }

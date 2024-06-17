@@ -70,19 +70,7 @@ function interface.ColdFusion.new(
             DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
             DynamicTheme.Color[Enums.ColorRole.Shadow],
  
-            if _buttonState == Enums.ButtonState.Enabled then 
-                Enums.ElevationResting.Level0
-            elseif _buttonState == Enums.ButtonState.Disabled then
-                Enums.ElevationResting.Level0 
-            elseif _buttonState == Enums.ButtonState.Hovered then
-                Enums.ElevationResting.Level1
-            elseif _buttonState == Enums.ButtonState.Focused then 
-                Enums.ElevationResting.Level0
-            elseif _buttonState == Enums.ButtonState.Pressed then
-                Enums.ElevationResting.Level0
-            elseif _buttonState == Enums.ButtonState.Dragged then
-                Enums.ElevationResting.Level3
-            else Enums.ElevationResting.Level0,
+            Enums.ElevationResting.Level0,
 
             Enums.ShapeSymmetry.Full,
             Enums.ShapeStyle.Large,
@@ -111,7 +99,7 @@ function interface.ColdFusion.new(
         typographyDataState,
 
         buttonState,
-        true
+        false
     )
 
     local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
@@ -124,11 +112,8 @@ function interface.ColdFusion.new(
             appearance.IsDark
         )
         local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
-        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
 
-        return (if _buttonState == Enums.ButtonState.Enabled then primary 
-            elseif _buttonState == Enums.ButtonState.Disabled then onSurface
-        else primary)
+        return primary
     end, appearanceDataState, buttonState)
 
     local labelTextColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
@@ -140,18 +125,19 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local onPrimary = MaterialColor.Color3FromARGB(dynamicScheme:get_onPrimary())
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+        local onSecondary = MaterialColor.Color3FromARGB(dynamicScheme:get_onSecondaryContainer())
 
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
             
-        return if _buttonState == Enums.ButtonState.Enabled then onPrimary 
+        return if _buttonState == Enums.ButtonState.Enabled then primary 
             elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-        else onPrimary
+        else primary
     end, appearanceDataState, buttonState)
 
     local out = _bind(base)({
-        Name = "Elevated",
-        BackgroundColor3 = containerColorState,
+        Name = "Text",
+        BackgroundTransparency = 1,
         TextColor3 = labelTextColorState,
        
     }) :: TextButton

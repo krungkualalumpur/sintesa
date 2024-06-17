@@ -36,7 +36,7 @@ type TypographyStyleEnum = CustomEnum<"TypographyStyle">
 export type TypographyStyle = CustomEnumItem<TypographyStyleEnum, "DisplayLarge"|"DisplayMedium"|"DisplaySmall"|"HeadlineLarge"|"HeadlineMedium"|"HeadlineSmall"|"TitleLarge"|"TitleMedium"|"TitleSmall"|"BodyLarge"|"BodyMedium"|"BodySmall"|"LabelLarge"|"LabelMedium"|"LabelSmall">
 
 type ButtonStateEnum = CustomEnum<"ButtonState">
-export type ButtonState = CustomEnumItem<ButtonStateEnum, "Enabled"|"Disabled"|"Hovered"|"Focused"|"Pressed">
+export type ButtonState = CustomEnumItem<ButtonStateEnum, "Enabled"|"Disabled"|"Hovered"|"Focused"|"Pressed"|"Dragged">
 
 export type CustomEnums = {
 
@@ -163,6 +163,7 @@ export type CustomEnums = {
 		Hovered : CustomEnumItem <ButtonStateEnum, "Hovered">,
 		Focused : CustomEnumItem <ButtonStateEnum, "Focused">,
 		Pressed : CustomEnumItem <ButtonStateEnum, "Pressed">,
+		Dragged : CustomEnumItem <ButtonStateEnum, "Dragged">,
 	} & ButtonStateEnum,
 
 }
@@ -878,6 +879,12 @@ ButtonState.Focused = {
 ButtonState.Pressed = {
 	Name = "Pressed",
 	Value = 5,
+	EnumType = ButtonState
+}
+
+ButtonState.Dragged = {
+	Name = "Dragged",
+	Value = 6,
 	EnumType = ButtonState
 }
 

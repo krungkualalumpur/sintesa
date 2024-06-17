@@ -106,7 +106,10 @@ function interface.ColdFusion.new(
         text,
 
         appearanceDataState,
-        typographyDataState
+        typographyDataState,
+
+        buttonState,
+        true
     )
 
     local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
@@ -146,14 +149,7 @@ function interface.ColdFusion.new(
         Name = "Elevated",
         BackgroundColor3 = containerColorState,
         TextColor3 = labelTextColorState,
-        Events = {
-            MouseEnter = function()
-                buttonState:Set(Enums.ButtonState.Hovered)
-            end,
-            MouseLeave = function()
-                buttonState:Set(Enums.ButtonState.Enabled)
-            end
-        }
+
     }) :: TextButton
 
     return out

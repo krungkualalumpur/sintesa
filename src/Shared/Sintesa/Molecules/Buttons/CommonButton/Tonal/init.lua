@@ -111,7 +111,7 @@ function interface.ColdFusion.new(
         typographyDataState,
 
         buttonState,
-        true
+        false
     )
 
     local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
@@ -123,12 +123,12 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+        local secondaryContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_secondaryContainer())
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
 
-        return (if _buttonState == Enums.ButtonState.Enabled then primary 
+        return (if _buttonState == Enums.ButtonState.Enabled then secondaryContainer 
             elseif _buttonState == Enums.ButtonState.Disabled then onSurface
-        else primary)
+        else secondaryContainer)
     end, appearanceDataState, buttonState)
 
     local labelTextColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
@@ -140,13 +140,13 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local onPrimary = MaterialColor.Color3FromARGB(dynamicScheme:get_onPrimary())
+        local onSecondary = MaterialColor.Color3FromARGB(dynamicScheme:get_onSecondaryContainer())
 
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
             
-        return if _buttonState == Enums.ButtonState.Enabled then onPrimary 
+        return if _buttonState == Enums.ButtonState.Enabled then onSecondary 
             elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-        else onPrimary
+        else onSecondary
     end, appearanceDataState, buttonState)
 
     local out = _bind(base)({

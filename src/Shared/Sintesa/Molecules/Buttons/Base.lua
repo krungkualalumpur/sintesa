@@ -1,6 +1,7 @@
 --!strict
 local _Packages = game:GetService("ReplicatedStorage"):WaitForChild("Packages")
 --services 
+local UserInputService =  game:GetService("UserInputService")
 --packages
 local Maid = require(_Packages:WaitForChild("Maid"))
 local ColdFusion = require(_Packages:WaitForChild("ColdFusion8"))
@@ -40,6 +41,14 @@ export type ButtonStates = {
 --variables
 --references
 --local functions
+local function mouseIsInButton(button : GuiObject)
+    local mouse = UserInputService:GetMouseLocation()
+    if ((mouse.X > button.AbsolutePosition.X) and (mouse.X < (button.AbsolutePosition.X + button.AbsoluteSize.X))) 
+    and ((mouse.Y > button.AbsolutePosition.Y) and (mouse.Y < (button.AbsolutePosition.Y + button.AbsoluteSize.Y))) then
+        return true
+    end
+    return false
+end
 --class
 local interface = {}
 
@@ -51,7 +60,9 @@ function interface.ColdFusion.new(
     text : CanBeState<string>,
 
     appearanceData : CanBeState<AppearanceData>,
-    typographyData : CanBeState<TypographyData>)
+    typographyData : CanBeState<TypographyData>,
+    buttonState : ValueState<Enums.ButtonState>,
+    hasShadow : boolean)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -127,30 +138,49 @@ function interface.ColdFusion.new(
                 end, appearanceDataState),
             }),
     
+            if hasShadow then
+                _new("UIStroke")({
+                    Name = "Shadow",
+                    Thickness = 6,
+                    Color = _Computed(function(appearance : AppearanceData)
+                        return appearance.ShadowColor
+                    end, appearanceDataState),
+                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+                    Transparency =  _Computed(function(appearance : AppearanceData)
+                        return (20 - ElevationStyle.getLevelData(appearance.Elevation))/20
+                    end, appearanceDataState)
+                })
+            else nil :: any
+        },
 
-            _new("UIStroke")({
-                Name = "Shadow",
-                Thickness = 6,
-                Color = _Computed(function(appearance : AppearanceData)
-                    return appearance.ShadowColor
-                end, appearanceDataState),
-                ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                Transparency =  _Computed(function(appearance : AppearanceData)
-                    return (40 - ElevationStyle.getLevelData(appearance.Elevation))/40
-                end, appearanceDataState)
-                --[[ AnchorPoint = Vector2.new(0.5, 0.5),
-               BackgroundColor3 = _Computed(function(appearance : AppearanceData)
-                    return appearance.ShadowColor
-                end, appearanceDataState),
+        Events = {
+            MouseEnter = function()
+                if buttonState:Get() ~= Enums.ButtonState.Disabled then
+                    buttonState:Set(Enums.ButtonState.Hovered)
+                end
+            end,
+            MouseLeave = function()
+                if buttonState:Get() ~= Enums.ButtonState.Disabled then
+                    buttonState:Set(Enums.ButtonState.Enabled)
+                end
+            end,
+            MouseButton1Down = function()
+                if buttonState:Get() ~= Enums.ButtonState.Disabled then
+                    buttonState:Set(Enums.ButtonState.Pressed)
+                end
+            end,
+        }
+    }) :: TextButton
 
-                BackgroundTransparency = _Computed(function(appearance : AppearanceData)
-                    return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
-                end, appearanceDataState),
-
-                Size = UDim2.fromScale(1.15, 1.15),
-                Position = UDim2.fromScale(0.5, 0.5),]]
-
-            })
+    _bind(out)({
+        Events = {
+            MouseButton1Up = function()
+                if mouseIsInButton(out) then
+                    buttonState:Set(Enums.ButtonState.Hovered)
+                else
+                    buttonState:Set(Enums.ButtonState.Enabled)
+                end
+            end
         }
     })
     return out :: TextButton

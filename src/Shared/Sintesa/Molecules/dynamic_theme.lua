@@ -39,7 +39,9 @@ local ColorState = {
 --references
 --local functions
 --class
-local theme = {}
+local theme = {
+    StateLayerOpacity = 0.08
+}
 
 theme.Color = ColorState
 

@@ -41,7 +41,8 @@ function interface.ColdFusion.new(
     text : CanBeState<string>,
 
     isDark : CanBeState<boolean>?,
-    textSize : CanBeState<number>?
+    textSize : CanBeState<number>?,
+    iconId : number?
     )
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -101,17 +102,7 @@ function interface.ColdFusion.new(
         }
     ))
 
-    local base = Base.ColdFusion.new(
-        maid, 
-        text,
-
-        appearanceDataState,
-        typographyDataState,
-
-        buttonState,
-        true
-    )
-
+    
     local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
@@ -129,6 +120,8 @@ function interface.ColdFusion.new(
         else surfaceContainerLow)
     end, appearanceDataState, buttonState)
 
+    local state
+
     local labelTextColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
@@ -145,12 +138,49 @@ function interface.ColdFusion.new(
         return if _buttonState == Enums.ButtonState.Enabled then primary elseif _buttonState == Enums.ButtonState.Disabled then onSurface else primary
     end, appearanceDataState, buttonState)
 
-    local out = _bind(base)({
-        Name = "Elevated",
-        BackgroundColor3 = containerColorState,
-        TextColor3 = labelTextColorState,
+    local stateLayerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+        local dynamicScheme = MaterialColor.getDynamicScheme(
+            appearance.PrimaryColor, 
+            appearance.SecondaryColor, 
+            appearance.TertiaryColor, 
+            appearance.NeutralColor, 
+            appearance.NeutralVariantColor,
+            appearance.IsDark
+        )
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
 
-    }) :: TextButton
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+            
+        return if _buttonState == Enums.ButtonState.Enabled then primary elseif _buttonState == Enums.ButtonState.Disabled then onSurface else primary
+     
+    end, appearanceDataState, buttonState)
+
+    local out = Base.ColdFusion.new(
+        maid, 
+        text,
+
+        containerColorState,
+        labelTextColorState,
+        stateLayerColorState,
+
+        appearanceDataState, 
+        typographyDataState,
+
+        buttonState,
+        true,
+
+        nil, 
+        nil,
+        _Computed(function(_buttonState : Enums.ButtonState)
+            return (if _buttonState == Enums.ButtonState.Pressed then 
+                (1  - 0.1)
+                elseif _buttonState == Enums.ButtonState.Focused then 
+                    (1 - 0.1)
+                elseif _buttonState == Enums.ButtonState.Hovered then
+                    (1 - 0.08)
+            else 1)
+        end, buttonState)
+    )
 
     return out
 end

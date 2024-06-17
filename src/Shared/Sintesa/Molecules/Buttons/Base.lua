@@ -59,10 +59,18 @@ function interface.ColdFusion.new(
     
     text : CanBeState<string>,
 
+    containerColorState : State<Color3>,
+    labelTextColorState : State<Color3> ,
+    stateLayerColorState : State<Color3>,
+
     appearanceData : CanBeState<AppearanceData>,
     typographyData : CanBeState<TypographyData>,
     buttonState : ValueState<Enums.ButtonState>,
-    hasShadow : boolean)
+    hasShadow : boolean,
+    iconId : number ?,
+
+    iconColorState : State<Color3> ?,
+    opacity : State<number> ?)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -74,71 +82,95 @@ function interface.ColdFusion.new(
 
     local appearanceDataState = _import(appearanceData, appearanceData)
     local typographyDataState = _import(typographyData, typographyData)
-
+    
+    local getUiCorner = function()
+        return _new("UICorner")({
+            CornerRadius = _Computed(function(appearance : AppearanceData) 
+                return UDim.new(
+                    0,  
+                    ShapeStyle.get(appearance.Style)
+                )
+            end, appearanceDataState),
+        })
+    end
     
     local out = _new("TextButton")({
 
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
-            return  MaterialColor.Color3FromARGB(MaterialColor.getDynamicScheme(
-                appearance.PrimaryColor, 
-                appearance.SecondaryColor, 
-                appearance.TertiaryColor, 
-                appearance.NeutralColor, 
-                appearance.NeutralVariantColor,
-                appearance.IsDark
-            ):get_primary())
-            
-        end, appearanceDataState),
-
-        BorderColor3 = _Computed(function(appearance : AppearanceData)
             return appearance.ShadowColor
         end, appearanceDataState),
-
-        BorderSizePixel = 2,
-
-        TextColor3 = _Computed(function(appearance : AppearanceData): Color3
-            local onPrimary = MaterialColor.getDynamicScheme(
-                appearance.PrimaryColor, 
-                appearance.SecondaryColor, 
-                appearance.TertiaryColor, 
-                appearance.NeutralColor, 
-                appearance.NeutralVariantColor,
-                appearance.IsDark
-            ):get_onPrimary()
-
-            return MaterialColor.Color3FromARGB(onPrimary)
+        BackgroundTransparency =  _Computed(function(appearance : AppearanceData)
+            return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
         end, appearanceDataState),
-
-        TextSize = _Computed(function(typography : TypographyData)
-            return typography.TypeScale.Size
-        end, typographyDataState),
-
-        LineHeight = _Computed(function(typography : TypographyData)
-            return typography.TypeScale.LineHeight
-        end, typographyDataState),
-
-        FontFace = _Computed(function(typography : TypographyData)
-            for _,fontWeight : Enum.FontWeight in pairs(Enum.FontWeight:GetEnumItems()) do
-                if typography.TypeScale.Weight == fontWeight.Value then
-                    return Font.fromName(typography.TypeScale.Font.Name, fontWeight)
-                end
-            end
-            return Font.fromName(typography.TypeScale.Font.Name, Enum.FontWeight.Regular) 
-        end, typographyDataState),
-
-        Text = text,
-
+        --[[BorderColor3 = _Computed(function(appearance : AppearanceData)
+            return appearance.ShadowColor
+        end, appearanceDataState),]]
+        BorderSizePixel = 2,
         Children = {
-            _new("UICorner")({
-                CornerRadius = _Computed(function(appearance : AppearanceData) 
-                    return UDim.new(
-                        0,  
-                        ShapeStyle.get(appearance.Style)
-                    )
-                end, appearanceDataState),
+            _new("CanvasGroup")({
+                AnchorPoint = Vector2.new(0.5,0.5),
+                Size = UDim2.fromScale(0.965, 0.925),
+                BackgroundColor3 = containerColorState,
+                Position = UDim2.fromScale(0.5,0.5),
+                Children = {
+                    getUiCorner(),
+                    _new("Frame")({
+                        BackgroundColor3 = stateLayerColorState,
+                        BackgroundTransparency = opacity or 1,
+                        Size = UDim2.fromScale(1, 1),
+                        Children = {
+                            _new("UIListLayout")({
+                                SortOrder = Enum.SortOrder.LayoutOrder,
+                                HorizontalAlignment = Enum.HorizontalAlignment.Center
+                            }),
+                            getUiCorner(),
+                            if iconId then
+                                _new("ImageLabel")({
+                                    LayoutOrder = 1,
+                                    BackgroundTransparency = 1,
+                                    ImageColor3 = iconColorState,
+                                    Image = "rbxassetid://",
+                                    Size = UDim2.fromScale(0.2, 1),
+                                    Children = {
+                                        _new("UIAspectRatioConstraint")({
+                                            AspectRatio = 1
+                                        })
+                                    }
+                                })
+                            else nil :: any,
+                            _new("TextLabel")({
+                                LayoutOrder = 2,
+                                BackgroundTransparency = 1,
+                                Size = UDim2.fromScale(0.8, 1),
+                                Text = text,
+                                
+                                TextColor3 = labelTextColorState,
+        
+                                TextSize = _Computed(function(typography : TypographyData)
+                                    return typography.TypeScale.Size
+                                end, typographyDataState),
+        
+                                LineHeight = _Computed(function(typography : TypographyData)
+                                    return typography.TypeScale.LineHeight
+                                end, typographyDataState),
+        
+                                FontFace = _Computed(function(typography : TypographyData)
+                                    for _,fontWeight : Enum.FontWeight in pairs(Enum.FontWeight:GetEnumItems()) do
+                                        if typography.TypeScale.Weight == fontWeight.Value then
+                                            return Font.fromName(typography.TypeScale.Font.Name, fontWeight)
+                                        end
+                                    end
+                                    return Font.fromName(typography.TypeScale.Font.Name, Enum.FontWeight.Regular) 
+                                end, typographyDataState),
+                            })
+                        }
+                    }),
+                }
             }),
+            
+            getUiCorner(),
     
-            if hasShadow then
+           --[[ if hasShadow then
                 _new("UIStroke")({
                     Name = "Shadow",
                     Thickness = 6,
@@ -150,7 +182,7 @@ function interface.ColdFusion.new(
                         return (20 - ElevationStyle.getLevelData(appearance.Elevation))/20
                     end, appearanceDataState)
                 })
-            else nil :: any
+            else nil :: any]]
         },
 
         Events = {

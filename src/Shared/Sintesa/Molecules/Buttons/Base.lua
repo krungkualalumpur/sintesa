@@ -57,20 +57,22 @@ interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
     
-    text : CanBeState<string>,
 
     containerColorState : State<Color3>,
-    labelTextColorState : State<Color3> ,
     stateLayerColorState : State<Color3>,
 
     appearanceData : CanBeState<AppearanceData>,
     typographyData : CanBeState<TypographyData>,
     buttonState : ValueState<Enums.ButtonState>,
     hasShadow : boolean,
-    iconId : number ?,
+
+    text : CanBeState<string?>,
+    iconId : CanBeState<number?>,
 
     iconColorState : State<Color3> ?,
     stateOpacity : State<number> ?,
+    labelTextColorState : State<Color3>?,
+
     backgroundOpacity : number?)
 
     local _fuse = ColdFusion.fuse(maid)
@@ -95,6 +97,9 @@ function interface.ColdFusion.new(
         })
     end
     
+    local textState = _import(text, text)
+    local iconIdState = _import(iconId, iconId)
+
     local out = _new("TextButton")({
 
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
@@ -112,7 +117,7 @@ function interface.ColdFusion.new(
                 Name = "CanvasGroup",
                 AnchorPoint = Vector2.new(0.5,0.5),
                 ClipsDescendants = false,
-                Size = UDim2.fromScale(0.965, 0.925),
+                Size = UDim2.new(0.92, 0, 0.92,0),
                 BackgroundTransparency = if backgroundOpacity then (1 - backgroundOpacity) else 0 ,
                 BackgroundColor3 = containerColorState,
                 Position = UDim2.fromScale(0.5,0.5),
@@ -126,26 +131,35 @@ function interface.ColdFusion.new(
                         Children = {
                             _new("UIListLayout")({
                                 SortOrder = Enum.SortOrder.LayoutOrder,
-                                HorizontalAlignment = Enum.HorizontalAlignment.Center
+                                FillDirection = Enum.FillDirection.Horizontal,
+                                HorizontalAlignment = Enum.HorizontalAlignment.Center,
+                                VerticalAlignment = Enum.VerticalAlignment.Center
                             }),
                             getUiCorner(),
-                            if iconId then
-                                _new("ImageLabel")({
-                                    LayoutOrder = 1,
-                                    BackgroundTransparency = 1,
-                                    ImageColor3 = iconColorState,
-                                    Image = "rbxassetid://",
-                                    Size = UDim2.fromScale(0.2, 1),
-                                    Children = {
-                                        _new("UIAspectRatioConstraint")({
-                                            AspectRatio = 1
-                                        })
-                                    }
-                                })
-                            else nil :: any,
+                            _new("ImageLabel")({
+                                LayoutOrder = 1,
+                                BackgroundTransparency = 1,
+                                Visible = _Computed(function(id : number?)
+                                    return if id then true else false
+                                end, iconIdState),
+                                ImageColor3 = iconColorState,
+                                Image = _Computed(function(id : number?)
+                                    return `rbxassetid://{id}`
+                                end, iconIdState) ,
+                                Size = UDim2.fromScale(if text then 0.2 else 1, 1),
+                                Children = {
+                                    _new("UIAspectRatioConstraint")({
+                                        AspectRatio = 1
+                                    })
+                                }
+                            })
+                            ,
                             _new("TextLabel")({
                                 LayoutOrder = 2,
                                 BackgroundTransparency = 1,
+                                Visible = _Computed(function(str : string?)
+                                    return if str then true else false
+                                end, textState),
                                 Size = UDim2.fromScale(0.8, 1),
                                 Text = text,
                                 
@@ -168,6 +182,7 @@ function interface.ColdFusion.new(
                                     return Font.fromName(typography.TypeScale.Font.Name, Enum.FontWeight.Regular) 
                                 end, typographyDataState),
                             })
+                        
                         }
                     }),
                 }

@@ -5,7 +5,7 @@ local Package = ReplicatedStorage:WaitForChild("Packages")
 --packages
 local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
-local Elevated = require(script.Parent)
+local FAB = require(script.Parent)
 --modules
 --types
 --constants
@@ -25,7 +25,7 @@ return function(target : CoreGui)
    local _Computed = _fuse.Computed
    local _Value = _fuse.Value
 
-   local out = Elevated.ColdFusion.new(maid, "Test", nil, nil, 12072054746)
+   local out = FAB.ColdFusion.new(maid, "test", 12072054746)
    out.Size = UDim2.fromScale(0.25, 0.25)
    out.Parent = target
 

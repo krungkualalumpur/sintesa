@@ -42,7 +42,7 @@ function interface.ColdFusion.new(
 
     isDark : CanBeState<boolean>?,
     textSize : CanBeState<number>?,
-    iconId : number?)
+    iconId : CanBeState<number?>)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -143,7 +143,7 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local onPrimary = Color3.fromRGB(255,0,0)  --MaterialColor.Color3FromARGB(dynamicScheme:get_onPrimary())
+        local onPrimary = MaterialColor.Color3FromARGB(dynamicScheme:get_onPrimary())
 
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
         
@@ -152,10 +152,8 @@ function interface.ColdFusion.new(
 
     local out = Base.ColdFusion.new(
         maid, 
-        text,
 
         containerColorState,
-        labelTextColorState,
         stateLayerColorState,
 
         appearanceDataState, 
@@ -164,6 +162,7 @@ function interface.ColdFusion.new(
         buttonState,
         true,
 
+        text,
         iconId, 
         labelTextColorState,
         _Computed(function(_buttonState : Enums.ButtonState)
@@ -174,7 +173,9 @@ function interface.ColdFusion.new(
                 elseif _buttonState == Enums.ButtonState.Hovered then
                     (1 - 0.08)
             else 1)
-        end, buttonState)
+        end, buttonState),
+
+        labelTextColorState
     )
 
     return out

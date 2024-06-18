@@ -42,7 +42,7 @@ function interface.ColdFusion.new(
 
     isDark : CanBeState<boolean>?,
     textSize : CanBeState<number>?,
-    iconId : number?)
+    iconId : CanBeState<number?>)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -159,10 +159,8 @@ function interface.ColdFusion.new(
 
     local base = Base.ColdFusion.new(
         maid, 
-        text,
 
         constantBackground,
-        labelTextColorState,
         stateLayerColorState,
 
         appearanceDataState, 
@@ -170,10 +168,11 @@ function interface.ColdFusion.new(
 
         buttonState,
         false,
-
+        text,
         iconId, 
         labelTextColorState,
         opacityState,
+        labelTextColorState,
         0
     )
     

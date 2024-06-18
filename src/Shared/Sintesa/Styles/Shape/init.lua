@@ -8,6 +8,7 @@ local Enums = require(script.Parent.Parent:WaitForChild("Enums"))
 --remotes
 --variables
 local ShapeStyles = {
+    [Enums.ShapeStyle.Full :: Enums.ShapeStyle] = 999999999,
     [Enums.ShapeStyle.ExtraLarge :: Enums.ShapeStyle] = 28,
     [Enums.ShapeStyle.Large] = 16,
     [Enums.ShapeStyle.Medium] = 12,

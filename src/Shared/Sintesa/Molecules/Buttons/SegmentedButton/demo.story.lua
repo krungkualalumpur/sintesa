@@ -5,7 +5,7 @@ local Package = ReplicatedStorage:WaitForChild("Packages")
 --packages
 local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
-local Elevated = require(script.Parent)
+local FilledTonalIcon = require(script.Parent)
 --modules
 --types
 --constants
@@ -25,7 +25,23 @@ return function(target : CoreGui)
    local _Computed = _fuse.Computed
    local _Value = _fuse.Value
 
-   local out = Elevated.ColdFusion.new(maid, "Test", nil, nil, 12072054746)
+   local isDark = _Value(false)
+   local buttons = {
+      {
+         Name = "Button1",
+         Selected = _Value(true)
+      },
+      {
+         Name = "Button2",
+         Selected = _Value(false)
+      },
+      {
+         Name = "Button3",
+         Selected = _Value(false)
+      },
+   }
+
+   local out = FilledTonalIcon.ColdFusion.new(maid, buttons, isDark)
    out.Size = UDim2.fromScale(0.25, 0.25)
    out.Parent = target
 
@@ -35,7 +51,7 @@ return function(target : CoreGui)
       Children = {
          out
       }
-   })
+   }) 
 
    return function()
       maid:Destroy()

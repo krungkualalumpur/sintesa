@@ -26,7 +26,7 @@ function Elevation.getLevelData(elevation : Enums.ElevationResting): number
     return LevelData[elevation]
 end
 function Elevation.getLevelsData(): LevelData
-    return table.freeze(LevelData)
+    return table.freeze(table.clone(LevelData))
 end
 
 return Elevation

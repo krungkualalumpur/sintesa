@@ -27,7 +27,7 @@ function Shape.get(shapeStyle : Enums.ShapeStyle)
 end
 
 function Shape.getShapeStyles()
-    return table.freeze(ShapeStyles)
+    return table.freeze(table.clone(ShapeStyles))
 end
 
 

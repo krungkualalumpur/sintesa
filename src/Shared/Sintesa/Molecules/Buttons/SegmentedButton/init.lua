@@ -61,30 +61,24 @@ function interface.ColdFusion.new(
 
     local out = _new("Frame")({
         Children = {
-
+            _new("UIListLayout")({
+                FillDirection = Enum.FillDirection.Horizontal,
+                HorizontalAlignment = Enum.HorizontalAlignment.Center,
+            })
         }
     })
     
-   --[[ buttonsListState:ForValues(function(buttonData : ButtonData, _maid: Maid)  
+    buttonsListState:ForValues(function(buttonData : ButtonData, _maid: Maid)  
         local _fuse = ColdFusion.fuse(_maid) 
         local _Computed = _fuse.Computed
         local button = _maid:GiveTask(Outlined.ColdFusion.new(_maid, buttonData.Name, isDarkState, nil, _Computed(function(selected : boolean)
             return if selected then 3300031967 else nil
-        end, buttonData.Selected)))
+        end, buttonData.Selected), buttonData.Selected))
         button.Size = UDim2.fromScale(0.25, 0.5)
         button.Parent = out
         return buttonData 
-    end) ]]
-    
-    for _,buttonData in pairs(buttonsListState:Get()) do
-       
-        local button = maid:GiveTask(Outlined.ColdFusion.new(maid, buttonData.Name, isDarkState, nil, _Computed(function(selected : boolean)
-            return if selected then 3300031967 else nil
-        end, buttonData.Selected)))
-        button.Size = UDim2.fromScale(0.25, 0.5)
-        button.Parent = out
-        return buttonData 
-    end
+    end) 
+     
 
     return out :: Frame
 end

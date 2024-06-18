@@ -42,18 +42,15 @@ return function(target : CoreGui)
    }
 
    local out = SegmentedButton.ColdFusion.new(maid, buttons, isDark)
-   out.Size = UDim2.fromScale(0.25, 0.25)
+   out.Size = UDim2.fromScale(1, 1)
    out.Parent = target
-
-   _new("Frame")({
-      Size = UDim2.fromScale(1, 1),
-      Parent = target,
-      Children = {
-         out
-      }
-   }) 
-
-   return function()
+   print("printttus")
+   task.spawn(function()
+      task.wait(2)
+      buttons[1].Selected:Set(false)
+      buttons[2].Selected:Set(true)
+   end)
+   return function() 
       maid:Destroy()
    end
 end

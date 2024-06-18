@@ -25,7 +25,7 @@ return function(target : CoreGui)
    local _Computed = _fuse.Computed
    local _Value = _fuse.Value
 
-   local out = Outlined.ColdFusion.new(maid, "Test")
+   local out = Outlined.ColdFusion.new(maid, "Test", nil, nil, nil, _Value(true))
    out.Size = UDim2.fromScale(0.25, 0.25)
    out.Parent = target
 

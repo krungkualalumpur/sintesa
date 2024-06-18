@@ -134,11 +134,11 @@ local TypeScalesData : TypeScalesData = {
 local Typography = {}
 
 function Typography.get(typographyStyle : Enums.TypographyStyle)
-    return table.freeze(TypeScalesData[typographyStyle])
+    return table.freeze(table.clone(TypeScalesData[typographyStyle]))
 end
 
 function Typography.getTypographyTypeScales()
-    return table.freeze(TypeScalesData)
+    return table.freeze(table.clone(TypeScalesData))
 end
 
 return Typography

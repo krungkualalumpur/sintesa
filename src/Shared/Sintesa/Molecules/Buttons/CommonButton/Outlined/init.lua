@@ -171,8 +171,8 @@ function interface.ColdFusion.new(
         buttonState,
         false,
 
-        nil, 
-        nil,
+        iconId, 
+        labelTextColorState,
         opacityState,
         0
     )

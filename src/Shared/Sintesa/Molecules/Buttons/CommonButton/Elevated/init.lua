@@ -164,8 +164,8 @@ function interface.ColdFusion.new(
         buttonState,
         true,
 
-        nil, 
-        nil,
+        iconId, 
+        labelTextColorState,
         _Computed(function(_buttonState : Enums.ButtonState)
             return (if _buttonState == Enums.ButtonState.Pressed then 
                 (1  - 0.1)

@@ -5,7 +5,7 @@ local Package = ReplicatedStorage:WaitForChild("Packages")
 --packages
 local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
-local FilledTonalIcon = require(script.Parent)
+local SegmentedButton = require(script.Parent)
 --modules
 --types
 --constants
@@ -41,7 +41,7 @@ return function(target : CoreGui)
       },
    }
 
-   local out = FilledTonalIcon.ColdFusion.new(maid, buttons, isDark)
+   local out = SegmentedButton.ColdFusion.new(maid, buttons, isDark)
    out.Size = UDim2.fromScale(0.25, 0.25)
    out.Parent = target
 

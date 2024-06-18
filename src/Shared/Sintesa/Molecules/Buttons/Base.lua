@@ -70,7 +70,8 @@ function interface.ColdFusion.new(
     iconId : number ?,
 
     iconColorState : State<Color3> ?,
-    opacity : State<number> ?)
+    stateOpacity : State<number> ?,
+    backgroundOpacity : number?)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -107,16 +108,20 @@ function interface.ColdFusion.new(
         end, appearanceDataState),]]
         BorderSizePixel = 2,
         Children = {
-            _new("CanvasGroup")({
+            _new("Frame")({
+                Name = "CanvasGroup",
                 AnchorPoint = Vector2.new(0.5,0.5),
+                ClipsDescendants = false,
                 Size = UDim2.fromScale(0.965, 0.925),
+                BackgroundTransparency = if backgroundOpacity then (1 - backgroundOpacity) else 0 ,
                 BackgroundColor3 = containerColorState,
                 Position = UDim2.fromScale(0.5,0.5),
                 Children = {
                     getUiCorner(),
                     _new("Frame")({
+                        Name = "Main",
                         BackgroundColor3 = stateLayerColorState,
-                        BackgroundTransparency = opacity or 1,
+                        BackgroundTransparency = stateOpacity or 1,
                         Size = UDim2.fromScale(1, 1),
                         Children = {
                             _new("UIListLayout")({

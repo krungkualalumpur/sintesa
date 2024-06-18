@@ -30,6 +30,7 @@ return function(target : CoreGui)
    out.Parent = target
 
    _new("Frame")({
+      BackgroundColor3 = Color3.fromRGB(255,200,255),
       Size = UDim2.fromScale(1, 1),
       Parent = target,
       Children = {

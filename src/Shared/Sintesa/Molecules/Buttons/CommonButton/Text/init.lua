@@ -41,8 +41,8 @@ function interface.ColdFusion.new(
     text : CanBeState<string>,
 
     isDark : CanBeState<boolean>?,
-    textSize : CanBeState<number>?
-    )
+    textSize : CanBeState<number>?,
+    iconId : number?)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -69,11 +69,11 @@ function interface.ColdFusion.new(
             DynamicTheme.Color[Enums.ColorRole.Surface],
             DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
             DynamicTheme.Color[Enums.ColorRole.Shadow],
- 
+            
             Enums.ElevationResting.Level0,
 
             Enums.ShapeSymmetry.Full,
-            Enums.ShapeStyle.Large,
+            Enums.ShapeStyle.ExtraLarge,
             40,
 
             dark
@@ -90,18 +90,7 @@ function interface.ColdFusion.new(
             Weight = labelLarge.Weight,
         }
     ))
-
-    local base = Base.ColdFusion.new(
-        maid, 
-        text,
-
-        appearanceDataState,
-        typographyDataState,
-
-        buttonState,
-        false
-    )
-
+    
     local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
@@ -111,9 +100,14 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
+        local outline = MaterialColor.Color3FromARGB(dynamicScheme:get_outline())
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
         local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
 
-        return primary
+        return (if _buttonState == Enums.ButtonState.Enabled then outline 
+            elseif _buttonState == Enums.ButtonState.Disabled then onSurface
+            elseif _buttonState == Enums.ButtonState.Focused then primary
+        else outline)
     end, appearanceDataState, buttonState)
 
     local labelTextColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
@@ -126,23 +120,61 @@ function interface.ColdFusion.new(
             appearance.IsDark
         )
         local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
-        local onSecondary = MaterialColor.Color3FromARGB(dynamicScheme:get_onSecondaryContainer())
-
+        local secondary = MaterialColor.Color3FromARGB(dynamicScheme:get_secondary())
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
             
-        return if _buttonState == Enums.ButtonState.Enabled then primary 
-            elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-        else primary
+        return if _buttonState == Enums.ButtonState.Enabled then primary elseif _buttonState == Enums.ButtonState.Disabled then onSurface elseif _buttonState == Enums.ButtonState.Focused then secondary else primary
     end, appearanceDataState, buttonState)
 
-    local out = _bind(base)({
-        Name = "Text",
-        BackgroundTransparency = 1,
-        TextColor3 = labelTextColorState,
-       
-    }) :: TextButton
+    local stateLayerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+        local dynamicScheme = MaterialColor.getDynamicScheme(
+            appearance.PrimaryColor, 
+            appearance.SecondaryColor, 
+            appearance.TertiaryColor, 
+            appearance.NeutralColor, 
+            appearance.NeutralVariantColor,
+            appearance.IsDark
+        )
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+            
+        return primary
+     
+    end, appearanceDataState, buttonState)
 
-    return out
+    local opacityState = _Computed(function(_buttonState : Enums.ButtonState)
+        return (
+            if _buttonState == Enums.ButtonState.Disabled then
+                1 - 0.8
+            elseif _buttonState == Enums.ButtonState.Pressed then
+                (1 - 0.1)
+            elseif _buttonState == Enums.ButtonState.Focused then 
+            (1  - 0.1)
+            elseif _buttonState == Enums.ButtonState.Hovered then
+                (1 - 0.08)
+        else 1)
+    end, buttonState)
+
+    local base = Base.ColdFusion.new(
+        maid, 
+        text,
+
+        containerColorState,
+        labelTextColorState,
+        stateLayerColorState,
+
+        appearanceDataState, 
+        typographyDataState,
+
+        buttonState,
+        false,
+
+        nil, 
+        nil,
+        opacityState,
+        0
+    )
+  
+    return base
 end
 
 return interface

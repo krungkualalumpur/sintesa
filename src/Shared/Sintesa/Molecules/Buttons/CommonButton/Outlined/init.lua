@@ -16,10 +16,6 @@ local Styles = require(script.Parent.Parent.Parent.Parent:WaitForChild("Styles")
 local Enums = require(script.Parent.Parent.Parent.Parent:WaitForChild("Enums"))
 
 local DynamicTheme = require(script.Parent.Parent.Parent:WaitForChild("dynamic_theme"))
-
-local ShapeStyle = require(script.Parent.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Shape"))
-local ElevationStyle = require(script.Parent.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
-
 --types
 type Maid = Maid.Maid
 
@@ -45,8 +41,8 @@ function interface.ColdFusion.new(
     text : CanBeState<string>,
 
     isDark : CanBeState<boolean>?,
-    textSize : CanBeState<number>?
-    )
+    textSize : CanBeState<number>?,
+    iconId : number?)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -73,23 +69,11 @@ function interface.ColdFusion.new(
             DynamicTheme.Color[Enums.ColorRole.Surface],
             DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
             DynamicTheme.Color[Enums.ColorRole.Shadow],
- 
-            if _buttonState == Enums.ButtonState.Enabled then 
-                Enums.ElevationResting.Level0
-            elseif _buttonState == Enums.ButtonState.Disabled then
-                Enums.ElevationResting.Level0 
-            elseif _buttonState == Enums.ButtonState.Hovered then
-                Enums.ElevationResting.Level1
-            elseif _buttonState == Enums.ButtonState.Focused then 
-                Enums.ElevationResting.Level0
-            elseif _buttonState == Enums.ButtonState.Pressed then
-                Enums.ElevationResting.Level0
-            elseif _buttonState == Enums.ButtonState.Dragged then
-                Enums.ElevationResting.Level3
-            else Enums.ElevationResting.Level0,
+            
+            Enums.ElevationResting.Level0,
 
             Enums.ShapeSymmetry.Full,
-            Enums.ShapeStyle.Large,
+            Enums.ShapeStyle.ExtraLarge,
             40,
 
             dark
@@ -106,19 +90,8 @@ function interface.ColdFusion.new(
             Weight = labelLarge.Weight,
         }
     ))
-
-    local base = Base.ColdFusion.new(
-        maid, 
-        text,
-
-        appearanceDataState,
-        typographyDataState,
-
-        buttonState,
-        false
-    )
-
-    local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+    
+    local outlineColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -128,8 +101,8 @@ function interface.ColdFusion.new(
             appearance.IsDark
         )
         local outline = MaterialColor.Color3FromARGB(dynamicScheme:get_outline())
-        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
 
         return (if _buttonState == Enums.ButtonState.Enabled then outline 
             elseif _buttonState == Enums.ButtonState.Disabled then onSurface
@@ -147,30 +120,76 @@ function interface.ColdFusion.new(
             appearance.IsDark
         )
         local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+            
+        return if _buttonState == Enums.ButtonState.Enabled then primary elseif _buttonState == Enums.ButtonState.Disabled then onSurface else primary
+    end, appearanceDataState, buttonState)
+
+    local stateLayerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+        local dynamicScheme = MaterialColor.getDynamicScheme(
+            appearance.PrimaryColor, 
+            appearance.SecondaryColor, 
+            appearance.TertiaryColor, 
+            appearance.NeutralColor, 
+            appearance.NeutralVariantColor,
+            appearance.IsDark
+        )
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
 
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
             
-        return if _buttonState == Enums.ButtonState.Enabled then primary 
-            elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-        else primary
+        return if _buttonState == Enums.ButtonState.Hovered then primary elseif _buttonState == Enums.ButtonState.Disabled then onSurface else primary
+     
     end, appearanceDataState, buttonState)
 
-    local out = _bind(base)({
-        Name = "Outlined",
-        BorderSizePixel = 3,
-        BackgroundTransparency = 1,
-        TextColor3 = labelTextColorState,
-        Children = {
-            _new("UIStroke")({
-                Name = "Shadow",
-                Thickness = 1,
-                Color = containerColorState,
-                ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                Transparency =  0
-            })
-        }
-    }) :: TextButton
-    return out
+    local opacityState = _Computed(function(_buttonState : Enums.ButtonState)
+        return (if _buttonState == Enums.ButtonState.Pressed then 
+            (1  - 0.1)
+            elseif _buttonState == Enums.ButtonState.Focused then 
+                (1 - 0.1)
+            elseif _buttonState == Enums.ButtonState.Hovered then
+                (1 - 0.08)
+        else 1)
+    end, buttonState)
+
+    local constantBackground = _Computed(function()
+        return Color3.fromRGB(255,255,255)
+    end)
+    
+
+    local base = Base.ColdFusion.new(
+        maid, 
+        text,
+
+        constantBackground,
+        labelTextColorState,
+        stateLayerColorState,
+
+        appearanceDataState, 
+        typographyDataState,
+
+        buttonState,
+        false,
+
+        nil, 
+        nil,
+        opacityState,
+        0
+    )
+    
+    local canvasGroup = base:FindFirstChild("CanvasGroup")
+    local mainFrame = if canvasGroup then canvasGroup:FindFirstChild("Main") else nil
+
+    _new("UIStroke")({
+        Name = "Shadow",
+        Parent = mainFrame,
+        Thickness = 1,
+        Color = outlineColorState,
+        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+        Transparency =  0
+    })
+    
+    return base
 end
 
 return interface

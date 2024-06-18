@@ -42,8 +42,7 @@ function interface.ColdFusion.new(
 
     isDark : CanBeState<boolean>?,
     textSize : CanBeState<number>?,
-    iconId : number?
-    )
+    iconId : number?)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -120,8 +119,6 @@ function interface.ColdFusion.new(
         else surfaceContainerLow)
     end, appearanceDataState, buttonState)
 
-    local state
-
     local labelTextColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
@@ -132,7 +129,6 @@ function interface.ColdFusion.new(
             appearance.IsDark
         )
         local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
-
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
             
         return if _buttonState == Enums.ButtonState.Enabled then primary elseif _buttonState == Enums.ButtonState.Disabled then onSurface else primary
@@ -147,12 +143,11 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+        local onPrimary = Color3.fromRGB(255,0,0)  --MaterialColor.Color3FromARGB(dynamicScheme:get_onPrimary())
 
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
-            
-        return if _buttonState == Enums.ButtonState.Enabled then primary elseif _buttonState == Enums.ButtonState.Disabled then onSurface else primary
-     
+        
+        return if _buttonState == Enums.ButtonState.Enabled then onPrimary elseif _buttonState == Enums.ButtonState.Disabled then onSurface elseif _buttonState == Enums.ButtonState.Hovered then onPrimary else onPrimary -- primary
     end, appearanceDataState, buttonState)
 
     local out = Base.ColdFusion.new(

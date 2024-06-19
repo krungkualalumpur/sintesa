@@ -93,41 +93,6 @@ function interface.ColdFusion.new(
         }
     ))
 
-    local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean)
-        local dynamicScheme = MaterialColor.getDynamicScheme(
-            appearance.PrimaryColor, 
-            appearance.SecondaryColor, 
-            appearance.TertiaryColor, 
-            appearance.NeutralColor, 
-            appearance.NeutralVariantColor,
-            appearance.IsDark
-        )
-        local inverseSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_inverseSurface())
-        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
-
-        return if selected then (if _buttonState == Enums.ButtonState.Enabled then 
-            inverseSurface elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-        else inverseSurface) else inverseSurface
-    end, appearanceDataState, buttonState, isSelected)
-
-    local outlineColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean)
-        local dynamicScheme = MaterialColor.getDynamicScheme(
-            appearance.PrimaryColor, 
-            appearance.SecondaryColor,  
-            appearance.TertiaryColor, 
-            appearance.NeutralColor, 
-            appearance.NeutralVariantColor,
-            appearance.IsDark
-        )
-        local outline = MaterialColor.Color3FromARGB(dynamicScheme:get_outline())
-        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
-
-        return if selected then outline else 
-            (if _buttonState ==  Enums.ButtonState.Enabled then outline     
-            elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-        else outline)
-    end, appearanceDataState, buttonState, isSelected)
-
     local iconColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
@@ -137,16 +102,14 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local inverseOnSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_inverseOnSurface())
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
         local onSurfaceVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurfaceVariant())
 
-        return if selected then (if _buttonState == Enums.ButtonState.Enabled then inverseOnSurface 
+        return if selected then (if _buttonState == Enums.ButtonState.Enabled then primary 
             elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-            elseif _buttonState == Enums.ButtonState.Pressed then inverseOnSurface
-        else inverseOnSurface) else  (if _buttonState == Enums.ButtonState.Enabled then onSurfaceVariant 
+        else primary) else  (if _buttonState == Enums.ButtonState.Enabled then onSurfaceVariant 
             elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-            elseif _buttonState == Enums.ButtonState.Pressed then onSurface
          else onSurfaceVariant)
     end, appearanceDataState, buttonState, isSelected)
 
@@ -159,23 +122,24 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local inverseOnSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_inverseOnSurface())
-        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
         local onSurfaceVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurfaceVariant())
 
-        return if selected then (if _buttonState == Enums.ButtonState.Hovered then inverseOnSurface 
-            elseif _buttonState == Enums.ButtonState.Focused then inverseOnSurface 
-            elseif _buttonState == Enums.ButtonState.Pressed then inverseOnSurface
-        else inverseOnSurface) else (if _buttonState == Enums.ButtonState.Hovered then inverseOnSurface 
+        return if selected then (if _buttonState == Enums.ButtonState.Hovered then primary 
+            elseif _buttonState == Enums.ButtonState.Focused then primary 
+            elseif _buttonState == Enums.ButtonState.Pressed then primary
+        else primary) else (if _buttonState == Enums.ButtonState.Hovered then onSurfaceVariant 
             elseif _buttonState == Enums.ButtonState.Focused then onSurfaceVariant 
-            elseif _buttonState == Enums.ButtonState.Pressed then onSurface 
+            elseif _buttonState == Enums.ButtonState.Pressed then onSurfaceVariant 
         else onSurfaceVariant) 
     end, appearanceDataState, buttonState, isSelected)
 
     local base = _bind(Base.ColdFusion.new(
         maid, 
 
-        containerColorState,
+        _Computed(function()
+            return Color3.fromRGB(255,255,255)
+        end),
         stateLayerColorState,
 
         appearanceDataState, 
@@ -188,19 +152,23 @@ function interface.ColdFusion.new(
         nil,
         iconId, 
         iconColorState,
-        _Computed(function(_buttonState : Enums.ButtonState)
-            return (if _buttonState == Enums.ButtonState.Pressed then 
+        _Computed(function(_buttonState : Enums.ButtonState, selected : boolean)
+            return if selected then (if _buttonState == Enums.ButtonState.Pressed then 
                 (1  - 0.1)
                 elseif _buttonState == Enums.ButtonState.Focused then 
+                    (1 - 0.1)
+                elseif _buttonState == Enums.ButtonState.Hovered then
                     (1 - 0.08)
+            else 1) else (if _buttonState == Enums.ButtonState.Pressed then 
+                (1  - 0.1)
+                elseif _buttonState == Enums.ButtonState.Focused then 
+                    (1 - 0.1)
                 elseif _buttonState == Enums.ButtonState.Hovered then
                     (1 - 0.08)
             else 1)
-        end, buttonState),
+        end, buttonState, isSelected),
         nil,
-        _Computed(function(selected : boolean)
-            return if selected then 1 else 0
-        end, isSelected)
+        0
     ))({
         Children = {
             _new("UIAspectRatioConstraint")({
@@ -208,22 +176,6 @@ function interface.ColdFusion.new(
             })
         }
     })
-
-    local canvasGroup = base:FindFirstChild("CanvasGroup")
-    local mainFrame = if canvasGroup then canvasGroup:FindFirstChild("Main") else nil
-
-    _new("UIStroke")({
-        Name = "Shadow",
-        Enabled = _Computed(function(selected : boolean)
-            return not selected
-        end, isSelected),
-        Parent = mainFrame,
-        Thickness = 1,
-        Color = outlineColorState,
-        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-        Transparency =  0
-    })
-    
 
     return base :: TextButton
 end

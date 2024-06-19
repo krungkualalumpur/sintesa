@@ -25,10 +25,11 @@ return function(target : CoreGui)
    local _Computed = _fuse.Computed
    local _Value = _fuse.Value
 
-   local out = Elevated.ColdFusion.new(maid, "TestAAAAAAAS", function() 
+   local out = Elevated.ColdFusion.new(maid, "Test", function() 
       print("Click!")
    end, nil, nil, 12072054746)
    out.Parent = target
+   out.Position = UDim2.fromScale(0.5, 0.5)
 
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),

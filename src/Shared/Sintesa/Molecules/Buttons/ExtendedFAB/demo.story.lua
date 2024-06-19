@@ -28,7 +28,6 @@ return function(target : CoreGui)
    local out = FAB.ColdFusion.new(maid, "test", 12072054746, function() 
       print("Click!")
    end)
-   out.Size = UDim2.fromScale(0.25, 0.25)
    out.Parent = target
 
    _new("Frame")({

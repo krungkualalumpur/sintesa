@@ -212,7 +212,6 @@ function interface.ColdFusion.new(
     local mainFrame = if canvasGroup then canvasGroup:FindFirstChild("Main") else nil
 
     _new("UIStroke")({
-        Name = "Shadow",
         Parent = mainFrame,
         Thickness = 1,
         Color = outlineColorState,

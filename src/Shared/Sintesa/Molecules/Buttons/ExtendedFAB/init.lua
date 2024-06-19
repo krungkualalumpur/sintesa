@@ -83,8 +83,8 @@ function interface.ColdFusion.new(
             else Enums.ElevationResting.Level3,
 
             Enums.ShapeSymmetry.Full,
-            Enums.ShapeStyle.ExtraLarge,
-            40,
+            Enums.ShapeStyle.Large,
+            56,
 
             dark
         )

@@ -28,7 +28,6 @@ return function(target : CoreGui)
    local out = Outlined.ColdFusion.new(maid, "Test", function() 
       print("Click!")
    end, nil, nil, nil)
-   out.Size = UDim2.fromScale(0.25, 0.25)
    out.Parent = target
 
    _new("Frame")({

@@ -45,6 +45,7 @@ return function(target : CoreGui)
       print(buttonData.Name .. " clicked!")
       buttonData.Selected:Set(not buttonData.Selected:Get())
    end)
+   out.Position = UDim2.fromScale(0, 0.25)
    out.Size = UDim2.fromScale(1, 1)
    out.Parent = target
 

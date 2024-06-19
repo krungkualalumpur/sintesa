@@ -75,14 +75,10 @@ function interface.ColdFusion.new(
         _maid:GiveTask(_bind(Outlined.ColdFusion.new(_maid, buttonData.Name, function()
             onClick(buttonData)
             end, isDarkState, nil, _Computed(function(selected : boolean)
-            return if selected then 3300031967 else nil
+            return if selected then 1202200114 else nil
         end, buttonData.Selected), buttonData.Selected, Enums.ShapeStyle.None))({
             Parent = out,
-            Children = {
-                _new("UIAspectRatioConstraint")({
-                    AspectRatio = 2.5
-                })
-            } 
+          
         }))
       
         return buttonData 

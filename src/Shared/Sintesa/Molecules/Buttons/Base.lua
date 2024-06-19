@@ -18,6 +18,8 @@ local DynamicTheme = require(script.Parent.Parent:WaitForChild("dynamic_theme"))
 local ShapeStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Shape"))
 local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
 
+local TextLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
+
 --types
 type Maid = Maid.Maid
 
@@ -37,6 +39,7 @@ export type ButtonStates = {
     }
 }
 --constants
+local PADDING_SIZE = UDim.new(0,2)
 --remotes
 --variables
 --references
@@ -75,7 +78,7 @@ function interface.ColdFusion.new(
     stateOpacity : State<number> ?,
     labelTextColorState : State<Color3>?,
 
-    backgroundOpacity : number?)
+    backgroundOpacity : CanBeState<number>?)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -101,41 +104,43 @@ function interface.ColdFusion.new(
     
     local textState = _import(text, text)
     local iconIdState = _import(iconId, iconId)
+    local backgroundOpacityState = _import(backgroundOpacity, backgroundOpacity)
 
     local out = _new("TextButton")({
         AutomaticSize = Enum.AutomaticSize.X,
-        Size = _Computed(function(appearance : AppearanceData)
-            return UDim2.new(0, 100, 0 ,appearance.Height)
-        end, appearanceDataState),
+        Size = _Computed(function(appearance : AppearanceData, str : string?)
+            return UDim2.new(0, if str then 75 else 0, 0 ,appearance.Height)
+        end, appearanceDataState, textState),
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return appearance.ShadowColor
         end, appearanceDataState),
-        BackgroundTransparency =  _Computed(function(appearance : AppearanceData)
+        BackgroundTransparency = _Computed(function(appearance : AppearanceData)
             return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
         end, appearanceDataState),
-        --[[BorderColor3 = _Computed(function(appearance : AppearanceData)
-            return appearance.ShadowColor
-        end, appearanceDataState),]]
-        BorderSizePixel = 2,
         Children = {
             _new("Frame")({
                 Name = "CanvasGroup",
                 AutomaticSize = Enum.AutomaticSize.X,
-                AnchorPoint = Vector2.new(0.5,0.5),
                 ClipsDescendants = false,
-                Size = if hasShadow then UDim2.new(1, 0, 0.9,0) else UDim2.new(1,0,1,0),
-                BackgroundTransparency = if backgroundOpacity then (1 - backgroundOpacity) else 0 ,
+                Size =  _Computed(function(appearance : AppearanceData, str : string?)
+                    local xOffset = if str then 75 else 0
+                    return if hasShadow then UDim2.new(0, xOffset, 0.9,0) else UDim2.new(0,xOffset,1,0)
+                end, appearanceDataState, textState),
+                BackgroundTransparency = _Computed(function(opacity : number?)
+                    return if opacity then (1 - opacity) else 0 
+                end, backgroundOpacityState),
                 BackgroundColor3 = containerColorState,
-                Position = UDim2.fromScale(0.5,0.45),
                 Children = {
                     getUiCorner(),
                     _new("Frame")({
                         Name = "Main",
+                        AutomaticSize = Enum.AutomaticSize.X,
                         BackgroundColor3 = stateLayerColorState,
                         BackgroundTransparency = stateOpacity or 1,
-                        Size = UDim2.fromScale(1, 1),
+                        Size = UDim2.fromScale(0, 1),
                         Children = {
                             _new("UIListLayout")({
+                                Padding = PADDING_SIZE,
                                 SortOrder = Enum.SortOrder.LayoutOrder,
                                 FillDirection = Enum.FillDirection.Horizontal,
                                 HorizontalAlignment = Enum.HorizontalAlignment.Center,
@@ -152,44 +157,25 @@ function interface.ColdFusion.new(
                                 Image = _Computed(function(id : number?)
                                     return `rbxassetid://{id}`
                                 end, iconIdState) ,
-                                Size = UDim2.fromScale(if text then 0.2 else 1, 1),
+                                Size = _Computed(function(appearance : AppearanceData, _text : string?)
+                                    return if text then UDim2.new(0, appearance.Height/2, 0 ,appearance.Height/2) else UDim2.new(0, appearance.Height, 0 ,appearance.Height)
+                                end, appearanceDataState, textState),
                                 Children = {
                                     _new("UIAspectRatioConstraint")({
                                         AspectRatio = 1
                                     })
                                 }
-                            })
-                            ,
-                            _new("TextLabel")({
-                                LayoutOrder = 2,
-                                AutomaticSize = Enum.AutomaticSize.X,
-
-                                BackgroundTransparency = 1,
-                                Visible = _Computed(function(str : string?)
-                                    return if str then true else false
-                                end, textState),
-                                Text = text,
-                                
-                                TextColor3 = labelTextColorState,
-        
-                                TextSize = _Computed(function(typography : TypographyData)
-                                    return typography.TypeScale.Size
-                                end, typographyDataState),
-        
-                                LineHeight = _Computed(function(typography : TypographyData)
-                                    return typography.TypeScale.LineHeight
-                                end, typographyDataState),
-        
-                                FontFace = _Computed(function(typography : TypographyData)
-                                    for _,fontWeight : Enum.FontWeight in pairs(Enum.FontWeight:GetEnumItems()) do
-                                        if typography.TypeScale.Weight == fontWeight.Value then
-                                            return Font.fromName(typography.TypeScale.Font.Name, fontWeight)
-                                        end
-                                    end
-                                    return Font.fromName(typography.TypeScale.Font.Name, Enum.FontWeight.Regular) 
-                                end, typographyDataState),
-                            })
-                        
+                            }),
+                            TextLabel.ColdFusion.new(
+                                maid,
+                                2, 
+                                textState,
+                                labelTextColorState :: State<Color3>,
+                                typographyDataState,
+                                _Computed(function(appearance : AppearanceData)
+                                    return appearance.Height
+                                end, appearanceDataState)
+                            )
                         }
                     }),
                 }

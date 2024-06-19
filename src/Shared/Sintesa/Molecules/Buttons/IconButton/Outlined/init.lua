@@ -5,17 +5,17 @@ local _Packages = game:GetService("ReplicatedStorage"):WaitForChild("Packages")
 local Maid = require(_Packages:WaitForChild("Maid"))
 local ColdFusion = require(_Packages:WaitForChild("ColdFusion8"))
 --modules
-local Base = require(script.Parent:WaitForChild("Base"))
+local Base = require(script.Parent.Parent:WaitForChild("Base"))
 
 local MaterialColor = require(
-    script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
+    script.Parent.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
 ) 
-local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
+local Types = require(script.Parent.Parent.Parent.Parent:WaitForChild("Types"))
 
-local Styles = require(script.Parent.Parent.Parent:WaitForChild("Styles"))
-local Enums = require(script.Parent.Parent.Parent:WaitForChild("Enums"))
+local Styles = require(script.Parent.Parent.Parent.Parent:WaitForChild("Styles"))
+local Enums = require(script.Parent.Parent.Parent.Parent:WaitForChild("Enums"))
 
-local DynamicTheme = require(script.Parent.Parent:WaitForChild("dynamic_theme"))
+local DynamicTheme = require(script.Parent.Parent.Parent:WaitForChild("dynamic_theme"))
 --types
 type Maid = Maid.Maid
 
@@ -39,6 +39,7 @@ interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
     iconId : CanBeState<number>,
+    isSelected : State<boolean>,
     onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,
@@ -71,18 +72,10 @@ function interface.ColdFusion.new(
             DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
             DynamicTheme.Color[Enums.ColorRole.Shadow],
  
-            if _buttonState == Enums.ButtonState.Enabled then 
-                Enums.ElevationResting.Level3 
-            elseif _buttonState == Enums.ButtonState.Hovered then
-                Enums.ElevationResting.Level4
-            elseif _buttonState == Enums.ButtonState.Focused then 
-                Enums.ElevationResting.Level3
-            elseif _buttonState == Enums.ButtonState.Pressed then
-                Enums.ElevationResting.Level3
-            else Enums.ElevationResting.Level3,
+            Enums.ElevationResting.Level0,
 
             Enums.ShapeSymmetry.Full,
-            Enums.ShapeStyle.Medium,
+            Enums.ShapeStyle.Full,
             40,
 
             dark
@@ -101,7 +94,7 @@ function interface.ColdFusion.new(
     ))
 
     
-    local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+    local outlineColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -110,12 +103,18 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local primaryContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_primaryContainer())
+        local inverseSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_inverseSurface())
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
 
-        return primaryContainer
-    end, appearanceDataState, buttonState)
+        return if selected then (if _buttonState == Enums.ButtonState.Enabled then 
+            inverseSurface elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
+        else inverseSurface) else 
+            (if _buttonState ==  Enums.ButtonState.Enabled then inverseSurface     
+            elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
+        else inverseSurface)
+    end, appearanceDataState, buttonState, isSelected)
 
-    local iconColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+    local iconColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -124,12 +123,18 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local onPrimaryContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_onPrimaryContainer())
-            
-        return onPrimaryContainer 
-    end, appearanceDataState, buttonState)
+        local onSecondaryContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_onSecondaryContainer())
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+        local onSurfaceVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurfaceVariant())
 
-    local stateLayerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+        return if selected then (if _buttonState == Enums.ButtonState.Enabled then onSecondaryContainer 
+            elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
+        else onSecondaryContainer) else  (if _buttonState == Enums.ButtonState.Enabled then onSurfaceVariant 
+            elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
+        else onSurfaceVariant)
+    end, appearanceDataState, buttonState, isSelected)
+
+    local stateLayerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -138,24 +143,33 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local onPrimary = MaterialColor.Color3FromARGB(dynamicScheme:get_onPrimaryContainer())
-        
-        return onPrimary 
-    end, appearanceDataState, buttonState)
+        local onSecondaryContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_onSecondaryContainer())
+        local onSurfaceVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurfaceVariant())
 
-    local out = _bind(Base.ColdFusion.new(
+        return if selected then (if _buttonState == Enums.ButtonState.Hovered then onSecondaryContainer 
+            elseif _buttonState == Enums.ButtonState.Focused then onSecondaryContainer 
+            elseif _buttonState == Enums.ButtonState.Pressed then onSecondaryContainer
+        else onSecondaryContainer) else (if _buttonState == Enums.ButtonState.Hovered then onSurfaceVariant 
+            elseif _buttonState == Enums.ButtonState.Focused then onSurfaceVariant 
+            elseif _buttonState == Enums.ButtonState.Pressed then onSurfaceVariant 
+        else onSurfaceVariant) 
+    end, appearanceDataState, buttonState, isSelected)
+
+    local base = _bind(Base.ColdFusion.new(
         maid, 
 
-        containerColorState,
+        _Computed(function()
+            return Color3.fromRGB(255,255,255) 
+        end),
         stateLayerColorState,
 
         appearanceDataState, 
         typographyDataState,
 
         buttonState,
-        true,
+        false,
+        
         onClick,
-
         nil,
         iconId, 
         iconColorState,
@@ -167,7 +181,9 @@ function interface.ColdFusion.new(
                 elseif _buttonState == Enums.ButtonState.Hovered then
                     (1 - 0.08)
             else 1)
-        end, buttonState)
+        end, buttonState),
+        nil,
+        0
     ))({
         Children = {
             _new("UIAspectRatioConstraint")({
@@ -176,7 +192,20 @@ function interface.ColdFusion.new(
         }
     })
 
-    return out :: TextButton
+    local canvasGroup = base:FindFirstChild("CanvasGroup")
+    local mainFrame = if canvasGroup then canvasGroup:FindFirstChild("Main") else nil
+
+    _new("UIStroke")({
+        Name = "Shadow",
+        Parent = mainFrame,
+        Thickness = 1,
+        Color = outlineColorState,
+        ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
+        Transparency =  0
+    })
+    
+
+    return base :: TextButton
 end
 
 return interface

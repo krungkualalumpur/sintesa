@@ -37,6 +37,7 @@ export type ButtonStates = {
     }
 }
 --constants
+local PADDING_SIZE = UDim.new(0,8)
 --remotes
 --variables
 --references
@@ -84,22 +85,23 @@ function interface.ColdFusion.new(
             end, appearanceDataState),
         })
     end
-    
+    print("Way")
     local out = _new("Frame")({
-
+        AutomaticSize = Enum.AutomaticSize.X,
+        Size = _Computed(function(appearence : AppearanceData)
+            return UDim2.new(0, 0, 0, appearence.Height)
+        end, appearanceDataState),
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return appearance.ShadowColor
         end, appearanceDataState),
         BackgroundTransparency =  _Computed(function(appearance : AppearanceData)
             return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
         end, appearanceDataState),
-        --[[BorderColor3 = _Computed(function(appearance : AppearanceData)
-            return appearance.ShadowColor
-        end, appearanceDataState),]]
         BorderSizePixel = 2,
         Children = {
             _new("Frame")({
                 Name = "Main",
+                AutomaticSize = Enum.AutomaticSize.X,
                 AnchorPoint = Vector2.new(0.5,0.5),
                 ClipsDescendants = false,
                 Size = if hasShadow then UDim2.new(0.92, 0, 0.92,0) else UDim2.new(1,0,1,0),
@@ -107,6 +109,12 @@ function interface.ColdFusion.new(
                 Position = UDim2.fromScale(0.5,0.5),
                 Children = _Computed(function(children : {[number] : Instance})
                     return {
+                        _new("UIPadding")({
+                            PaddingTop = PADDING_SIZE,
+                            PaddingBottom = PADDING_SIZE,
+                            PaddingLeft = PADDING_SIZE,
+                            PaddingRight = PADDING_SIZE
+                        }),
                         _new("UIListLayout")({
                             Padding = UDim.new(0, 10),
                             SortOrder = Enum.SortOrder.LayoutOrder,
@@ -121,20 +129,6 @@ function interface.ColdFusion.new(
             }),
             
             getUiCorner(),
-    
-           --[[ if hasShadow then
-                _new("UIStroke")({
-                    Name = "Shadow",
-                    Thickness = 6,
-                    Color = _Computed(function(appearance : AppearanceData)
-                        return appearance.ShadowColor
-                    end, appearanceDataState),
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    Transparency =  _Computed(function(appearance : AppearanceData)
-                        return (20 - ElevationStyle.getLevelData(appearance.Elevation))/20
-                    end, appearanceDataState)
-                })
-            else nil :: any]]
         }
     }) 
 

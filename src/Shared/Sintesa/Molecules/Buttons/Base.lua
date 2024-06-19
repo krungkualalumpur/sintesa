@@ -66,6 +66,8 @@ function interface.ColdFusion.new(
     buttonState : ValueState<Enums.ButtonState>,
     hasShadow : boolean,
 
+
+
     text : CanBeState<string?>,
     iconId : CanBeState<number?>,
 
@@ -117,7 +119,7 @@ function interface.ColdFusion.new(
                 Name = "CanvasGroup",
                 AnchorPoint = Vector2.new(0.5,0.5),
                 ClipsDescendants = false,
-                Size = UDim2.new(0.92, 0, 0.92,0),
+                Size = if hasShadow then UDim2.new(0.92, 0, 0.92,0) else UDim2.new(1,0,1,0),
                 BackgroundTransparency = if backgroundOpacity then (1 - backgroundOpacity) else 0 ,
                 BackgroundColor3 = containerColorState,
                 Position = UDim2.fromScale(0.5,0.5),

@@ -103,7 +103,10 @@ function interface.ColdFusion.new(
     local iconIdState = _import(iconId, iconId)
 
     local out = _new("TextButton")({
-
+        AutomaticSize = Enum.AutomaticSize.X,
+        Size = _Computed(function(appearance : AppearanceData)
+            return UDim2.new(0, 100, 0 ,appearance.Height)
+        end, appearanceDataState),
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return appearance.ShadowColor
         end, appearanceDataState),
@@ -117,12 +120,13 @@ function interface.ColdFusion.new(
         Children = {
             _new("Frame")({
                 Name = "CanvasGroup",
+                AutomaticSize = Enum.AutomaticSize.X,
                 AnchorPoint = Vector2.new(0.5,0.5),
                 ClipsDescendants = false,
-                Size = if hasShadow then UDim2.new(0.92, 0, 0.92,0) else UDim2.new(1,0,1,0),
+                Size = if hasShadow then UDim2.new(1, 0, 0.9,0) else UDim2.new(1,0,1,0),
                 BackgroundTransparency = if backgroundOpacity then (1 - backgroundOpacity) else 0 ,
                 BackgroundColor3 = containerColorState,
-                Position = UDim2.fromScale(0.5,0.5),
+                Position = UDim2.fromScale(0.5,0.45),
                 Children = {
                     getUiCorner(),
                     _new("Frame")({
@@ -158,11 +162,12 @@ function interface.ColdFusion.new(
                             ,
                             _new("TextLabel")({
                                 LayoutOrder = 2,
+                                AutomaticSize = Enum.AutomaticSize.X,
+
                                 BackgroundTransparency = 1,
                                 Visible = _Computed(function(str : string?)
                                     return if str then true else false
                                 end, textState),
-                                Size = UDim2.fromScale(0.8, 1),
                                 Text = text,
                                 
                                 TextColor3 = labelTextColorState,

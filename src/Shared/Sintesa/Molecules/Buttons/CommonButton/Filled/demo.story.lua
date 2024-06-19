@@ -27,8 +27,7 @@ return function(target : CoreGui)
 
    local out = Filled.ColdFusion.new(maid, "Test", function() 
       print("Click!")
-   end)
-   out.Size = UDim2.fromScale(0.25, 0.25)
+   end, nil, nil, 12072054746)
    out.Parent = target
 
    _new("Frame")({

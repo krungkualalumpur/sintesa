@@ -72,13 +72,19 @@ function interface.ColdFusion.new(
     buttonsListState:ForValues(function(buttonData : ButtonData, _maid: Maid)  
         local _fuse = ColdFusion.fuse(_maid) 
         local _Computed = _fuse.Computed
-        local button = _maid:GiveTask(Outlined.ColdFusion.new(_maid, buttonData.Name, function()
+        _maid:GiveTask(_bind(Outlined.ColdFusion.new(_maid, buttonData.Name, function()
             onClick(buttonData)
             end, isDarkState, nil, _Computed(function(selected : boolean)
             return if selected then 3300031967 else nil
-        end, buttonData.Selected), buttonData.Selected, Enums.ShapeStyle.None))
-        button.Size = UDim2.fromScale(0.25, 0.5)
-        button.Parent = out
+        end, buttonData.Selected), buttonData.Selected, Enums.ShapeStyle.None))({
+            Parent = out,
+            Children = {
+                _new("UIAspectRatioConstraint")({
+                    AspectRatio = 2.5
+                })
+            } 
+        }))
+      
         return buttonData 
     end) 
      

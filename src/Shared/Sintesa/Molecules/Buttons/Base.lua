@@ -66,7 +66,7 @@ function interface.ColdFusion.new(
     buttonState : ValueState<Enums.ButtonState>,
     hasShadow : boolean,
 
-
+    onClick : (... any) -> (... any),
 
     text : CanBeState<string?>,
     iconId : CanBeState<number?>,
@@ -221,6 +221,7 @@ function interface.ColdFusion.new(
             MouseButton1Down = function()
                 if buttonState:Get() ~= Enums.ButtonState.Disabled then
                     buttonState:Set(Enums.ButtonState.Pressed)
+                    onClick()
                 end
             end,
         }

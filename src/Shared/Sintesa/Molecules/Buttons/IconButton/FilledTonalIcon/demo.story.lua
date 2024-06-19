@@ -26,7 +26,9 @@ return function(target : CoreGui)
    local _Value = _fuse.Value
 
    local selected = _Value(false)
-   local out = FilledTonalIcon.ColdFusion.new(maid, 12072054746, selected)
+   local out = FilledTonalIcon.ColdFusion.new(maid, 12072054746, selected, function() 
+      print("Click!")
+   end)
    out.Size = UDim2.fromScale(0.25, 0.25)
    out.Parent = target
 

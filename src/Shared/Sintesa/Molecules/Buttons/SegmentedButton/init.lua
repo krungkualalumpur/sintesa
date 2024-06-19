@@ -32,7 +32,7 @@ type TransitionData = Types.TransitionData
 
 type ButtonData = {
     Name : string,
-    Selected : State<boolean>
+    Selected : ValueState<boolean>
 }
 --constants
 --variables
@@ -45,7 +45,8 @@ interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
     buttonsList : CanBeState<{[number] : ButtonData}>,
-    isDark : CanBeState<boolean>)
+    isDark : CanBeState<boolean>,
+    onClick : (ButtonData) -> ())
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -71,9 +72,11 @@ function interface.ColdFusion.new(
     buttonsListState:ForValues(function(buttonData : ButtonData, _maid: Maid)  
         local _fuse = ColdFusion.fuse(_maid) 
         local _Computed = _fuse.Computed
-        local button = _maid:GiveTask(Outlined.ColdFusion.new(_maid, buttonData.Name, isDarkState, nil, _Computed(function(selected : boolean)
+        local button = _maid:GiveTask(Outlined.ColdFusion.new(_maid, buttonData.Name, function()
+            onClick(buttonData)
+            end, isDarkState, nil, _Computed(function(selected : boolean)
             return if selected then 3300031967 else nil
-        end, buttonData.Selected), buttonData.Selected))
+        end, buttonData.Selected), buttonData.Selected, Enums.ShapeStyle.None))
         button.Size = UDim2.fromScale(0.25, 0.5)
         button.Parent = out
         return buttonData 

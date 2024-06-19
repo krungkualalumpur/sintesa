@@ -39,6 +39,7 @@ interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
     text : CanBeState<string>,
+    onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,
     textSize : CanBeState<number>?,
@@ -170,6 +171,7 @@ function interface.ColdFusion.new(
 
         buttonState,
         true,
+        onClick,
 
         text,
         iconId, 

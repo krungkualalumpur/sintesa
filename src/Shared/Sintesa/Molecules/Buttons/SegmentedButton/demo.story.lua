@@ -41,15 +41,13 @@ return function(target : CoreGui)
       },
    }
 
-   local out = SegmentedButton.ColdFusion.new(maid, buttons, isDark)
+   local out = SegmentedButton.ColdFusion.new(maid, buttons, isDark, function(buttonData) 
+      print(buttonData.Name .. " clicked!")
+      buttonData.Selected:Set(not buttonData.Selected:Get())
+   end)
    out.Size = UDim2.fromScale(1, 1)
    out.Parent = target
-   print("printttus")
-   task.spawn(function()
-      task.wait(2)
-      buttons[1].Selected:Set(false)
-      buttons[2].Selected:Set(true)
-   end)
+
    return function() 
       maid:Destroy()
    end

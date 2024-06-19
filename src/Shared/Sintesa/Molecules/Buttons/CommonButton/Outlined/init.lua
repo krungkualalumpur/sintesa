@@ -39,11 +39,13 @@ interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
     text : CanBeState<string>,
+    onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,
     textSize : CanBeState<number>?,
     iconId : CanBeState<number?>,
-    isSelected : CanBeState<boolean?>)
+    isSelected : CanBeState<boolean?>,
+    shapeStyle : CanBeState<Enums.ShapeStyle?>)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -58,10 +60,13 @@ function interface.ColdFusion.new(
 
     local isSelectedState = _import(isSelected, isSelected)
 
+    local shapeStyleState = _import(shapeStyle, Enums.ShapeStyle.ExtraLarge :: Enums.ShapeStyle)
+
     local appearanceDataState = _Computed(
         function(
             dark : boolean,
-            _buttonState : Enums.ButtonState
+            _buttonState : Enums.ButtonState,
+            shapeStyle : Enums.ShapeStyle
         ) 
            
         return Types.createAppearanceData(
@@ -76,12 +81,12 @@ function interface.ColdFusion.new(
             Enums.ElevationResting.Level0,
 
             Enums.ShapeSymmetry.Full,
-            Enums.ShapeStyle.ExtraLarge,
+            shapeStyle,
             40,
 
             dark
         )
-    end, isDarkState, buttonState)
+    end, isDarkState, buttonState, shapeStyleState)
    
     local labelLarge = Styles.Typography.get(Enums.TypographyStyle.LabelLarge)
     local typographyDataState = _Value(Types.createTypographyData(
@@ -193,6 +198,8 @@ function interface.ColdFusion.new(
 
         buttonState,
         false,
+        onClick,
+
         text,
         iconId, 
         labelTextColorState,

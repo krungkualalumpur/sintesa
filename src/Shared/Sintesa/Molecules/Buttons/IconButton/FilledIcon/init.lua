@@ -40,6 +40,7 @@ function interface.ColdFusion.new(
     maid : Maid,
     iconId : CanBeState<number>,
     isSelected : State<boolean>,
+    onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,
     textSize : CanBeState<number>?
@@ -161,6 +162,7 @@ function interface.ColdFusion.new(
         buttonState,
         false,
 
+        onClick,
         nil,
         iconId, 
         iconColorState,

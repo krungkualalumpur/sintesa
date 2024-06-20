@@ -17,8 +17,8 @@ local Enums = require(script.Parent.Parent.Parent.Parent:WaitForChild("Enums"))
 
 local DynamicTheme = require(script.Parent.Parent.Parent:WaitForChild("dynamic_theme"))
 
-local Text = require(script.Parent.Parent.Parent:WaitForChild("Buttons"):WaitForChild("CommonButton"):WaitForChild("Text"))
 local TextLabel = require(script.Parent.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
+local StandardIconButton = require(script.Parent.Parent.Parent:WaitForChild("Buttons"):WaitForChild("IconButton"):WaitForChild("Standard"))
 
 --types
 type Maid = Maid.Maid
@@ -80,7 +80,7 @@ function TopAppBar.ColdFusion.new(
         )
     end, isDarkState)
 
-    local labelLarge = Styles.Typography.get(Enums.TypographyStyle.LabelLarge)
+    local labelLarge = Styles.Typography.get(Enums.TypographyStyle.TitleLarge)
     local typographyDataState = _Value(Types.createTypographyData(
         labelLarge
     ))
@@ -113,22 +113,52 @@ function TopAppBar.ColdFusion.new(
         return onSurface
     end, appearanceDataState) 
 
-    local leadingIcon = Text.ColdFusion.new(maid, "", function()
-        print("Test1")
-    end, isDark, nil, 15567843390) :: Instance
+    local leadingIconSelected = _Value(false)
+    local onLeadingIconClicked = function()
+        print("Fangchan nakrab")
+    end
+
+    local trailingIconSelected = _Value(false)
+    local onOTrailingIconClicked = function()
+        print("Anadee fangchan nakrab")
+    end
+
+    local leadingIcon = _bind(StandardIconButton.ColdFusion.new(
+        maid,15567843390, 
+        leadingIconSelected,
+        onLeadingIconClicked
+    ))({
+        Size = UDim2.fromOffset(24, 24)
+    }) :: Instance
+
+    local trailingIcon = _bind(StandardIconButton.ColdFusion.new(
+        maid,13805569043, 
+        trailingIconSelected,
+        onOTrailingIconClicked
+    ))({
+        Size = UDim2.fromOffset(24, 24) 
+    }) :: Instance
 
     local Children = {
-        leadingIcon,
-        TextLabel.ColdFusion.new(
+        _bind(leadingIcon){
+            LayoutOrder = 1,
+        },
+        _bind(TextLabel.ColdFusion.new(
             maid, 
             2, 
-            "A headeee nakrab", 
+            "chiwit khong phom thi thai pen mei dii na chab", 
             headlineColorState, 
             typographyDataState, 
             _Computed(function(appearence : AppearanceData)
                 return appearence.Height
             end, appearanceDataState)
-        )
+        ))({
+            AutomaticSize = Enum.AutomaticSize.None,
+            Size = UDim2.fromScale(0.8, 1)
+        }),
+        _bind(trailingIcon)({
+            LayoutOrder = 3,
+        })
     }
 
     local out = Base.ColdFusion.new(

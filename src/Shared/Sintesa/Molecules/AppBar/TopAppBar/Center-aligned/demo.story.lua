@@ -27,7 +27,7 @@ return function(target : CoreGui)
 
     local onScroll = _Value(false)
     local out = TopAppBar.ColdFusion.new(maid, false, onScroll)
-    out.Position = UDim2.fromScale(0.5, 0)
+    out.Position = UDim2.fromScale(0, 0)
    out.Parent = target
     return function()
         maid:Destroy()

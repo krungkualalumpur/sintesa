@@ -87,9 +87,8 @@ function interface.ColdFusion.new(
     end
     print("Way")
     local out = _new("Frame")({
-        AutomaticSize = Enum.AutomaticSize.X,
         Size = _Computed(function(appearence : AppearanceData)
-            return UDim2.new(0, 0, 0, appearence.Height)
+            return UDim2.new(1, 0, 0, appearence.Height)
         end, appearanceDataState),
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return appearance.ShadowColor
@@ -116,7 +115,7 @@ function interface.ColdFusion.new(
                             PaddingRight = PADDING_SIZE
                         }),
                         _new("UIListLayout")({
-                            Padding = UDim.new(0, 10),
+                            Padding = UDim.new(0, 40),
                             SortOrder = Enum.SortOrder.LayoutOrder,
                             FillDirection = Enum.FillDirection.Horizontal,
                             HorizontalAlignment = Enum.HorizontalAlignment.Center,

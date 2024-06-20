@@ -62,7 +62,7 @@ function interface.ColdFusion.new(
 
     appearanceData : CanBeState<AppearanceData>,
     hasShadow : boolean,
-    Children : CanBeState<{[number] : Instance}>)
+    Children : CanBeState<{[number] : CanBeState<Instance> | {CanBeState<Instance>}}>)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new

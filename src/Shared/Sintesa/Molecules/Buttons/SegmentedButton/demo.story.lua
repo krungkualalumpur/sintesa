@@ -5,8 +5,9 @@ local Package = ReplicatedStorage:WaitForChild("Packages")
 --packages
 local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
-local SegmentedButton = require(script.Parent)
 --modules
+local SegmentedButton = require(script.Parent)
+local Types = require(script.Parent.Parent.Parent.Parent:WaitForChild("Types"))
 --types
 --constants
 --remotes
@@ -27,23 +28,14 @@ return function(target : CoreGui)
 
    local isDark = _Value(false)
    local buttons = {
-      {
-         Name = "Button1",
-         Selected = _Value(true)
-      },
-      {
-         Name = "Button2",
-         Selected = _Value(false)
-      },
-      {
-         Name = "Button3",
-         Selected = _Value(false)
-      },
+      Types.createButtonData("Button1",  0, _Value(true)),
+      Types.createButtonData("Button2", 0, _Value(false)),
+      Types.createButtonData("Button3",  0, _Value(false)),
    }
 
-   local out = SegmentedButton.ColdFusion.new(maid, buttons, isDark, function(buttonData) 
-      print(buttonData.Name .. " clicked!")
-      buttonData.Selected:Set(not buttonData.Selected:Get())
+   local out = SegmentedButton.ColdFusion.new(maid, buttons :: {[number] : Types.ButtonData}, isDark, function(buttonData) 
+      print((buttonData.Name or "") .. " clickedkos!")
+      if buttonData.Selected then buttonData.Selected:Set(not buttonData.Selected:Get()) end
    end)
    out.Position = UDim2.fromScale(0, 0.25)
    out.Size = UDim2.fromScale(1, 1)

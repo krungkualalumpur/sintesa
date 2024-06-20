@@ -42,7 +42,7 @@ function interface.ColdFusion.new(
     onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,
-    textSize : CanBeState<number>?,
+    height : CanBeState<number>?,
     iconId : CanBeState<number?>,
     isSelected : CanBeState<boolean?>,
     shapeStyle : CanBeState<Enums.ShapeStyle?>)
@@ -62,11 +62,14 @@ function interface.ColdFusion.new(
 
     local shapeStyleState = _import(shapeStyle, Enums.ShapeStyle.ExtraLarge :: Enums.ShapeStyle)
 
+    local height = _import(height, 40)
+
     local appearanceDataState = _Computed(
         function(
             dark : boolean,
             _buttonState : Enums.ButtonState,
-            shapeStyle : Enums.ShapeStyle
+            shapeStyle : Enums.ShapeStyle,
+            _height : number
         ) 
            
         return Types.createAppearanceData(
@@ -82,7 +85,7 @@ function interface.ColdFusion.new(
 
             Enums.ShapeSymmetry.Full,
             shapeStyle,
-            40,
+            _height,
 
             dark
         )
@@ -170,16 +173,16 @@ function interface.ColdFusion.new(
         return
             (if _buttonState == Enums.ButtonState.Enabled then 
                 if selected == true then
-                    1 - 0.1
+                    0.1
                 else
-                    1
+                    0
             elseif _buttonState == Enums.ButtonState.Pressed then 
-            (1  - 0.1)
+            0.1
             elseif _buttonState == Enums.ButtonState.Focused then 
-                (1 - 0.1)
+                0.1
             elseif _buttonState == Enums.ButtonState.Hovered then
-                (1 - 0.08)
-        else 1)
+                0.08
+        else 0)
     end, buttonState, isSelectedState)
 
     local constantBackground = _Computed(function()

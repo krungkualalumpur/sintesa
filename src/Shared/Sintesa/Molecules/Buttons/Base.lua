@@ -104,6 +104,7 @@ function interface.ColdFusion.new(
     
     local textState = _import(text, text)
     local iconIdState = _import(iconId, iconId)
+    local stateOpacityState = _import(stateOpacity, stateOpacity)
     local backgroundOpacityState = _import(backgroundOpacity, backgroundOpacity)
 
     local out = _new("TextButton")({
@@ -136,7 +137,9 @@ function interface.ColdFusion.new(
                         Name = "Main",
                         AutomaticSize = Enum.AutomaticSize.X,
                         BackgroundColor3 = stateLayerColorState,
-                        BackgroundTransparency = stateOpacity or 1,
+                        BackgroundTransparency = _Computed(function(opacity : number?)
+                            return if opacity then (1 - opacity) else 1
+                        end, stateOpacityState),
                         Size = UDim2.fromScale(0, 1),
                         Children = {
                             _new("UIListLayout")({

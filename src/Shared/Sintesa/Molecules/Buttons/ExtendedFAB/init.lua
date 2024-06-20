@@ -43,7 +43,7 @@ function interface.ColdFusion.new(
     onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,
-    textSize : CanBeState<number>?
+    height : CanBeState<number>?
     )
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -56,11 +56,13 @@ function interface.ColdFusion.new(
     local buttonState : ValueState<Enums.ButtonState>  = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState) 
 
     local isDarkState = _import(isDark, false)
+    local heightState = _import(height, 56)
 
     local appearanceDataState = _Computed(
         function(
             dark : boolean,
-            _buttonState : Enums.ButtonState
+            _buttonState : Enums.ButtonState,
+            _height : number
         ) 
            
         return Types.createAppearanceData(
@@ -84,11 +86,11 @@ function interface.ColdFusion.new(
 
             Enums.ShapeSymmetry.Full,
             Enums.ShapeStyle.Large,
-            56,
+            _height,
 
             dark
         )
-    end, isDarkState, buttonState)
+    end, isDarkState, buttonState, heightState)
    
     local labelLarge = Styles.Typography.get(Enums.TypographyStyle.LabelLarge)
     local typographyDataState = _Value(Types.createTypographyData(
@@ -176,12 +178,12 @@ function interface.ColdFusion.new(
         iconColorState,
         _Computed(function(_buttonState : Enums.ButtonState)
             return (if _buttonState == Enums.ButtonState.Pressed then 
-                (1  - 0.1)
+                0.1
                 elseif _buttonState == Enums.ButtonState.Focused then 
-                    (1 - 0.1)
+                    0.1
                 elseif _buttonState == Enums.ButtonState.Hovered then
-                    (1 - 0.08)
-            else 1)
+                    0.08
+            else 0)
         end, buttonState),
         textLabelColorState
     )

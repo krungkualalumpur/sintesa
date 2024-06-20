@@ -30,10 +30,7 @@ type AppearanceData = Types.AppearanceData
 type TypographyData = Types.TypographyData
 type TransitionData = Types.TransitionData
 
-type ButtonData = {
-    Name : string,
-    Selected : ValueState<boolean>
-}
+type ButtonData = Types.ButtonData
 --constants
 --variables
 --references
@@ -71,12 +68,16 @@ function interface.ColdFusion.new(
     
     buttonsListState:ForValues(function(buttonData : ButtonData, _maid: Maid)  
         local _fuse = ColdFusion.fuse(_maid) 
+        local _import = _fuse.import
         local _Computed = _fuse.Computed
-        _maid:GiveTask(_bind(Outlined.ColdFusion.new(_maid, buttonData.Name, function()
+
+        local selected = _import(buttonData.Selected, false)
+
+        _maid:GiveTask(_bind(Outlined.ColdFusion.new(_maid, buttonData.Name or "", function()
             onClick(buttonData)
             end, isDarkState, nil, _Computed(function(selected : boolean)
             return if selected then 1202200114 else nil
-        end, buttonData.Selected), buttonData.Selected, Enums.ShapeStyle.None))({
+        end,  selected), selected, Enums.ShapeStyle.None))({
             Parent = out,
           
         }))

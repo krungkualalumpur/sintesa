@@ -31,7 +31,12 @@ type CanBeState<T> = ColdFusion.CanBeState<T>
 type AppearanceData = Types.AppearanceData
 type TypographyData = Types.TypographyData
 type TransitionData = Types.TransitionData
+
+type ButtonData = Types.ButtonData
+
+export type IconRef = "Leading" | "Trailing"
 --constants
+local PADDING_SIZE = UDim.new(0, 24)
 --remotes
 --variables
 --references
@@ -43,8 +48,15 @@ TopAppBar.ColdFusion = {}
 
 function TopAppBar.ColdFusion.new(
     maid : Maid,
+
     isDark : CanBeState<boolean>,
-    onScroll : State<boolean>)
+    title : CanBeState<string>,
+    leadingButton : CanBeState<ButtonData>,
+    trailingButtons : CanBeState<{[number] : ButtonData}>,
+
+    onScroll : State<boolean>,
+
+    onButtonClicked : (ButtonData) -> ())
     
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -55,6 +67,10 @@ function TopAppBar.ColdFusion.new(
     local _Value = _fuse.Value
     
     local isDarkState = _import(isDark, false)
+
+    local leadingIconState = _import(leadingButton, leadingButton)
+    local trailingIconsState = _import(trailingButtons, trailingButtons)
+
 
     local appearanceDataState = _Computed(
         function(
@@ -113,40 +129,59 @@ function TopAppBar.ColdFusion.new(
         return onSurface
     end, appearanceDataState) 
 
-    local leadingIconSelected = _Value(false)
-    local onLeadingIconClicked = function()
-        print("Fangchan nakrab")
+    local function getLeadingIcon()
+        local leadingIcon = _Computed(function(button : ButtonData)
+            local leadingIconId = button.Id or 15567843390
+            local selected = _import(button.Selected, false)
+            
+            return _bind(StandardIconButton.ColdFusion.new(
+                maid, 
+                leadingIconId, 
+                selected,
+                function()
+                    onButtonClicked(button)
+                end,
+                isDarkState,
+                24
+            ))({
+                LayoutOrder = 1
+            })
+        end, leadingIconState)
+        return leadingIcon
     end
 
-    local trailingIconSelected = _Value(false)
-    local onOTrailingIconClicked = function()
-        print("Anadee fangchan nakrab")
+    local function getTrailingIcon(buttonData : ButtonData, fuse : Fuse ?)
+        local _import = if fuse then fuse.import else _import
+        local trailingIconId = buttonData.Id or 13805569043
+        local selected = _import(buttonData.Selected, false)
+            
+        local button = _bind(StandardIconButton.ColdFusion.new(
+                maid, 
+                trailingIconId, 
+                selected,
+                function()
+                    onButtonClicked(buttonData)
+                end,
+                isDarkState,
+                24
+            ))({
+                LayoutOrder = 3
+            })
+        return button
+
     end
 
-    local leadingIcon = _bind(StandardIconButton.ColdFusion.new(
-        maid,15567843390, 
-        leadingIconSelected,
-        onLeadingIconClicked
-    ))({
-        Size = UDim2.fromOffset(24, 24)
-    }) :: Instance
+    local leadingIcon = getLeadingIcon()
 
-    local trailingIcon = _bind(StandardIconButton.ColdFusion.new(
-        maid,13805569043, 
-        trailingIconSelected,
-        onOTrailingIconClicked
-    ))({
-        Size = UDim2.fromOffset(24, 24) 
-    }) :: Instance
 
-    local Children = {
-        _bind(leadingIcon){
-            LayoutOrder = 1,
-        },
+    local trailingIcons  = _Value({}) 
+
+    local Children : {CanBeState<Instance> | {CanBeState<Instance>}} = {
+       leadingIcon ,
         _bind(TextLabel.ColdFusion.new(
             maid, 
             2, 
-            "chiwit khong phom thi thai pen mei dii na chab", 
+            title, 
             headlineColorState, 
             typographyDataState, 
             _Computed(function(appearence : AppearanceData)
@@ -154,12 +189,50 @@ function TopAppBar.ColdFusion.new(
             end, appearanceDataState)
         ))({
             AutomaticSize = Enum.AutomaticSize.None,
-            Size = UDim2.fromScale(0.8, 1)
+            TextXAlignment = Enum.TextXAlignment.Left,
+            Size = UDim2.fromScale(0.75, 1)
         }),
-        _bind(trailingIcon)({
-            LayoutOrder = 3,
+        _new("Frame")({
+            LayoutOrder = 2,
+            BackgroundTransparency = 1,
+            Size = UDim2.fromScale(0.1, 1),
+            Children = {
+                _new("UIListLayout")({
+                    Padding = PADDING_SIZE,
+                    FillDirection = Enum.FillDirection.Horizontal,
+                    HorizontalAlignment = Enum.HorizontalAlignment.Right,
+                    VerticalAlignment = Enum.VerticalAlignment.Top
+                }) :: any,
+                trailingIcons
+            }
         })
+        
     }
+
+    --_new("ObjectValue")({
+--[[ Value =]] 
+        _Computed(function(buttons : {ButtonData})
+            trailingIcons:Set({})
+            return buttons
+        end, trailingIconsState):ForValues(function(buttonData : ButtonData, _maid: Maid)  
+            _fuse = ColdFusion.fuse(_maid)
+            _import = _fuse.import 
+
+            _Computed = _fuse.Computed
+
+            local sc = trailingIcons:Get()
+            --local trailingIconId = buttonData.Id or 13805569043
+            --local selected = _import(buttonData.Selected, false)
+            
+            local button = getTrailingIcon(buttonData, _fuse)
+
+            table.insert(sc, button)
+
+            trailingIcons:Set(sc)
+            return buttonData
+        end)
+    --}) 
+
 
     local out = Base.ColdFusion.new(
         maid, 

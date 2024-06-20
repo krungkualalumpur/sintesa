@@ -11,6 +11,11 @@ local Typography = require(script.Parent:WaitForChild("Styles"):WaitForChild("Ty
 local Motions = require(script.Parent:WaitForChild("Styles"):WaitForChild("Motions"))
 
 --types
+type Fuse = ColdFusion.Fuse
+type State<T> = ColdFusion.State<T>
+type ValueState<T> = ColdFusion.ValueState<T>
+type CanBeState<T> = ColdFusion.CanBeState<T>
+
 export type TypeScaleData = Typography.TypeScaleData
 export type AppearanceData = {
     Symmetry : Enums.ShapeSymmetry,
@@ -39,6 +44,11 @@ export type TransitionData = {
     Duration : Enums.TransitionDuration
 }
 
+export type ButtonData = {
+    Name : string?,
+    Selected : ValueState<boolean>?,
+    Id : number?
+}
 --constants
 --remotes
 --variables
@@ -98,6 +108,18 @@ function data.createTransitionData(
     return {
         Easing = easing,
         Duration = duration,
+    } 
+end
+
+function data.createButtonData(
+    Name : string,
+    Id : number,
+    Selected : ValueState<boolean>?) : ButtonData
+
+    return {
+        Name = Name,
+        Selected = Selected,
+        Id = Id
     } 
 end
 

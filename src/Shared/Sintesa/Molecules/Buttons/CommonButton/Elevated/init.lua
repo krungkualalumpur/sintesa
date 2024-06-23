@@ -28,6 +28,7 @@ type AppearanceData = Types.AppearanceData
 type TypographyData = Types.TypographyData
 type TransitionData = Types.TransitionData
 
+type IconData = Types.IconData
 --constants
 --variables
 --references
@@ -43,7 +44,7 @@ function interface.ColdFusion.new(
 
     isDark : CanBeState<boolean>?,
     height : CanBeState<number>?,
-    iconId : CanBeState<number?>)
+    iconId : CanBeState<number | IconData?>?)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import

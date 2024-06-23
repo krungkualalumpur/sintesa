@@ -9,7 +9,7 @@ local Enums = require(script.Parent:WaitForChild("Enums"))
 local DynamicColorTypes = require(script.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor"):WaitForChild("dynamiccolor"):WaitForChild("Types"))
 local Typography = require(script.Parent:WaitForChild("Styles"):WaitForChild("Typography"))
 local Motions = require(script.Parent:WaitForChild("Styles"):WaitForChild("Motions"))
-
+local Icons = require(script.Parent:WaitForChild("Icons"))
 --types
 type Fuse = ColdFusion.Fuse
 type State<T> = ColdFusion.State<T>
@@ -43,11 +43,12 @@ export type TransitionData = {
     Easing : Enums.Easing,
     Duration : Enums.TransitionDuration
 }
+export type IconData = Icons.IconData
 
 export type ButtonData = {
     Name : string?,
     Selected : ValueState<boolean>?,
-    Id : number?
+    Id : (number | IconData)?
 }
 --constants
 --remotes

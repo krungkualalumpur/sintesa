@@ -28,6 +28,7 @@ type AppearanceData = Types.AppearanceData
 type TypographyData = Types.TypographyData
 type TransitionData = Types.TransitionData
 
+type IconData = Types.IconData
 --constants
 --variables
 --references
@@ -38,7 +39,7 @@ local interface = {}
 interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
-    iconId : CanBeState<number>,
+    iconId : CanBeState<number | IconData>,
     isSelected : State<boolean>,
     onClick: () -> (), 
 

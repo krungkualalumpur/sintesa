@@ -20,6 +20,8 @@ local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"
 
 local TextLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
 
+type IconData = Types.IconData
+
 --types
 type Maid = Maid.Maid
 
@@ -72,7 +74,7 @@ function interface.ColdFusion.new(
     onClick : (... any) -> (... any),
 
     text : CanBeState<string?>,
-    iconId : CanBeState<number?>,
+    iconId : CanBeState<number | IconData?>?,
 
     iconColorState : State<Color3> ?,
     stateOpacity : State<number> ?,

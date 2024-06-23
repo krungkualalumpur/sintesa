@@ -28,6 +28,7 @@ type AppearanceData = Types.AppearanceData
 type TypographyData = Types.TypographyData
 type TransitionData = Types.TransitionData
 
+type IconData = Types.IconData
 --constants
 --variables
 --references
@@ -39,7 +40,7 @@ interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
     text : CanBeState<string>,
-    iconId : CanBeState<number>,
+    iconId : CanBeState<number | IconData>,
     onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,

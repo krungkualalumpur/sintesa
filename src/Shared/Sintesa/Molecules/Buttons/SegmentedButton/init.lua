@@ -31,6 +31,7 @@ type TypographyData = Types.TypographyData
 type TransitionData = Types.TransitionData
 
 type ButtonData = Types.ButtonData
+type IconData = Types.IconData
 --constants
 --variables
 --references

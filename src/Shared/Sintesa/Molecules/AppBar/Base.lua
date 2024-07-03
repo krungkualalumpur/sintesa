@@ -71,7 +71,7 @@ function interface.ColdFusion.new(
     local _clone = _fuse.clone
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
-
+ 
     local appearanceDataState = _import(appearanceData, appearanceData)
     local childrenState = _import(Children, Children)
 
@@ -85,7 +85,7 @@ function interface.ColdFusion.new(
             end, appearanceDataState),
         })
     end
-    print("Way")
+
     local out = _new("Frame")({
         Size = _Computed(function(appearence : AppearanceData)
             return UDim2.new(1, 0, 0, appearence.Height)

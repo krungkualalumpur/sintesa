@@ -8,6 +8,7 @@ local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
 --modules
 local CenterAligned = require(script.Parent)
 local Types = require(script.Parent.Parent.Parent.Parent.Parent:WaitForChild("Types"))
+local Icons = require(script.Parent.Parent.Parent.Parent.Parent:WaitForChild("Icons"))
 --types
 type Fuse = ColdFusion.Fuse
 type State<T> = ColdFusion.State<T>
@@ -16,7 +17,7 @@ type CanBeState<T> = ColdFusion.CanBeState<T>
 
 type IconRef = CenterAligned.IconRef
 --constants
---remotes
+--remotes 
 --variables
 --references
 --local functions 
@@ -33,9 +34,8 @@ return function(target : CoreGui)
     local _Value = _fuse.Value
 
     local onScroll = _Value(false)
-    local leadingButton = Types.createButtonData("Leading", 15567843390)
+    local leadingButton = Types.createButtonData("Leading", Icons.action.alarm) 
     local trailingButton = Types.createButtonData("Trailing", 13805569043)
-
     local out = CenterAligned.ColdFusion.new(
         maid, 
         false, 

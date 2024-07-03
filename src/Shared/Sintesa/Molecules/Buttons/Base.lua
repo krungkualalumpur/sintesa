@@ -74,7 +74,7 @@ function interface.ColdFusion.new(
     onClick : (... any) -> (... any),
 
     text : CanBeState<string?>,
-    iconId : CanBeState<number | IconData?>?,
+    iconId : CanBeState<number | IconData>?,
 
     iconColorState : State<Color3> ?,
     stateOpacity : State<number> ?,
@@ -105,7 +105,7 @@ function interface.ColdFusion.new(
     end
     
     local textState = _import(text, text)
-    local iconIdState = _import(iconId, iconId)
+    local iconIdState : State<(number? | IconData?)> = _import(iconId, iconId)
     local stateOpacityState = _import(stateOpacity, stateOpacity)
     local backgroundOpacityState = _import(backgroundOpacity, backgroundOpacity)
 
@@ -155,13 +155,23 @@ function interface.ColdFusion.new(
                             _new("ImageLabel")({
                                 LayoutOrder = 1,
                                 BackgroundTransparency = 1,
-                                Visible = _Computed(function(id : number?)
+                                Visible = _Computed(function(id : (number | IconData)?)
                                     return if id then true else false
                                 end, iconIdState),
                                 ImageColor3 = iconColorState,
-                                Image = _Computed(function(id : number?)
-                                    return `rbxassetid://{id}`
+                                Image = _Computed(function(id : (number | IconData)?)
+                                    local _id = if type(id) == "number" then  `http://www.roblox.com/asset/?id={id}` elseif id then id.AssetId else ''
+                                    return _id
                                 end, iconIdState) ,
+                                ImageRectOffset = _Computed(function(id : (number | IconData?)? )
+                                    print(id)
+                                    local offset = if type(id) == "table" then Vector2.new(id.OffsetPerSize[1]*id.Size[1], id.OffsetPerSize[2]*id.Size[2]) else Vector2.new()
+                                    return offset
+                                end, iconIdState) ,
+                                ImageRectSize = _Computed(function(id : (number | IconData?)? )
+                                    local size = if type(id) == "table" then Vector2.new(id.Size[1], id.Size[2]) else Vector2.new()
+                                    return size
+                                end, iconIdState),
                                 Size = _Computed(function(appearance : AppearanceData, _text : string?)
                                     return if text then UDim2.new(0, appearance.Height/2, 0 ,appearance.Height/2) else UDim2.new(0, appearance.Height, 0 ,appearance.Height)
                                 end, appearanceDataState, textState),

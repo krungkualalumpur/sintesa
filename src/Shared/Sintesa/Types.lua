@@ -112,9 +112,10 @@ function data.createTransitionData(
     } 
 end
 
+
 function data.createButtonData(
     Name : string,
-    Id : number,
+    Id : number | IconData,
     Selected : ValueState<boolean>?) : ButtonData
 
     return {

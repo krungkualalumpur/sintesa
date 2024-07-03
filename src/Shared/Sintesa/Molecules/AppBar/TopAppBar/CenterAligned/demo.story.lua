@@ -34,8 +34,8 @@ return function(target : CoreGui)
     local _Value = _fuse.Value
 
     local onScroll = _Value(false)
-    local leadingButton = Types.createButtonData("Leading", Icons.action.alarm) 
-    local trailingButton = Types.createButtonData("Trailing", 13805569043)
+    local leadingButton = Types.createButtonData("Leading", Icons.navigation.arrow_back) 
+    local trailingButton = Types.createButtonData("Trailing", Icons.communication.call)
     local out = CenterAligned.ColdFusion.new(
         maid, 
         false, 

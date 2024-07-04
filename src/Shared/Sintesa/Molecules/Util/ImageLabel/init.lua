@@ -67,7 +67,7 @@ function ImageLabel.ColdFusion.new(
     local imageIdState  = _import(imageId, imageId) 
 
     return _new("ImageLabel")({
-        LayoutOrder = 1,
+        LayoutOrder = layoutOrder,
         BackgroundTransparency = 1,
         Visible = _Computed(function(id : (number? | IconData?))
             return if id then true else false

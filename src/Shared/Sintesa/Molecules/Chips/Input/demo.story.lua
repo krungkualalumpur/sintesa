@@ -5,8 +5,9 @@ local Package = ReplicatedStorage:WaitForChild("Packages")
 --packages
 local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
-local Suggestion = require(script.Parent)
 --modules
+local Suggestion = require(script.Parent)
+local Icons = require(script.Parent.Parent.Parent.Parent:WaitForChild("Icons"))
 --types
 --constants
 --remotes
@@ -25,11 +26,11 @@ return function(target : CoreGui)
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local selected = _Value(true :: boolean?)
+    local selected = _Value(false)
     local isError = _Value(false)
     local out = Suggestion.ColdFusion.new(maid, "Suggestion Chip", function()  
 
-    end, false)
+    end, false, selected, Icons.image.image, Icons.navigation.close)
     out.Parent = target
 
    _new("Frame")({

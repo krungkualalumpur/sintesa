@@ -46,7 +46,15 @@ function interface.ColdFusion.new(
     height : CanBeState<number>?,
     iconId : CanBeState<number | IconData?>?,
     isSelected : CanBeState<boolean?>,
-    shapeStyle : CanBeState<Enums.ShapeStyle?>)
+    shapeStyle : CanBeState<Enums.ShapeStyle?>, 
+
+    appearenceData : CanBeState<AppearanceData> ?,
+    typographyData : CanBeState<TypographyData> ?,
+    
+    givenOutlineColorState : State<Color3>?,
+    givenTextColorState : State<Color3>?,
+
+    state : ValueState<Enums.ButtonState> ?)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -55,7 +63,7 @@ function interface.ColdFusion.new(
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local buttonState : ValueState<Enums.ButtonState>  = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState) 
+    local buttonState : ValueState<Enums.ButtonState>  = state or _Value(Enums.ButtonState.Enabled :: Enums.ButtonState)  
 
     local isDarkState = _import(isDark, false)
 
@@ -65,7 +73,7 @@ function interface.ColdFusion.new(
 
     local height = _import(height, 40)
 
-    local appearanceDataState = _Computed(
+    local appearanceDataState = _import(appearenceData, _Computed(
         function(
             dark : boolean,
             _buttonState : Enums.ButtonState,
@@ -90,10 +98,10 @@ function interface.ColdFusion.new(
 
             dark
         )
-    end, isDarkState, buttonState, shapeStyleState)
+    end, isDarkState, buttonState, shapeStyleState))
    
     local labelLarge = Styles.Typography.get(Enums.TypographyStyle.LabelLarge)
-    local typographyDataState = _Value(Types.createTypographyData(
+    local typographyDataState = _import(typographyData, Types.createTypographyData(
         {
             Font = labelLarge.Font,
             LineHeight = labelLarge.LineHeight,  
@@ -101,9 +109,9 @@ function interface.ColdFusion.new(
             Tracking = labelLarge.Tracking,
             Weight = labelLarge.Weight,
         }
-    ))
+    )) 
     
-    local outlineColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean?)
+    local outlineColorState = _import(givenOutlineColorState,  _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean?)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -123,9 +131,9 @@ function interface.ColdFusion.new(
         else outline) else (
             secondaryContainer
         )
-    end, appearanceDataState, buttonState, isSelectedState)
+    end, appearanceDataState, buttonState, isSelectedState))
 
-    local labelTextColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean?)
+    local labelTextColorState = _import(givenTextColorState, _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean?)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -145,7 +153,7 @@ function interface.ColdFusion.new(
         else
             onSurface
         )
-    end, appearanceDataState, buttonState, isSelectedState)
+    end, appearanceDataState, buttonState, isSelectedState))
 
     local stateLayerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean?)
         local dynamicScheme = MaterialColor.getDynamicScheme(

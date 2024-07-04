@@ -19,6 +19,7 @@ local ShapeStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):Wa
 local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
 
 local TextLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
+local Icons = require(script.Parent.Parent.Parent:WaitForChild("Icons"))
 
 type IconData = Types.IconData
 
@@ -104,53 +105,33 @@ function interface.ColdFusion.new(
         })
     end
     
-    local textState = _import(text, text)
     local iconIdState : State<(number | IconData?)> = _import(iconId, iconId)
     local stateOpacityState = _import(stateOpacity, stateOpacity)
-    local backgroundOpacityState = _import(backgroundOpacity, backgroundOpacity)
 
     local out = _new("TextButton")({
-        AutomaticSize = Enum.AutomaticSize.X,
-        Size = _Computed(function(appearance : AppearanceData, str : string?)
-            return UDim2.new(0, if str then 75 else 0, 0 ,appearance.Height)
-        end, appearanceDataState, textState),
+        AutomaticSize = Enum.AutomaticSize.XY,
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return appearance.ShadowColor
         end, appearanceDataState),
-        BackgroundTransparency = _Computed(function(appearance : AppearanceData)
-            return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
-        end, appearanceDataState),
+        BackgroundTransparency = 1,
         Children = {
             _new("Frame")({
                 Name = "CanvasGroup",
-                AutomaticSize = Enum.AutomaticSize.X,
                 ClipsDescendants = false,
-                Size =  _Computed(function(appearance : AppearanceData, str : string?)
-                    local xOffset = if str then 75 else 0
-                    return if hasShadow then UDim2.new(0, xOffset, 0.9,0) else UDim2.new(0,xOffset,1,0)
-                end, appearanceDataState, textState),
-                BackgroundTransparency = _Computed(function(opacity : number?)
-                    return if opacity then (1 - opacity) else 0 
-                end, backgroundOpacityState),
+                Size = UDim2.new(0, 28, 0,28) ,
+                BackgroundTransparency = 1,
                 BackgroundColor3 = containerColorState,
                 Children = {
                     getUiCorner(),
                     _new("Frame")({
                         Name = "Main",
-                        AutomaticSize = Enum.AutomaticSize.X,
                         BackgroundColor3 = stateLayerColorState,
                         BackgroundTransparency = _Computed(function(opacity : number?)
-                            return if opacity then (1 - opacity) else 1
+                            return if opacity then (1 - opacity) else 0
                         end, stateOpacityState),
-                        Size = UDim2.fromScale(0, 1),
+                        Size = UDim2.fromScale(1, 1),
                         Children = {
-                            _new("UIListLayout")({
-                                Padding = PADDING_SIZE,
-                                SortOrder = Enum.SortOrder.LayoutOrder,
-                                FillDirection = Enum.FillDirection.Horizontal,
-                                HorizontalAlignment = Enum.HorizontalAlignment.Center,
-                                VerticalAlignment = Enum.VerticalAlignment.Center
-                            }),
+                         
                             getUiCorner(),
                             _new("ImageLabel")({
                                 LayoutOrder = 1,
@@ -158,7 +139,9 @@ function interface.ColdFusion.new(
                                 Visible = _Computed(function(id : (number | IconData)?)
                                     return if id then true else false
                                 end, iconIdState),
-                                ImageColor3 = iconColorState,
+                                AnchorPoint = Vector2.new(0.5,0.5),
+                                Position = UDim2.fromScale(0.5, 0.5),
+                                ImageColor3 = containerColorState,
                                 Image = _Computed(function(id : (number | IconData)?)
                                     local _id = if type(id) == "number" then  `http://www.roblox.com/asset/?id={id}` elseif id then id.AssetId else ''
                                     return _id
@@ -172,45 +155,32 @@ function interface.ColdFusion.new(
                                     local size = if type(id) == "table" then Vector2.new(id.Size[1], id.Size[2]) else Vector2.new()
                                     return size
                                 end, iconIdState),
-                                Size = _Computed(function(appearance : AppearanceData, _text : string?)
-                                    return if text then UDim2.new(0, appearance.Height/2, 0 ,appearance.Height/2) else UDim2.new(0, appearance.Height, 0 ,appearance.Height)
-                                end, appearanceDataState, textState),
+                                Size = UDim2.fromScale(1, 1), --if text then UDim2.new(0, appearance.Height/2, 0 ,appearance.Height/2) else UDim2.new(0, appearance.Height, 0 ,appearance.Height)
+            
                                 Children = {
                                     _new("UIAspectRatioConstraint")({
                                         AspectRatio = 1
                                     })
                                 }
                             }),
-                            TextLabel.ColdFusion.new(
-                                maid,
-                                2, 
-                                textState,
-                                labelTextColorState :: State<Color3>,
-                                typographyDataState,
-                                _Computed(function(appearance : AppearanceData)
-                                    return appearance.Height
-                                end, appearanceDataState)
-                            )
+
+                            _new("Frame")({
+                                ZIndex = 0,
+                                Visible = _Computed(function(id : (number | IconData)?)
+                                    return if id == Icons.toggle.check_box_outline_blank then false else true
+                                end, iconIdState),
+                                AnchorPoint = Vector2.new(0.5,0.5),
+                                BackgroundColor3 = iconColorState,
+                                Position = UDim2.fromScale(0.5,0.5),
+                                Size = UDim2.fromScale(0.65, 0.65)
+                            })
+
                         }
                     }),
                 }
             }),
             
-            getUiCorner(),
-    
-           --[[ if hasShadow then
-                _new("UIStroke")({
-                    Name = "Shadow",
-                    Thickness = 6,
-                    Color = _Computed(function(appearance : AppearanceData)
-                        return appearance.ShadowColor
-                    end, appearanceDataState),
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border,
-                    Transparency =  _Computed(function(appearance : AppearanceData)
-                        return (20 - ElevationStyle.getLevelData(appearance.Elevation))/20
-                    end, appearanceDataState)
-                })
-            else nil :: any]]
+            getUiCorner()
         },
 
         Events = {

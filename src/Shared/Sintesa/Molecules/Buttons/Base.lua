@@ -19,6 +19,7 @@ local ShapeStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):Wa
 local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
 
 local TextLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
+local ImageLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("ImageLabel"))
 
 type IconData = Types.IconData
 
@@ -152,26 +153,14 @@ function interface.ColdFusion.new(
                                 VerticalAlignment = Enum.VerticalAlignment.Center
                             }),
                             getUiCorner(),
-                            _new("ImageLabel")({
-                                LayoutOrder = 1,
-                                BackgroundTransparency = 1,
-                                Visible = _Computed(function(id : (number | IconData)?)
-                                    return if id then true else false
-                                end, iconIdState),
-                                ImageColor3 = iconColorState,
-                                Image = _Computed(function(id : (number | IconData)?)
-                                    local _id = if type(id) == "number" then  `http://www.roblox.com/asset/?id={id}` elseif id then id.AssetId else ''
-                                    return _id
-                                end, iconIdState) ,
-                                ImageRectOffset = _Computed(function(id : (number | IconData?)? )
-                                    print(id)
-                                    local offset = if type(id) == "table" then Vector2.new(id.OffsetPerSize[1]*id.Size[1], id.OffsetPerSize[2]*id.Size[2]) else Vector2.new()
-                                    return offset
-                                end, iconIdState) ,
-                                ImageRectSize = _Computed(function(id : (number | IconData?)? )
-                                    local size = if type(id) == "table" then Vector2.new(id.Size[1], id.Size[2]) else Vector2.new()
-                                    return size
-                                end, iconIdState),
+                            _bind(ImageLabel.ColdFusion.new(
+                                maid,
+
+                                1,
+                                iconIdState,
+
+                                iconColorState
+                            ))({
                                 Size = _Computed(function(appearance : AppearanceData, _text : string?)
                                     return if text then UDim2.new(0, appearance.Height/2, 0 ,appearance.Height/2) else UDim2.new(0, appearance.Height, 0 ,appearance.Height)
                                 end, appearanceDataState, textState),
@@ -181,6 +170,35 @@ function interface.ColdFusion.new(
                                     })
                                 }
                             }),
+                            -- _new("ImageLabel")({
+                            --     LayoutOrder = 1,
+                            --     BackgroundTransparency = 1,
+                            --     Visible = _Computed(function(id : (number | IconData)?)
+                            --         return if id then true else false
+                            --     end, iconIdState),
+                            --     ImageColor3 = iconColorState,
+                            --     Image = _Computed(function(id : (number | IconData)?)
+                            --         local _id = if type(id) == "number" then  `http://www.roblox.com/asset/?id={id}` elseif id then id.AssetId else ''
+                            --         return _id
+                            --     end, iconIdState) ,
+                            --     ImageRectOffset = _Computed(function(id : (number | IconData?)? )
+                            --         print(id)
+                            --         local offset = if type(id) == "table" then Vector2.new(id.OffsetPerSize[1]*id.Size[1], id.OffsetPerSize[2]*id.Size[2]) else Vector2.new()
+                            --         return offset
+                            --     end, iconIdState) ,
+                            --     ImageRectSize = _Computed(function(id : (number | IconData?)? )
+                            --         local size = if type(id) == "table" then Vector2.new(id.Size[1], id.Size[2]) else Vector2.new()
+                            --         return size
+                            --     end, iconIdState),
+                            --     Size = _Computed(function(appearance : AppearanceData, _text : string?)
+                            --         return if text then UDim2.new(0, appearance.Height/2, 0 ,appearance.Height/2) else UDim2.new(0, appearance.Height, 0 ,appearance.Height)
+                            --     end, appearanceDataState, textState),
+                            --     Children = {
+                            --         _new("UIAspectRatioConstraint")({
+                            --             AspectRatio = 1
+                            --         })
+                            --     }
+                            -- }),
                             TextLabel.ColdFusion.new(
                                 maid,
                                 2, 
@@ -190,7 +208,7 @@ function interface.ColdFusion.new(
                                 _Computed(function(appearance : AppearanceData)
                                     return appearance.Height
                                 end, appearanceDataState)
-                            )
+                            ),
                         }
                     }),
                 }

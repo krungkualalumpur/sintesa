@@ -75,7 +75,7 @@ function TextLabel.ColdFusion.new(
         Visible = _Computed(function(str : string?)
             return if str then true else false
         end, textState),
-        AutomaticSize = Enum.AutomaticSize.X,
+        AutomaticSize = Enum.AutomaticSize.XY,
         BackgroundTransparency = 1,
         Text = _Computed(function(str : string?)
             return str or ""

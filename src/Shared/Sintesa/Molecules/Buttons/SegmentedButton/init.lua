@@ -14,6 +14,7 @@ local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
 
 local Styles = require(script.Parent.Parent.Parent:WaitForChild("Styles"))
 local Enums = require(script.Parent.Parent.Parent:WaitForChild("Enums"))
+local Icons = require(script.Parent.Parent.Parent:WaitForChild("Icons"))
 
 local DynamicTheme = require(script.Parent.Parent:WaitForChild("dynamic_theme"))
 
@@ -77,7 +78,7 @@ function interface.ColdFusion.new(
         _maid:GiveTask(_bind(Outlined.ColdFusion.new(_maid, buttonData.Name or "", function()
             onClick(buttonData)
             end, isDarkState, nil, _Computed(function(selected : boolean)
-            return if selected then 1202200114 else nil
+            return if selected then Icons.navigation.check else nil
         end,  selected), selected, Enums.ShapeStyle.None))({
             Parent = out,
           

@@ -5,7 +5,7 @@ local Package = ReplicatedStorage:WaitForChild("Packages")
 --packages
 local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
-local ViewportFrame = require(script.Parent)
+local Divider = require(script.Parent)
 --modules
 --types
 --constants
@@ -25,14 +25,8 @@ return function(target : CoreGui)
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local out = ViewportFrame.ColdFusion.new(
-        maid, 
-        _new("Part")({Size = Vector3.new(2,2,2)}) 
-        ,200,
-        true,
-        false
-    ) 
-    out.Position = UDim2.fromScale(0.5,0.5)
+    local out = Divider.ColdFusion.new(maid, false,true) 
+    out.Position = UDim2.fromScale(0,0.5)
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),
       Parent = target,

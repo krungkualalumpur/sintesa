@@ -50,7 +50,9 @@ function Util.ColdFusion.new(
     maid : Maid,
     instance : CanBeState<Instance>,
     height : CanBeState<number>,
-    isRotate : CanBeState<boolean>)
+    isRotate : CanBeState<boolean>,
+    isDark : CanBeState<boolean>,
+    shapeStyle : CanBeState<Enums.ShapeStyle>?)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -63,6 +65,44 @@ function Util.ColdFusion.new(
     local instanceState = _import(instance, instance)
     local cfOffset = _Value(Vector3.new(1, 1, 2))
     local isRotateState = _import(isRotate, isRotate)
+    
+    local isDarkState = _import(isDark, isDark)
+    local shapeStyleState = _import(shapeStyle :: Enums.ShapeStyle, Enums.ShapeStyle.Medium) 
+
+    local getUiCorner = function()
+        return _new("UICorner")({
+            CornerRadius = _Computed(function(style : Enums.ShapeStyle) 
+                return UDim.new(
+                    0,  
+                    ShapeStyle.get(style)
+                )
+            end, shapeStyleState),
+        })
+    end
+
+    local appearanceDataState = _Computed(
+        function(
+            dark : boolean        
+        ) 
+           
+        return Types.createAppearanceData(
+            DynamicTheme.Color[Enums.ColorRole.Primary],
+            DynamicTheme.Color[Enums.ColorRole.Secondary],
+            DynamicTheme.Color[Enums.ColorRole.Tertiary],
+
+            DynamicTheme.Color[Enums.ColorRole.Surface],
+            DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
+            DynamicTheme.Color[Enums.ColorRole.Shadow],
+ 
+            Enums.ElevationResting.Level0,
+
+            Enums.ShapeSymmetry.Full,
+            Enums.ShapeStyle.None,
+            112,
+
+            dark
+        )
+    end, isDarkState)
     
     local camera = _new("Camera")({
         FieldOfView = 40,
@@ -87,14 +127,27 @@ function Util.ColdFusion.new(
                     cfOffset:Set(Vector3.new(math.cos(math.rad(x)), 0.5, math.sin(math.rad(x)))*2.4)
                 end))
             end
-            return 1
+            return 0
         end, isRotateState),
-        --BackgroundColor3 = Color3.fromRGB(255,0,0),
+        BackgroundColor3 = _Computed(function(appearance : AppearanceData)
+            local dynamicScheme = MaterialColor.getDynamicScheme(
+                appearance.PrimaryColor, 
+                appearance.SecondaryColor, 
+                appearance.TertiaryColor, 
+                appearance.NeutralColor, 
+                appearance.NeutralVariantColor,
+                appearance.IsDark
+            )
+            local surfaceContainerHighest = MaterialColor.Color3FromARGB(dynamicScheme:get_surfaceContainerHighest())
+            
+            return surfaceContainerHighest
+        end, appearanceDataState),
         Size = _Computed(function(h : number)
             return UDim2.fromOffset(h, h)
         end, heightState),
         CurrentCamera = camera,
         Children = {
+            getUiCorner(),
             camera,
             _new("WorldModel")({
                 Children = {

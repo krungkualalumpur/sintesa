@@ -45,7 +45,8 @@ function interface.ColdFusion.new(
     onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,
-    height : CanBeState<number>?)
+    height : CanBeState<number>?,
+    badge : CanBeState<number | string | boolean>?)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -204,7 +205,8 @@ function interface.ColdFusion.new(
         nil,
         _Computed(function(selected : boolean)
             return if selected then 1 else 0
-        end, isSelected)
+        end, isSelected),
+        badge
     ))({
         Children = {
             _new("UIAspectRatioConstraint")({

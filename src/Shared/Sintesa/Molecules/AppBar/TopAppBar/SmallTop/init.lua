@@ -238,7 +238,6 @@ function TopAppBar.ColdFusion.new(
         maid, 
         containerColorState, 
         appearanceDataState,
-        true, 
         Children
     )
     return out :: Frame

@@ -65,6 +65,7 @@ function ImageLabel.ColdFusion.new(
     local _Value = _fuse.Value
    
     local imageIdState  = _import(imageId, imageId) 
+    local _iconColorState = _import(iconColorState, Color3.fromRGB())
 
     return _new("ImageLabel")({
         LayoutOrder = layoutOrder,
@@ -72,13 +73,12 @@ function ImageLabel.ColdFusion.new(
         Visible = _Computed(function(id : (number? | IconData?))
             return if id then true else false
         end, imageIdState),
-        ImageColor3 = iconColorState,
+        ImageColor3 = _iconColorState:Tween(),
         Image = _Computed(function(id : (number | IconData)?)
             local _id = if type(id) == "number" then  `http://www.roblox.com/asset/?id={id}` elseif id then id.AssetId else ''
             return _id
         end, imageIdState) ,
         ImageRectOffset = _Computed(function(id : (number | IconData?)? )
-            print(id)
             local offset = if type(id) == "table" then Vector2.new(id.OffsetPerSize[1]*id.Size[1], id.OffsetPerSize[2]*id.Size[2]) else Vector2.new()
             return offset
         end, imageIdState) ,

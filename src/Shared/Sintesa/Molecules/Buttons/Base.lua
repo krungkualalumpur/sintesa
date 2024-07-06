@@ -21,6 +21,9 @@ local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"
 local TextLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
 local ImageLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("ImageLabel"))
 
+local SmallBadge = require(script.Parent.Parent:WaitForChild("Badges"):WaitForChild("Small"))
+local LargeBadge = require(script.Parent.Parent:WaitForChild("Badges"):WaitForChild("Large"))
+
 type IconData = Types.IconData
 
 --types
@@ -81,7 +84,8 @@ function interface.ColdFusion.new(
     stateOpacity : State<number> ?,
     labelTextColorState : State<Color3>?,
 
-    backgroundOpacity : CanBeState<number>?)
+    backgroundOpacity : CanBeState<number>?,
+    badge : CanBeState<number | string | boolean>?)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -109,6 +113,7 @@ function interface.ColdFusion.new(
     local iconIdState : State<(number | IconData?)> = _import(iconId, iconId)
     local stateOpacityState = _import(stateOpacity, stateOpacity)
     local backgroundOpacityState = _import(backgroundOpacity, backgroundOpacity)
+    local badgeState = _import(badge, badge)
 
     local out = _new("TextButton")({
         AutomaticSize = Enum.AutomaticSize.X,
@@ -122,6 +127,23 @@ function interface.ColdFusion.new(
             return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
         end, appearanceDataState),
         Children = {
+            _bind(SmallBadge.ColdFusion.new(maid))({
+                ZIndex = 10,
+                Position = UDim2.fromScale(0.65, 0),
+                Visible = _Computed(function(content : (number | string | boolean))
+                    return if type(content) == "boolean" then true else false
+                end, badgeState)
+            }) :: any,
+            _bind(LargeBadge.ColdFusion.new(maid,  _Computed(function(content : (number | string | boolean))
+                return if type(content) == "number" or type(content) == "string" then tostring(content) else ""
+            end, badgeState)))({
+                ZIndex = 10,
+                Position = UDim2.fromScale(0.65, 0),
+                Visible = _Computed(function(content : (number | string | boolean))
+                    return if type(content) == "number" or type(content) == "string" then true else false
+                end, badgeState)
+            }):: any,
+           
             _new("Frame")({
                 Name = "CanvasGroup",
                 AutomaticSize = Enum.AutomaticSize.X,
@@ -132,8 +154,8 @@ function interface.ColdFusion.new(
                 end, appearanceDataState, textState),
                 BackgroundTransparency = _Computed(function(opacity : number?)
                     return if opacity then (1 - opacity) else 0 
-                end, backgroundOpacityState),
-                BackgroundColor3 = containerColorState,
+                end, backgroundOpacityState):Tween(),
+                BackgroundColor3 = containerColorState:Tween(),
                 Children = {
                     getUiCorner(),
                     _new("Frame")({
@@ -142,7 +164,7 @@ function interface.ColdFusion.new(
                         BackgroundColor3 = stateLayerColorState,
                         BackgroundTransparency = _Computed(function(opacity : number?)
                             return if opacity then (1 - opacity) else 1
-                        end, stateOpacityState),
+                        end, stateOpacityState):Tween(),
                         Size = UDim2.fromScale(0, 1),
                         Children = {
                             _new("UIListLayout")({
@@ -246,6 +268,11 @@ function interface.ColdFusion.new(
                 if buttonState:Get() ~= Enums.ButtonState.Disabled then
                     buttonState:Set(Enums.ButtonState.Pressed)
                     onClick()
+                end
+            end,
+            MouseButton1Up = function()
+                if buttonState:Get() ~= Enums.ButtonState.Disabled then
+                    buttonState:Set(Enums.ButtonState.Enabled)
                 end
             end,
         }

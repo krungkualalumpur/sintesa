@@ -61,7 +61,12 @@ function interface.ColdFusion.new(
     containerColorState : State<Color3>,
 
     appearanceData : CanBeState<AppearanceData>,
-    Children : CanBeState<{[number] : CanBeState<Instance> | {CanBeState<Instance>}}>)
+    Children : CanBeState<{[number] : CanBeState<Instance> | {CanBeState<Instance>}}>,
+    fillDirection : Enum.FillDirection,
+    horizontalAlignment : Enum.HorizontalAlignment?,
+    verticalAlignment : Enum.VerticalAlignment?,
+    listPadding : number?,
+    betweenListPadding : number?)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -97,28 +102,34 @@ function interface.ColdFusion.new(
         end, appearanceDataState),
         BorderSizePixel = 2,
         Children = {
-            _new("Frame")({
+            _new("ScrollingFrame")({
                 Name = "Main",
                 AutomaticSize = Enum.AutomaticSize.X,
+                CanvasSize = UDim2.new(),
+
+                AutomaticCanvasSize = if fillDirection == Enum.FillDirection.Horizontal then Enum.AutomaticSize.X 
+                    elseif fillDirection == Enum.FillDirection.Vertical then Enum.AutomaticSize.Y 
+                else Enum.AutomaticSize.X,
                 AnchorPoint = Vector2.new(0.5,0.5),
                 ClipsDescendants = false,
                 Size = UDim2.new(1,0,1,0),
                 BackgroundColor3 = containerColorState,
                 Position = UDim2.fromScale(0.5,0.5),
+                ScrollBarThickness = 6,
                 Children = _Computed(function(children : {[number] : Instance})
                     return {
                         _new("UIPadding")({
-                            PaddingTop = PADDING_SIZE,
-                            PaddingBottom = PADDING_SIZE,
-                            PaddingLeft = PADDING_SIZE,
-                            PaddingRight = PADDING_SIZE
+                            PaddingTop = if listPadding then UDim.new(0, listPadding) else  PADDING_SIZE,
+                            PaddingBottom = if listPadding then UDim.new(0, listPadding) else  PADDING_SIZE,
+                            PaddingLeft = if listPadding then UDim.new(0, listPadding) else  PADDING_SIZE,
+                            PaddingRight = if listPadding then UDim.new(0, listPadding) else  PADDING_SIZE
                         }),
                         _new("UIListLayout")({
-                            Padding = UDim.new(0, 40),
+                            Padding = UDim.new(0,  betweenListPadding or 48),
                             SortOrder = Enum.SortOrder.LayoutOrder,
-                            FillDirection = Enum.FillDirection.Horizontal,
-                            HorizontalAlignment = Enum.HorizontalAlignment.Center,
-                            VerticalAlignment = Enum.VerticalAlignment.Center
+                            FillDirection = fillDirection,
+                            HorizontalAlignment = horizontalAlignment or Enum.HorizontalAlignment.Center,
+                            VerticalAlignment = verticalAlignment or Enum.VerticalAlignment.Center
                         }),
                         getUiCorner(),
                         table.unpack(children)

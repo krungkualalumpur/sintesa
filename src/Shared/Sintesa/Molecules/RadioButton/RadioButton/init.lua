@@ -5,17 +5,18 @@ local _Packages = game:GetService("ReplicatedStorage"):WaitForChild("Packages")
 local Maid = require(_Packages:WaitForChild("Maid"))
 local ColdFusion = require(_Packages:WaitForChild("ColdFusion8"))
 --modules
-local Base = require(script.Parent.Parent:WaitForChild("Base"))
+local Base = require(script.Parent:WaitForChild("Base"))
 
 local MaterialColor = require(
-    script.Parent.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
+    script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
 ) 
-local Types = require(script.Parent.Parent.Parent.Parent:WaitForChild("Types"))
+local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
+local Icons = require(script.Parent.Parent.Parent:WaitForChild("Icons"))
 
-local Styles = require(script.Parent.Parent.Parent.Parent:WaitForChild("Styles"))
-local Enums = require(script.Parent.Parent.Parent.Parent:WaitForChild("Enums"))
+local Styles = require(script.Parent.Parent.Parent:WaitForChild("Styles"))
+local Enums = require(script.Parent.Parent.Parent:WaitForChild("Enums"))
 
-local DynamicTheme = require(script.Parent.Parent.Parent:WaitForChild("dynamic_theme"))
+local DynamicTheme = require(script.Parent.Parent:WaitForChild("dynamic_theme"))
 --types
 type Maid = Maid.Maid
 
@@ -39,15 +40,11 @@ local interface = {}
 interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
-    iconId : CanBeState<number | IconData>,
     isSelected : State<boolean>,
     onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,
-    height : CanBeState<number>?,
-    badge : CanBeState<number | string | boolean>?,
-
-    iconColor : CanBeState<Color3> ?)
+    height : CanBeState<number>?)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -78,28 +75,25 @@ function interface.ColdFusion.new(
             DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
             DynamicTheme.Color[Enums.ColorRole.Shadow],
  
-            Enums.ElevationResting.Level0,
+            if _buttonState == Enums.ButtonState.Enabled then 
+                Enums.ElevationResting.Level3 
+            elseif _buttonState == Enums.ButtonState.Hovered then
+                Enums.ElevationResting.Level4
+            elseif _buttonState == Enums.ButtonState.Focused then 
+                Enums.ElevationResting.Level3
+            elseif _buttonState == Enums.ButtonState.Pressed then
+                Enums.ElevationResting.Level3
+            else Enums.ElevationResting.Level3,
 
             Enums.ShapeSymmetry.Full,
-            Enums.ShapeStyle.Full,
+            Enums.ShapeStyle.Medium,
             _height,
 
             dark
         )
     end, isDarkState, buttonState, heightState)
-   
-    local labelLarge = Styles.Typography.get(Enums.TypographyStyle.LabelLarge)
-    local typographyDataState = _Value(Types.createTypographyData(
-        {
-            Font = labelLarge.Font,
-            LineHeight = labelLarge.LineHeight, 
-            Size = labelLarge.Size,
-            Tracking = labelLarge.Tracking,
-            Weight = labelLarge.Weight,
-        }
-    ))
-
-    local iconColorState = _import(iconColor, _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean)
+    
+    local iconColorState =  _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -112,12 +106,21 @@ function interface.ColdFusion.new(
         local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
         local onSurfaceVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurfaceVariant())
 
-        return if selected then (if _buttonState == Enums.ButtonState.Enabled then primary 
+        return if (selected == true ) then 
+            (if _buttonState == Enums.ButtonState.Enabled then ( primary)
+                elseif _buttonState == Enums.ButtonState.Disabled then onSurface
+                elseif _buttonState == Enums.ButtonState.Hovered then (primary)    
+                elseif _buttonState == Enums.ButtonState.Focused then (primary) 
+                elseif _buttonState == Enums.ButtonState.Pressed then (primary)
+            else primary) 
+        else  (if _buttonState == Enums.ButtonState.Enabled then ( onSurfaceVariant)
             elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-        else primary) else  (if _buttonState == Enums.ButtonState.Enabled then onSurfaceVariant 
-            elseif _buttonState == Enums.ButtonState.Disabled then onSurface 
-         else onSurfaceVariant)
-    end, appearanceDataState, buttonState, isSelected))
+            elseif _buttonState == Enums.ButtonState.Hovered then ( onSurface)    
+            elseif _buttonState == Enums.ButtonState.Focused then (onSurface)
+            elseif _buttonState == Enums.ButtonState.Pressed then (onSurface)
+        else onSurface) 
+    end, appearanceDataState, buttonState, isSelected)
+
 
     local stateLayerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, selected : boolean)
         local dynamicScheme = MaterialColor.getDynamicScheme(
@@ -129,53 +132,38 @@ function interface.ColdFusion.new(
             appearance.IsDark
         )
         local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
-        local onSurfaceVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurfaceVariant())
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+        local errorColor = MaterialColor.Color3FromARGB(dynamicScheme:get_error())
 
-        return if selected then (if _buttonState == Enums.ButtonState.Hovered then primary 
-            elseif _buttonState == Enums.ButtonState.Focused then primary 
-            elseif _buttonState == Enums.ButtonState.Pressed then primary
-        else primary) else (if _buttonState == Enums.ButtonState.Hovered then onSurfaceVariant 
-            elseif _buttonState == Enums.ButtonState.Focused then onSurfaceVariant 
-            elseif _buttonState == Enums.ButtonState.Pressed then onSurfaceVariant 
-        else onSurfaceVariant) 
+        return if (selected == true ) then (primary) 
+        else onSurface 
     end, appearanceDataState, buttonState, isSelected)
 
+    local iconId = _Computed(function(selected : boolean) 
+        return if selected == true then Icons.toggle.radio_button_checked else Icons.toggle.radio_button_unchecked 
+    end, isSelected) 
     local base = _bind(Base.ColdFusion.new(
         maid, 
 
-        _Computed(function()
-            return Color3.fromRGB(255,255,255)
-        end),
-        stateLayerColorState,
+        stateLayerColorState:Tween(),
 
         appearanceDataState, 
-        typographyDataState,
 
         buttonState,
-        false,
-        
+        true,
         onClick,
-        nil,
+
         iconId, 
-        iconColorState,
-        _Computed(function(_buttonState : Enums.ButtonState, selected : boolean)
-            return if selected then (if _buttonState == Enums.ButtonState.Pressed then 
-                0.1
-                elseif _buttonState == Enums.ButtonState.Focused then 
-                    0.1
-                elseif _buttonState == Enums.ButtonState.Hovered then
-                    0.08
-            else 0) else (if _buttonState == Enums.ButtonState.Pressed then 
+        iconColorState:Tween(),
+        _Computed(function(_buttonState : Enums.ButtonState)
+            return (if _buttonState == Enums.ButtonState.Pressed then 
                     0.1
                 elseif _buttonState == Enums.ButtonState.Focused then 
-                    0.1
+                   0.1
                 elseif _buttonState == Enums.ButtonState.Hovered then
                     0.08
             else 0)
-        end, buttonState, isSelected),
-        nil,
-        0,
-        badge
+        end, buttonState)
     ))({
         Children = {
             _new("UIAspectRatioConstraint")({

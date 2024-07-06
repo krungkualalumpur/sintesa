@@ -88,7 +88,7 @@ return function(target : CoreGui)
         isSelected,
         isDark,
         function()  
-           
+           isSelected:Set(not isSelected:Get())
         end
     )
     out.Position = UDim2.fromScale(0.4, 0.4)

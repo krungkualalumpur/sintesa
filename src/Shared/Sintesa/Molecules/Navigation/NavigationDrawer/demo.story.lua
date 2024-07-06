@@ -6,7 +6,7 @@ local Package = ReplicatedStorage:WaitForChild("Packages")
 local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
 --modules
-local BottomAppBar = require(script.Parent)
+local NavigationBar = require(script.Parent)
 local Types = require(script.Parent.Parent.Parent.Parent:WaitForChild("Types"))
 local Icons = require(script.Parent.Parent.Parent.Parent:WaitForChild("Icons"))
 --types
@@ -15,9 +15,8 @@ type State<T> = ColdFusion.State<T>
 type ValueState<T> = ColdFusion.ValueState<T>
 type CanBeState<T> = ColdFusion.CanBeState<T>
 
-type IconRef = BottomAppBar.IconRef
 --constants
---remotes
+--remotes 
 --variables
 --references
 --local functions 
@@ -33,37 +32,38 @@ return function(target : CoreGui)
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local onScroll = _Value(false)
-    --local leadingButton = Types.createButtonData("Trailing", Icons.navigation.offline_share)
-    local trailingButton = Types.createButtonData("Leading", Icons.content.add)
-
-    local out = BottomAppBar.ColdFusion.new(
+    local out = NavigationBar.ColdFusion.new(
         maid, 
         false, 
+        "Pleang Chat Thai",
         {
-            Types.createButtonData("Trailing", Icons.file.attachment), 
-            Types.createButtonData("Trailing", Icons.image.image), 
-            Types.createButtonData("Trailing", Icons.navigation.offline_share)
-        } ,
-        trailingButton,
-        onScroll,
+            {
+                Name = "Experiment",
+                Buttons = {
+                    Types.createButtonData("acce_new", Icons.action.accessibility_new, _Value(false)),
+                    Types.createButtonData("acce_for", Icons.action.accessible_forward, _Value(false)),
+                    Types.createButtonData("acc_bal", Icons.action.account_balance, _Value(false)),
+                    Types.createButtonData("add_chart", Icons.action.addchart, _Value(false), 1),
+                },
+            },
+            {
+                Name = "Email",
+                Buttons = {
+                    Types.createButtonData("Inbox", Icons.action.all_inbox, _Value(false)),
+                    Types.createButtonData("Outbox", Icons.action.outbox, _Value(false), 2),
+                    Types.createButtonData("Favorites", Icons.action.favorite, _Value(false)),
+                    Types.createButtonData("Trash", Icons.action.delete, _Value(false)),
+                },
+            },
+        },
         function(buttonData : Types.ButtonData)  
+            print((if buttonData then buttonData.Name or "" else "") .. " clicked!")
             if buttonData.Selected then
                 buttonData.Selected:Set(not buttonData.Selected:Get())
             end
         end
     )
-    
-    local screen = _new("Frame")({
-        Size = UDim2.fromScale(1, 1),
-        BackgroundTransparency = 1,
-        Parent = target,
-        Children = {
-            out
-        }
-    })
-
-    --out.Parent = target
+    out.Parent = target
     return function()
         maid:Destroy()
     end

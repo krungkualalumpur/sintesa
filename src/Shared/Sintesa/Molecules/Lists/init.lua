@@ -6,17 +6,17 @@ local UserInputService =  game:GetService("UserInputService")
 local Maid = require(_Packages:WaitForChild("Maid"))
 local ColdFusion = require(_Packages:WaitForChild("ColdFusion8"))
 --modules
-local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
-local Enums = require(script.Parent.Parent.Parent:WaitForChild("Enums"))
+local Types = require(script.Parent.Parent:WaitForChild("Types"))
+local Enums = require(script.Parent.Parent:WaitForChild("Enums"))
 
 local MaterialColor = require(
-    script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
+    script.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
 )
 
-local DynamicTheme = require(script.Parent.Parent:WaitForChild("dynamic_theme"))
+local DynamicTheme = require(script.Parent:WaitForChild("dynamic_theme"))
 
-local ShapeStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Shape"))
-local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
+local ShapeStyle = require(script.Parent.Parent:WaitForChild("Styles"):WaitForChild("Shape"))
+local ElevationStyle = require(script.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
 
 --types
 type Maid = Maid.Maid
@@ -37,7 +37,7 @@ export type ButtonStates = {
     }
 }
 --constants
-local PADDING_SIZE = UDim.new(0,8)
+local PADDING_SIZE = UDim.new(0,12)
 --remotes
 --variables
 --references
@@ -58,10 +58,9 @@ interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
 
-    containerColorState : State<Color3>,
-
-    appearanceData : CanBeState<AppearanceData>,
-    Children : CanBeState<{[number] : CanBeState<Instance> | {CanBeState<Instance>}}>)
+    isDark : CanBeState<boolean>,
+    
+    hasShadow : boolean)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -70,10 +69,47 @@ function interface.ColdFusion.new(
     local _clone = _fuse.clone
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
- 
-    local appearanceDataState = _import(appearanceData, appearanceData)
-    local childrenState = _import(Children, Children)
+  
+    local isDarkState = _import(isDark, false)
 
+    local appearanceDataState = _Computed(
+        function(
+            dark : boolean
+        ) 
+           
+        return Types.createAppearanceData(
+            DynamicTheme.Color[Enums.ColorRole.Primary],
+            DynamicTheme.Color[Enums.ColorRole.Secondary],
+            DynamicTheme.Color[Enums.ColorRole.Tertiary],
+
+            DynamicTheme.Color[Enums.ColorRole.Surface],
+            DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
+            DynamicTheme.Color[Enums.ColorRole.Shadow],
+        
+            Enums.ElevationResting.Level0,
+
+            Enums.ShapeSymmetry.Full,
+            Enums.ShapeStyle.None,
+            1,
+
+            dark
+        )
+    end, isDarkState)
+
+    local containerColorState = _Computed(function(appearance : AppearanceData)
+        local dynamicScheme = MaterialColor.getDynamicScheme(
+            appearance.PrimaryColor, 
+            appearance.SecondaryColor, 
+            appearance.TertiaryColor, 
+            appearance.NeutralColor, 
+            appearance.NeutralVariantColor,
+            appearance.IsDark
+        )
+        local outlineVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_outlineVariant())
+            
+        return  outlineVariant
+    end, appearanceDataState)
+    
     local getUiCorner = function()
         return _new("UICorner")({
             CornerRadius = _Computed(function(appearance : AppearanceData) 
@@ -86,44 +122,28 @@ function interface.ColdFusion.new(
     end
 
     local out = _new("Frame")({
-        Size = _Computed(function(appearence : AppearanceData)
-            return UDim2.new(1, 0, 0, appearence.Height)
-        end, appearanceDataState),
+        
+        AutomaticSize = Enum.AutomaticSize.XY,
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return appearance.ShadowColor
         end, appearanceDataState),
         BackgroundTransparency =  _Computed(function(appearance : AppearanceData)
             return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
         end, appearanceDataState),
+        Size = UDim2.new(1,0,0,1),
         BorderSizePixel = 2,
         Children = {
             _new("Frame")({
                 Name = "Main",
-                AutomaticSize = Enum.AutomaticSize.X,
+                AutomaticSize = Enum.AutomaticSize.XY,
                 AnchorPoint = Vector2.new(0.5,0.5),
                 ClipsDescendants = false,
-                Size = UDim2.new(1,0,1,0),
+                Size = --[[if hasShadow then UDim2.new(0.92, 0, 0.92,0) else]] UDim2.new(1,0,1,0),
                 BackgroundColor3 = containerColorState,
                 Position = UDim2.fromScale(0.5,0.5),
-                Children = _Computed(function(children : {[number] : Instance})
-                    return {
-                        _new("UIPadding")({
-                            PaddingTop = PADDING_SIZE,
-                            PaddingBottom = PADDING_SIZE,
-                            PaddingLeft = PADDING_SIZE,
-                            PaddingRight = PADDING_SIZE
-                        }),
-                        _new("UIListLayout")({
-                            Padding = UDim.new(0, 40),
-                            SortOrder = Enum.SortOrder.LayoutOrder,
-                            FillDirection = Enum.FillDirection.Horizontal,
-                            HorizontalAlignment = Enum.HorizontalAlignment.Center,
-                            VerticalAlignment = Enum.VerticalAlignment.Center
-                        }),
-                        getUiCorner(),
-                        table.unpack(children)
-                    }
-                end, childrenState)
+                Children = {
+                    getUiCorner(),
+                }
             }),
             
             getUiCorner(),

@@ -48,7 +48,8 @@ export type IconData = Icons.IconData
 export type ButtonData = {
     Name : string?,
     Selected : ValueState<boolean>?,
-    Id : (number | IconData)?
+    Id : (number | IconData)?,
+    Badge : (number | string | boolean)?
 }
 --constants
 --remotes
@@ -116,12 +117,14 @@ end
 function data.createButtonData(
     Name : string,
     Id : number | IconData,
-    Selected : ValueState<boolean>?) : ButtonData
+    Selected : ValueState<boolean>?,
+    Badge : (number | string | boolean)?) : ButtonData
 
     return {
         Name = Name,
         Selected = Selected,
-        Id = Id
+        Id = Id,
+        Badge = Badge
     } 
 end
 

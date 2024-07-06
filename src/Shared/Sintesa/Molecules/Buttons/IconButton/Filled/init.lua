@@ -44,7 +44,8 @@ function interface.ColdFusion.new(
     onClick: () -> (), 
 
     isDark : CanBeState<boolean>?,
-    height : CanBeState<number>?)
+    height : CanBeState<number>?,
+    badge : CanBeState<number | string | boolean>?)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -176,7 +177,10 @@ function interface.ColdFusion.new(
                 elseif _buttonState == Enums.ButtonState.Hovered then
                     0.08
             else 0)
-        end, buttonState)
+        end, buttonState),
+        nil,
+        nil,
+        badge
     ))({
         Children = {
             _new("UIAspectRatioConstraint")({

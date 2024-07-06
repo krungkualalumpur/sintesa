@@ -200,6 +200,11 @@ function interface.ColdFusion.new(
                     onClick()
                 end
             end,
+            MouseButton1Up = function()
+                if buttonState:Get() ~= Enums.ButtonState.Disabled then
+                    buttonState:Set(Enums.ButtonState.Enabled)
+                end
+            end,
         }
     }) :: TextButton
 

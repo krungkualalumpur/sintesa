@@ -64,17 +64,14 @@ function interface.ColdFusion.new(
     maid : Maid,
     
 
-    containerColorState : State<Color3>,
     stateLayerColorState : State<Color3>,
 
     appearanceData : CanBeState<AppearanceData>,
-    typographyData : CanBeState<TypographyData>,
     buttonState : ValueState<Enums.ButtonState>,
     hasShadow : boolean,
 
     onClick : (... any) -> (... any),
 
-    text : CanBeState<string?>,
     iconId : CanBeState<number | IconData?>?,
 
     iconColorState : State<Color3> ?,
@@ -92,7 +89,6 @@ function interface.ColdFusion.new(
     local _Value = _fuse.Value
 
     local appearanceDataState = _import(appearanceData, appearanceData)
-    local typographyDataState = _import(typographyData, typographyData)
     
     local getUiCorner = function()
         return _new("UICorner")({
@@ -120,7 +116,6 @@ function interface.ColdFusion.new(
                 ClipsDescendants = false,
                 Size = UDim2.new(0, 28, 0,28) ,
                 BackgroundTransparency = 1,
-                BackgroundColor3 = containerColorState,
                 Children = {
                     getUiCorner(),
                     _new("Frame")({
@@ -136,21 +131,20 @@ function interface.ColdFusion.new(
                             _new("ImageLabel")({
                                 LayoutOrder = 1,
                                 BackgroundTransparency = 1,
-                                Visible = _Computed(function(id : (number | IconData)?)
-                                    return if id then true else false
-                                end, iconIdState),
+                                -- Visible = _Computed(function(id : (number | IconData)?)
+                                --     return if id then true else false
+                                -- end, iconIdState),
                                 AnchorPoint = Vector2.new(0.5,0.5),
                                 Position = UDim2.fromScale(0.5, 0.5),
-                                ImageColor3 = containerColorState,
+                                ImageColor3 = iconColorState,
                                 Image = _Computed(function(id : (number | IconData)?)
                                     local _id = if type(id) == "number" then  `http://www.roblox.com/asset/?id={id}` elseif id then id.AssetId else ''
                                     return _id
                                 end, iconIdState) ,
                                 ImageRectOffset = _Computed(function(id : (number | IconData?)? )
-                                    print(id)
                                     local offset = if type(id) == "table" then Vector2.new(id.OffsetPerSize[1]*id.Size[1], id.OffsetPerSize[2]*id.Size[2]) else Vector2.new()
                                     return offset
-                                end, iconIdState) ,
+                                end, iconIdState),
                                 ImageRectSize = _Computed(function(id : (number | IconData?)? )
                                     local size = if type(id) == "table" then Vector2.new(id.Size[1], id.Size[2]) else Vector2.new()
                                     return size
@@ -163,18 +157,6 @@ function interface.ColdFusion.new(
                                     })
                                 }
                             }),
-
-                            _new("Frame")({
-                                ZIndex = 0,
-                                Visible = _Computed(function(id : (number | IconData)?)
-                                    return if id == Icons.toggle.check_box_outline_blank then false else true
-                                end, iconIdState),
-                                AnchorPoint = Vector2.new(0.5,0.5),
-                                BackgroundColor3 = iconColorState,
-                                Position = UDim2.fromScale(0.5,0.5),
-                                Size = UDim2.fromScale(0.65, 0.65)
-                            })
-
                         }
                     }),
                 }
@@ -198,6 +180,11 @@ function interface.ColdFusion.new(
                 if buttonState:Get() ~= Enums.ButtonState.Disabled then
                     buttonState:Set(Enums.ButtonState.Pressed)
                     onClick()
+                end
+            end,
+            MouseButton1Up = function()
+                if buttonState:Get() ~= Enums.ButtonState.Disabled then
+                    buttonState:Set(Enums.ButtonState.Enabled)
                 end
             end,
         }

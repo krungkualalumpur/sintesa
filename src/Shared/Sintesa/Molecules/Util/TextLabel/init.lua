@@ -66,11 +66,12 @@ function TextLabel.ColdFusion.new(
     local typographyDataState = _import(typographyData, typographyData)
     local heightState = _import(height, height)
     local textState = _import(text, text) :: State<string?>
+    local textColor3State = _import(textColor3, Color3.fromRGB())
 
     return _new("TextLabel")({
         LayoutOrder = layoutOrder,
         Size = _Computed(function(num : number, str : string ?) 
-            return UDim2.fromOffset(if str then 75 else 0, 23)
+            return UDim2.fromOffset(if str then 75 else num, num)
         end, heightState, textState),
         Visible = _Computed(function(str : string?)
             return if str then true else false
@@ -82,11 +83,11 @@ function TextLabel.ColdFusion.new(
         end, textState),
         LineHeight = _Computed(function(typography : TypographyData)
             return typography.TypeScale.LineHeight
-        end, typographyDataState),
+        end, typographyDataState), 
         TextSize = _Computed(function(typography : TypographyData)
             return typography.TypeScale.Size
         end, typographyDataState),
-        TextColor3 = textColor3,
+        TextColor3 = textColor3State:Tween(),
         FontFace = _Computed(function(typography : TypographyData)
             for _,fontWeight : Enum.FontWeight in pairs(Enum.FontWeight:GetEnumItems()) do
                 if typography.TypeScale.Weight == fontWeight.Value then

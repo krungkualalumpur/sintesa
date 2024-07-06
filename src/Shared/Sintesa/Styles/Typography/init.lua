@@ -97,7 +97,7 @@ local TypeScalesData : TypeScalesData = {
         Tracking = 0.25,
         LineHeight = 20
     },
-    [Enums.TypographyStyle.BodyMedium] = {
+    [Enums.TypographyStyle.BodySmall] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 12,

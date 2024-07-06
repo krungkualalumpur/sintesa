@@ -244,7 +244,6 @@ function TopAppBar.ColdFusion.new(
         maid, 
         containerColorState, 
         appearanceDataState,
-        true, 
         Children
     )
     out.Size = UDim2.new(1,0,0, 72)

@@ -34,8 +34,8 @@ return function(target : CoreGui)
     local _Value = _fuse.Value
 
     local onScroll = _Value(false)
-    local leadingButton = Types.createButtonData("Leading", Icons.navigation.arrow_back) 
-    local trailingButton = Types.createButtonData("Trailing", Icons.communication.call)
+    local leadingButton = Types.createFusionButtonData("Leading", Icons.navigation.arrow_back) 
+    local trailingButton = Types.createFusionButtonData("Trailing", Icons.communication.call)
     local out = CenterAligned.ColdFusion.new(
         maid, 
         false, 

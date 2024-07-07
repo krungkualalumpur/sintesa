@@ -38,10 +38,10 @@ return function(target : CoreGui)
         "Pleang Chat Thai",
         {
               
-            Types.createButtonData("acce_new", Icons.action.accessibility_new, _Value(false)),
-            Types.createButtonData("acce_for", Icons.action.accessible_forward, _Value(false)),
-            Types.createButtonData("acc_bal", Icons.action.account_balance, _Value(false)),
-            Types.createButtonData("add_chart", Icons.action.addchart, _Value(false), 1),
+            Types.createFusionButtonData("acce_new", Icons.action.accessibility_new, _Value(false)),
+            Types.createFusionButtonData("acce_for", Icons.action.accessible_forward, _Value(false)),
+            Types.createFusionButtonData("acc_bal", Icons.action.account_balance, _Value(false)),
+            Types.createFusionButtonData("add_chart", Icons.action.addchart, _Value(false), 1),
     
         },
         function(buttonData : Types.ButtonData)  

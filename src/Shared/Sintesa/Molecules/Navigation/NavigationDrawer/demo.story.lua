@@ -40,19 +40,19 @@ return function(target : CoreGui)
             {
                 Name = "Experiment",
                 Buttons = {
-                    Types.createButtonData("acce_new", Icons.action.accessibility_new, _Value(false)),
-                    Types.createButtonData("acce_for", Icons.action.accessible_forward, _Value(false)),
-                    Types.createButtonData("acc_bal", Icons.action.account_balance, _Value(false)),
-                    Types.createButtonData("add_chart", Icons.action.addchart, _Value(false), 1),
+                    Types.createFusionButtonData("acce_new", Icons.action.accessibility_new, _Value(false)),
+                    Types.createFusionButtonData("acce_for", Icons.action.accessible_forward, _Value(false)),
+                    Types.createFusionButtonData("acc_bal", Icons.action.account_balance, _Value(false)),
+                    Types.createFusionButtonData("add_chart", Icons.action.addchart, _Value(false), 1),
                 },
             },
             {
                 Name = "Email",
                 Buttons = {
-                    Types.createButtonData("Inbox", Icons.action.all_inbox, _Value(false)),
-                    Types.createButtonData("Outbox", Icons.action.outbox, _Value(false), 2),
-                    Types.createButtonData("Favorites", Icons.action.favorite, _Value(false)),
-                    Types.createButtonData("Trash", Icons.action.delete, _Value(false)),
+                    Types.createFusionButtonData("Inbox", Icons.action.all_inbox, _Value(false)),
+                    Types.createFusionButtonData("Outbox", Icons.action.outbox, _Value(false), 2),
+                    Types.createFusionButtonData("Favorites", Icons.action.favorite, _Value(false)),
+                    Types.createFusionButtonData("Trash", Icons.action.delete, _Value(false)),
                 },
             },
         },

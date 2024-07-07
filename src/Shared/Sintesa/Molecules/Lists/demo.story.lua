@@ -5,8 +5,13 @@ local Package = ReplicatedStorage:WaitForChild("Packages")
 --packages
 local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
-local Divider = require(script.Parent)
 --modules
+local Lists = require(script.Parent)
+local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
+local Icons = require(script.Parent.Parent.Parent:WaitForChild("Icons"))
+
+local Checkbox = require(script.Parent.Parent:WaitForChild("Checkbox"):WaitForChild("Checkbox"))
+local Switch  = require(script.Parent.Parent:WaitForChild("Switch"))
 --types
 --constants
 --remotes
@@ -25,12 +30,63 @@ return function(target : CoreGui)
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local out = Divider.ColdFusion.new(maid, false,true) 
-    out.Position = UDim2.fromScale(0,0.5)
+   
+    local lists = {
+
+    }
+    for i = 1, 10 do
+      local isKodekoSelected = _Value(false :: boolean?)
+      local isUMNOSelected = _Value(false :: boolean)
+      local isAryaSelected = _Value(false :: boolean?)
+
+         table.insert(lists, Types.createFusionListInstance(
+            'kodeko', 
+            'support prayut twaa suport yelloo chet and thai prime king ', 
+            nil,--"100+", 
+            Checkbox.ColdFusion.new(maid, isKodekoSelected, function()
+               isKodekoSelected:Set(not isKodekoSelected:Get())
+            end, false),--Icons.navigation.arrow_drop_down, 
+            nil, 
+            Icons.social.person,
+            true
+         ))
+         table.insert(lists, Types.createFusionListInstance(
+            'UMNO', 
+            'support malay untuak PERSATUAN!', 
+            nil,--"100+", 
+            Switch.ColdFusion.new(maid, isUMNOSelected, _Value(false), function()
+               isUMNOSelected:Set(not isUMNOSelected:Get())
+            end),--Icons.navigation.arrow_drop_down,
+            nil, 
+            Icons.maps.add_business,
+            true
+         ))
+         table.insert(lists, Types.createFusionListInstance(
+            'Aryaa', 
+            'support Aryo untuk kemenangan Karyo!!', 
+            nil,--"100+", 
+            Checkbox.ColdFusion.new(maid, isAryaSelected, function()
+               isAryaSelected:Set(not isAryaSelected:Get())
+            end, false),--Icons.navigation.arrow_drop_down,
+            "A", 
+            nil,
+            true
+         ))
+    end
+    local out = Lists.ColdFusion.new(maid, false,true, lists, 500) 
+    out.Position = UDim2.fromOffset(0,0)
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),
+      BackgroundTransparency = 1,
       Parent = target,
       Children = {
+         _new("UIPadding")({
+            PaddingTop = UDim.new(0,10),
+            PaddingBottom = UDim.new(0,10),
+            PaddingLeft = UDim.new(0,10),
+            PaddingRight = UDim.new(0,10),
+
+         }),
          out
       }
    })

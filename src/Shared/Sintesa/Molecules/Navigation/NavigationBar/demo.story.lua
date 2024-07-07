@@ -33,17 +33,17 @@ return function(target : CoreGui)
     local _Value = _fuse.Value
 
     local onScroll = _Value(false)
-    local leadingButton = Types.createButtonData("Leading", Icons.navigation.arrow_back) 
-    local trailingButton = Types.createButtonData("Trailing", Icons.communication.call)
+    local leadingButton = Types.createFusionButtonData("Leading", Icons.navigation.arrow_back) 
+    local trailingButton = Types.createFusionButtonData("Trailing", Icons.communication.call)
     local out = NavigationBar.ColdFusion.new(
         maid, 
         false, 
         "Pleang Chat Thai",
         {
-            Types.createButtonData("acce_new", Icons.action.accessibility_new, _Value(false)),
-            Types.createButtonData("acce_for", Icons.action.accessible_forward, _Value(false)),
-            Types.createButtonData("acc_bal", Icons.action.account_balance, _Value(false)),
-            Types.createButtonData("add_chart", Icons.action.addchart, _Value(false), "+999"),
+            Types.createFusionButtonData("acce_new", Icons.action.accessibility_new, _Value(false)),
+            Types.createFusionButtonData("acce_for", Icons.action.accessible_forward, _Value(false)),
+            Types.createFusionButtonData("acc_bal", Icons.action.account_balance, _Value(false)),
+            Types.createFusionButtonData("add_chart", Icons.action.addchart, _Value(false), "+999"),
         },
         function(buttonData : Types.ButtonData)  
             print((if buttonData then buttonData.Name or "" else "") .. " clicked!")

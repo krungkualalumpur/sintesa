@@ -17,6 +17,7 @@ export type TypeScalesData = {
     [Enums.TypographyStyle] : TypeScaleData
 }
 --constants
+local LINE_HEIGHT_ADJUSTMENT = 0.08
 --remotes
 --variables
 local TypeScalesData : TypeScalesData = {
@@ -25,84 +26,84 @@ local TypeScalesData : TypeScalesData = {
         Weight = 400,
         Size =  57,
         Tracking = -0.25,
-        LineHeight = 64
+        LineHeight = 64*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.DisplayMedium] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 45,
         Tracking = 0,
-        LineHeight = 52
+        LineHeight = 52*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.DisplaySmall] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 36,
         Tracking = 0,
-        LineHeight = 44
+        LineHeight = 44*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.HeadlineLarge] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 32,
         Tracking = 0,
-        LineHeight = 40
+        LineHeight = 40*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.HeadlineMedium] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 28,
         Tracking = 0,
-        LineHeight = 36
+        LineHeight = 36*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.HeadlineSmall] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 24,
         Tracking = 0,
-        LineHeight = 32
+        LineHeight = 32*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.TitleLarge] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 22,
         Tracking = 0,
-        LineHeight = 28
+        LineHeight = 28*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.TitleMedium] = {
         Font = Enum.Font.Roboto,
         Weight = 500,
         Size = 16,
         Tracking = 0.15,
-        LineHeight = 24
+        LineHeight = 24*LINE_HEIGHT_ADJUSTMENT
     }, 
     [Enums.TypographyStyle.TitleSmall] = {
         Font = Enum.Font.Roboto,
         Weight = 500,
         Size = 14,
         Tracking = 0.1,
-        LineHeight = 20
+        LineHeight = 20*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.BodyLarge] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 16,
         Tracking = 0.5,
-        LineHeight = 24
+        LineHeight = 24*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.BodyMedium] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 14,
         Tracking = 0.25,
-        LineHeight = 20
+        LineHeight = 20*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.BodySmall] = {
         Font = Enum.Font.Roboto,
         Weight = 400,
         Size = 12,
         Tracking = 0.4,
-        LineHeight = 16
+        LineHeight = 16*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.LabelLarge] = {
         Font = Enum.Font.Roboto,
@@ -110,7 +111,7 @@ local TypeScalesData : TypeScalesData = {
         WeightProminent = 700,
         Size = 14,
         Tracking = 0.1,
-        LineHeight = 20
+        LineHeight = 20*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.LabelMedium] = {
         Font = Enum.Font.Roboto,
@@ -118,14 +119,14 @@ local TypeScalesData : TypeScalesData = {
         WeightProminent = 700,
         Size = 12,
         Tracking = 0.5,
-        LineHeight = 16
+        LineHeight = 16*LINE_HEIGHT_ADJUSTMENT
     },
     [Enums.TypographyStyle.LabelSmall] = {
         Font = Enum.Font.Roboto,
         Weight = 500,
         Size = 11,
         Tracking = 0.5,
-        LineHeight = 16
+        LineHeight = 16*LINE_HEIGHT_ADJUSTMENT
     },
 }
 --references

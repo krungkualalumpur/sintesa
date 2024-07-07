@@ -160,7 +160,7 @@ function Interface.ColdFusion.new(
     local Children = _Computed(function(buttons : {
         [number] : ButtonData
     })
-        local menuButton = if hasMenuButton then Types.createButtonData("", Icons.navigation.menu, nil, nil) else nil
+        local menuButton = if hasMenuButton then Types.createFusionButtonData("", Icons.navigation.menu, nil, nil) else nil
 
         if menuButton then 
             table.insert(buttons, 1, menuButton)

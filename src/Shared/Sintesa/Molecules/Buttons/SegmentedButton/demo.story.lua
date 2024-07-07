@@ -28,9 +28,9 @@ return function(target : CoreGui)
 
    local isDark = _Value(false)
    local buttons = {
-      Types.createButtonData("Button1",  0, _Value(true)),
-      Types.createButtonData("Button2", 0, _Value(false)),
-      Types.createButtonData("Button3",  0, _Value(false)),
+      Types.createFusionButtonData("Button1",  0, _Value(true)),
+      Types.createFusionButtonData("Button2", 0, _Value(false)),
+      Types.createFusionButtonData("Button3",  0, _Value(false)),
    }
 
    local out = SegmentedButton.ColdFusion.new(maid, buttons :: {[number] : Types.ButtonData}, isDark, function(buttonData) 

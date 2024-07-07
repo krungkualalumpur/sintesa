@@ -37,6 +37,13 @@ type AppearanceData = Types.AppearanceData
 type TypeScaleData = Types.TypeScaleData
 
 type IconData = Types.IconData
+type MenuData = {
+    LeadingIcon : (IconData|number)?,
+    Name : CanBeState<string>,
+    TrailingIcon : (IconData|number)?,
+    TrailingSupportingText : string?
+
+}
 export type ButtonStates = {
     [Enums.ButtonState] : {
         Container : AppearanceData,
@@ -69,7 +76,10 @@ function interface.ColdFusion.new(
     isDark : CanBeState<boolean>,
     
     hasShadow : boolean,
-    lists : CanBeState<{ListData}>,
+    lists : CanBeState<{
+        MenuData
+    }>,
+    onClick : (MenuData) -> (),
     length : number)
 
     local _fuse = ColdFusion.fuse(maid)
@@ -100,7 +110,7 @@ function interface.ColdFusion.new(
             Enums.ElevationResting.Level0,
 
             Enums.ShapeSymmetry.Full,
-            Enums.ShapeStyle.None,
+            Enums.ShapeStyle.Small,
             1,
 
             dark
@@ -116,9 +126,9 @@ function interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local outlineVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_outlineVariant())
+        local surfaceContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_surfaceContainer())
             
-        return  outlineVariant
+        return  surfaceContainer
     end, appearanceDataState)
     
     local listsState = _import(lists, lists)
@@ -134,9 +144,9 @@ function interface.ColdFusion.new(
         })
     end
 
-    local Children =  _Computed(function(group : {ListData})
+    local Children =  _Computed(function(group : {MenuData})
         return group
-    end, listsState):ForValues(function(list : ListData, pairMaid : Maid)
+    end, listsState):ForValues(function(list : MenuData, pairMaid : Maid)
         local buttonState = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState)
         
         local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
@@ -148,9 +158,9 @@ function interface.ColdFusion.new(
                 appearance.NeutralVariantColor,
                 appearance.IsDark
             )
-            local surface = MaterialColor.Color3FromARGB(dynamicScheme:get_surface())
+            local surfaceContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_surfaceContainer())
                 
-            return  surface
+            return surfaceContainer
         end, appearanceDataState, buttonState)
 
         local textColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
@@ -208,6 +218,20 @@ function interface.ColdFusion.new(
             return primaryContainer
         end, appearanceDataState)
 
+        local stateLayerColorState = _Computed(function(appearance : AppearanceData)
+            local dynamicScheme = MaterialColor.getDynamicScheme(
+                appearance.PrimaryColor, 
+                appearance.SecondaryColor, 
+                appearance.TertiaryColor, 
+                appearance.NeutralColor, 
+                appearance.NeutralVariantColor,
+                appearance.IsDark
+            )
+            local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+                
+            return onSurface
+        end, appearanceDataState)
+
         local avatarTextColorState = _Computed(function(appearance : AppearanceData)
             local dynamicScheme = MaterialColor.getDynamicScheme(
                 appearance.PrimaryColor, 
@@ -232,25 +256,13 @@ function interface.ColdFusion.new(
             labelLarge
         ))
 
-        local stateLayerColorState = _Computed(function(appearance : AppearanceData)
-            local dynamicScheme = MaterialColor.getDynamicScheme(
-                appearance.PrimaryColor, 
-                appearance.SecondaryColor, 
-                appearance.TertiaryColor, 
-                appearance.NeutralColor, 
-                appearance.NeutralVariantColor,
-                appearance.IsDark
-            )
-            local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
-                
-            return onSurface
-        end, appearanceDataState)
 
         local out = _new("TextButton")({
-            AutomaticSize = Enum.AutomaticSize.Y,
             BackgroundColor3 = containerColorState,
             Size = UDim2.new(1,0,0,0),
+            AutomaticSize = Enum.AutomaticSize.Y,
             Children = {
+                getUiCorner(),
                 _new("Frame")({
                     BackgroundTransparency = _Computed(function(_buttonState : Enums.ButtonState) 
                         return if _buttonState == Enums.ButtonState.Hovered then 1 - 0.08
@@ -258,7 +270,7 @@ function interface.ColdFusion.new(
                             elseif _buttonState == Enums.ButtonState.Pressed then 1 - 0.1
                         else 1 - 0
                     end, buttonState):Tween(),
-                    BackgroundColor3 = stateLayerColorState ,
+                    BackgroundColor3 = stateLayerColorState:Tween() ,
                     AutomaticSize = Enum.AutomaticSize.Y,
                     Size = UDim2.new(1,0,0,56),
                     Children = {
@@ -275,22 +287,8 @@ function interface.ColdFusion.new(
                             SortOrder = Enum.SortOrder.LayoutOrder,
                         }),
                      
-                        _bind(TextLabel.ColdFusion.new(maid, 1, list.LeadingAvatarText, avatarTextColorState, headlineTypographyDataState, 40))({
-                            BackgroundTransparency = 0,
-                            Size = UDim2.fromOffset(40, 40),
-                            BackgroundColor3 = avatarColorState,
-                            Children = {
-                                _new("UICorner")({
-                                    CornerRadius = _Computed(function() 
-                                        return UDim.new(
-                                            0,  
-                                            ShapeStyle.get(Enums.ShapeStyle.Full)
-                                        )
-                                    end),
-                                })
-                            }
-                        }),
-                         _bind(if typeof(list.LeadingIcon) == "Instance" then list.LeadingIcon else ImageLabel.ColdFusion.new(maid, 1, list.LeadingIcon, iconColorState))({
+                       
+                         _bind(ImageLabel.ColdFusion.new(maid, 1, list.LeadingIcon, iconColorState))({
                             Size = UDim2.fromOffset(24, 24),
                             --BackgroundColor3 = Color3.fromRGB(25,5,55)
                         }),
@@ -306,34 +304,33 @@ function interface.ColdFusion.new(
                                     FillDirection = Enum.FillDirection.Vertical,
                                     SortOrder = Enum.SortOrder.LayoutOrder,
                                 }),
-                                _bind(TextLabel.ColdFusion.new(maid, 1, list.HeadlineText, textColorState, headlineTypographyDataState, 2))({
+                                _bind(TextLabel.ColdFusion.new(maid, 1, list.Name, textColorState, headlineTypographyDataState, 2))({
                                     AutomaticSize = Enum.AutomaticSize.Y,
+                                    BackgroundTransparency = 1,
                                     Size = UDim2.new(0, 56, 0, 0),
-                                    TextXAlignment = Enum.TextXAlignment.Left
+                                    TextXAlignment = Enum.TextXAlignment.Left,
+                                    TextTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+                                        return if _buttonState == Enums.ButtonState.Disabled then 1 - 0.38 else 1 - 1
+                                    end, buttonState)
                                 }),
-                                _bind(TextLabel.ColdFusion.new(maid, 2, list.SupportingText, supportingTextColorState, labelLargeTypographyDataState, 2))({
-                                    AutomaticSize = Enum.AutomaticSize.Y,
-                                    Size = UDim2.new(0, 220, 0, 0),
-                                    TextWrapped = true,
-                                    TextXAlignment = Enum.TextXAlignment.Left
-                                }),
+                               
                             }
                         }),
                     }
                 }),
-                 _bind(if typeof(list.TrailingIcon) == "Instance" then list.TrailingIcon else ImageLabel.ColdFusion.new(maid, 1,  list.TrailingIcon, iconColorState))({
+                 _bind(ImageLabel.ColdFusion.new(maid, 1,  list.TrailingIcon, iconColorState))({
                     AnchorPoint = Vector2.new(1,0.5),
-                    Position = UDim2.new(1,0,0.5,0) - UDim2.new(0,16,0,0)
+                    Size = UDim2.fromOffset(24, 24),
+                    Position = UDim2.new(1,0,0.5,0) - UDim2.new(0,48,0,0)
                     --BackgroundColor3 = Color3.fromRGB(25,5,55)
                 }),
                 _bind(TextLabel.ColdFusion.new(maid, 1, list.TrailingSupportingText, supportingTextColorState, labelLargeTypographyDataState, 0))({
                     AnchorPoint = Vector2.new(1,0.5),
                     Size = UDim2.fromOffset(24, 24),
-                    Position = UDim2.new(1,0,0.5,0) - UDim2.new(0,16,0,0)
+                    Position = UDim2.new(1,0,0.5,0) - UDim2.new(0,24,0,0)
                     --BackgroundColor3 = Color3.fromRGB(25,5,55)
                 }),
             },
-
             Events = {
                 MouseEnter = function()
                     if buttonState:Get() ~= Enums.ButtonState.Disabled then
@@ -348,6 +345,7 @@ function interface.ColdFusion.new(
                 MouseButton1Down = function()
                     if buttonState:Get() ~= Enums.ButtonState.Disabled then
                         buttonState:Set(Enums.ButtonState.Pressed)
+                        onClick(list)
                     end
                 end,
                 MouseButton1Up = function()
@@ -368,23 +366,22 @@ function interface.ColdFusion.new(
         BackgroundTransparency =  _Computed(function(appearance : AppearanceData)
             return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
         end, appearanceDataState),
-        Size = UDim2.new(0,listLength,1,0),
+        AutomaticSize = Enum.AutomaticSize.Y,
+        Size = UDim2.new(0,listLength,0,0),
         BorderSizePixel = 2,
         ClipsDescendants = true,
         Children = {
-            _new("ScrollingFrame")({
+            _new("Frame")({
                 Name = "Main",
                 ZIndex = 10,
-                ScrollBarThickness = 1,
-                AutomaticCanvasSize = Enum.AutomaticSize.Y,
-                CanvasSize = UDim2.new(),
+                AutomaticSize = Enum.AutomaticSize.Y,
                 ClipsDescendants = false,
-                Size = --[[if hasShadow then UDim2.new(0.92, 0, 0.92,0) else]] UDim2.new(1,0,1,0),
+                Size = --[[if hasShadow then UDim2.new(0.92, 0, 0.92,0) else]] UDim2.new(1,0,0,0),
                 BackgroundColor3 = containerColorState,
                 Children = {
                     _new("UIPadding")({
-                        PaddingLeft = UDim.new(0,3),
-                        PaddingRight = UDim.new(0,3),
+                        PaddingTop = UDim.new(0,6),
+                        PaddingBottom = UDim.new(0,6),
 
                     }),
                     _new("UIListLayout")({

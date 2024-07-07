@@ -34,16 +34,16 @@ return function(target : CoreGui)
     local _Value = _fuse.Value
 
     local onScroll = _Value(false)
-    --local leadingButton = Types.createButtonData("Trailing", Icons.navigation.offline_share)
-    local trailingButton = Types.createButtonData("Leading", Icons.content.add)
+    --local leadingButton = Types.createFusionButtonData("Trailing", Icons.navigation.offline_share)
+    local trailingButton = Types.createFusionButtonData("Leading", Icons.content.add)
 
     local out = BottomAppBar.ColdFusion.new(
         maid, 
         false, 
         {
-            Types.createButtonData("Trailing", Icons.file.attachment), 
-            Types.createButtonData("Trailing", Icons.image.image), 
-            Types.createButtonData("Trailing", Icons.navigation.offline_share)
+            Types.createFusionButtonData("Trailing", Icons.file.attachment), 
+            Types.createFusionButtonData("Trailing", Icons.image.image), 
+            Types.createFusionButtonData("Trailing", Icons.navigation.offline_share)
         } ,
         trailingButton,
         onScroll,

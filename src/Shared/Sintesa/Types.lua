@@ -51,6 +51,20 @@ export type ButtonData = {
     Id : (number | IconData)?,
     Badge : (number | string | boolean)?
 }
+
+export type ListData = {
+    HeadlineText : string,
+    SupportingText : string?,
+    TrailingSupportingText : string?,
+    TrailingIcon : (IconData|GuiButton)?,
+    
+    LeadingAvatarText : string?,
+    
+    LeadingIcon : (IconData|GuiButton)?,
+
+    HasDivider : boolean?
+}
+
 --constants
 --remotes
 --variables
@@ -113,8 +127,7 @@ function data.createTransitionData(
     } 
 end
 
-
-function data.createButtonData(
+function data.createFusionButtonData(
     Name : string,
     Id : number | IconData,
     Selected : ValueState<boolean>?,
@@ -125,6 +138,32 @@ function data.createButtonData(
         Selected = Selected,
         Id = Id,
         Badge = Badge
+    } 
+end
+
+
+function data.createFusionListInstance(
+    headlineText : string,
+    supportingText : string?,
+    trailingSupportingText : string?,
+    trailingIcon : (IconData| GuiButton)?,
+    
+    leadingAvatarText : string?,
+    
+    leadingIcon : (IconData|GuiButton)?,
+
+    hasDivider : boolean?) : ListData
+
+    return {
+        HeadlineText = headlineText,
+        SupportingText = supportingText,
+        TrailingSupportingText = trailingSupportingText,
+        TrailingIcon = trailingIcon,
+
+        LeadingAvatarText = leadingAvatarText,
+
+        LeadingIcon = leadingIcon,
+        HasDivider = hasDivider
     } 
 end
 

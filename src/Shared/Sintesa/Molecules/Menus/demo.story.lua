@@ -36,7 +36,7 @@ return function(target : CoreGui)
     }
     for i = 1, 3 do
          table.insert(lists, {LeadingIcon = Icons.action.sticky_note_2, Name = "Surya", TrailingIcon = Icons.action.abc, TrailingSupportingText = "G"})
-         table.insert(lists, {Name = "Bedu"})
+         table.insert(lists, {Name = "Bedu", HasDividor = true})
 
     end
     local out = Lists.ColdFusion.new(maid, false,true, lists,  function(menu)

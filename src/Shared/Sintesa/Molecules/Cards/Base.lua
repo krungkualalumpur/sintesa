@@ -42,14 +42,6 @@ local PADDING_SIZE = UDim.new(0,12)
 --variables
 --references
 --local functions
-local function mouseIsInButton(button : GuiObject)
-    local mouse = UserInputService:GetMouseLocation()
-    if ((mouse.X > button.AbsolutePosition.X) and (mouse.X < (button.AbsolutePosition.X + button.AbsoluteSize.X))) 
-    and ((mouse.Y > button.AbsolutePosition.Y) and (mouse.Y < (button.AbsolutePosition.Y + button.AbsoluteSize.Y))) then
-        return true
-    end
-    return false
-end
 --class
 local interface = {}
 

@@ -50,12 +50,12 @@ return function(target : CoreGui)
   
     local isDark = _Value(false)
 
-    local isSelected = _Value(true)
-
 
     local out = Slider.ColdFusion.new(
         maid,
-        false
+        isDark,
+        300,
+        _Value(0.5)
     )
     out.Position = UDim2.fromScale(0.4, 0.4)
 

@@ -47,10 +47,11 @@ function interface.ColdFusion.new(
     maid : Maid,
     isDark : CanBeState<boolean>,
     size : CanBeState<number>,
+    isContinuous : boolean,
     ratioState : ValueState<number>,
     ratioState2 : ValueState<number>? -- for range
     )   
-    
+    local stopIndicatorSize = 4
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -78,7 +79,7 @@ function interface.ColdFusion.new(
             Enums.ElevationResting.Level0,
 
             Enums.ShapeSymmetry.Full,
-            Enums.ShapeStyle.ExtraSmall,
+            Enums.ShapeStyle.Full,
             1,
 
             dark
@@ -182,6 +183,44 @@ function interface.ColdFusion.new(
     local sizeState = _import(size, size)
 
     local buttonSeparatorSize = 0.05
+    local trackStopNs= 11
+
+    local function getStopIndicator(n : number)
+        local out = _new("Frame")({
+            ZIndex = 1,
+            LayoutOrder = n,
+            AnchorPoint = Vector2.new(0.5,0.5),
+            Size = UDim2.fromOffset(stopIndicatorSize, stopIndicatorSize),
+            
+            Children = {
+                _new("UICorner")({})
+            }
+        })
+
+        _bind(out)({
+            BackgroundColor3 = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState, size : number, ratio : number)
+                local active = n < (if isContinuous then (trackStopNs*ratio) else (trackStopNs*math.round(ratio*10)/10))
+                local dynamicScheme = MaterialColor.getDynamicScheme(
+                    appearance.PrimaryColor, 
+                    appearance.SecondaryColor, 
+                    appearance.TertiaryColor, 
+                    appearance.NeutralColor, 
+                    appearance.NeutralVariantColor,
+                    appearance.IsDark
+                )
+                local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+                local secondaryContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_secondaryContainer())
+                local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+                local inverseOnSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_inverseOnSurface())
+                --print(active)
+                return if _buttonState == Enums.ButtonState.Enabled then (if active then secondaryContainer else primary) 
+                    elseif _buttonState == Enums.ButtonState.Disabled then (if active then onSurface else inverseOnSurface )
+                else (if active then secondaryContainer else primary) 
+            end, appearanceDataState, buttonState, sizeState, ratioState),
+        })
+        return out  
+    end
+
     local out = _new("Frame"){
         BackgroundTransparency = 1,
       --  BackgroundColor3 = Color3.fromRGB(255,0,0),
@@ -195,37 +234,111 @@ function interface.ColdFusion.new(
                 BackgroundTransparency = 1,
                 Size = UDim2.fromScale(1, 1),
                 Children = {
-                    _new("UIListLayout")({
-                        FillDirection = Enum.FillDirection.Horizontal,
-                        SortOrder = Enum.SortOrder.LayoutOrder
-                    }),
                     _new("Frame")({
-                        LayoutOrder = 1,
-                        Name = "Active",
-                        BackgroundColor3 = activeTrackColorState,
-                        Size = _Computed(function(ratio : number)
-                            return UDim2.fromScale(math.clamp(ratio - buttonSeparatorSize*0.5, 0, 1), 1) 
-                        end, ratioState),
-                        Children = { 
-                            getUiCorner(),
-
-                        }
-                    }),
-                   
-                    _new("Frame")({
-                        LayoutOrder = 3,
-                        Name = "Inactive",
-                        BackgroundColor3 = inactiveTrackColorState,
-                        Size = _Computed(function(ratio : number) 
-                            return UDim2.fromScale(math.clamp(1 - (ratio + buttonSeparatorSize*0.5), 0, 1 - buttonSeparatorSize), 1) 
-                        end, ratioState),
+                        Name = "Content",
+                        BackgroundTransparency = 1,
+                        ClipsDescendants = true,
+                        Size = UDim2.new(1, 0, 1, 0),
                         Children = {
-                            getUiCorner(),
-
+                            _new("UIListLayout")({
+                                Padding = UDim.new(buttonSeparatorSize*2, 0),
+                                FillDirection = Enum.FillDirection.Horizontal,
+                                SortOrder = Enum.SortOrder.LayoutOrder
+                            }),
+                            _new("Frame")({
+                                LayoutOrder = 1,
+                                Name = "Active",
+                                BackgroundColor3 = activeTrackColorState,
+                                --ClipsDescendants = true,
+                                Size = _Computed(function(ratio : number)
+                                    return if isContinuous then UDim2.fromScale(math.clamp(ratio - buttonSeparatorSize, -0.05, 1), 1) 
+                                    else UDim2.fromScale(math.clamp((math.round(ratio*10)/10) - buttonSeparatorSize, -0.05, 1), 1) 
+                                end, ratioState),
+                                Children = { 
+                                    ---getUiCorner(),
+                                    -- _new("Frame")({
+                                    --     AnchorPoint = Vector2.new(0.5,0),
+                                    --     BackgroundColor3 = activeTrackColorState,
+                                    --     Size = UDim2.new(0, 16, 1, 0),
+                                    --     Children = {getUiCorner()}
+                                    -- })
+                                }
+                            }),
+                           
+                            _new("Frame")({
+                                LayoutOrder = 3,
+                                Name = "Inactive",
+                                ZIndex = 0,
+                                BackgroundColor3 = inactiveTrackColorState,
+                                --ClipsDescendants = true,
+                                Size = _Computed(function(ratio : number) 
+                                    return if isContinuous then UDim2.fromScale(math.clamp(1 - (ratio- buttonSeparatorSize), 0, 1), 1)
+                                    else  UDim2.fromScale(math.clamp(1 - (math.round(ratio*10)/10) - buttonSeparatorSize, 0, 1), 1)
+                                end, ratioState),
+                                Children = {
+                                    --getUiCorner(),
+                                    -- _new("Frame")({
+                                    --     AnchorPoint = Vector2.new(0.5,0),
+                                    --     BackgroundColor3 = inactiveTrackColorState,
+                                    --     Size = UDim2.new(0, 16, 1, 0),
+                                    --     Position = UDim2.fromScale(1, 0),
+                                    --     Children = {getUiCorner()}
+                                    -- })
+                                }
+                            })
                         }
-                    })
+                    }),
+                    _new("Frame")({
+                        Name = "TrackStopIndicatorFrame",
+                        ZIndex = 1,
+                        Visible = if isContinuous then false else true,
+                        BackgroundTransparency = 1,
+                        Size = UDim2.new(1, 0, 1, 0),
+                        Children = {
+                            
+                            _new("UIListLayout")({
+                                Padding = _Computed(function(size : number) 
+                                    return UDim.new(0, ((size - ((stopIndicatorSize - stopIndicatorSize*0.25)*(trackStopNs)))/(trackStopNs - 1))) 
+                                end, sizeState),
+                                FillDirection = Enum.FillDirection.Horizontal,
+                                VerticalAlignment = Enum.VerticalAlignment.Center,
+                                HorizontalAlignment = Enum.HorizontalAlignment.Center
+                            }),
+                            getStopIndicator(0),
+                            getStopIndicator(1),
+                            getStopIndicator(2),
+                            getStopIndicator(3),
+                            getStopIndicator(4),
+                            getStopIndicator(5),
+                            getStopIndicator(6),
+                            getStopIndicator(7),
+                            getStopIndicator(8),
+                            getStopIndicator(9),
+                            getStopIndicator(10)
+                        }
+                    }),
+                    
+                   
                 }
-                }
+                },
+                _new("Frame")({
+                    Name = "RoundEdge",
+                    AnchorPoint = Vector2.new(0.5,0),
+                    ZIndex = 0,
+                    BackgroundColor3 = activeTrackColorState,
+                    Size = UDim2.new(0, 16, 1, 0),
+                    Children = {getUiCorner()}
+                }),
+                _new("Frame")({
+                    Name = "RoundEdge",
+                    AnchorPoint = Vector2.new(0.5,0),
+                    ZIndex = 0,
+                    BackgroundColor3 = inactiveTrackColorState,
+                    Size = UDim2.new(0, 16, 1, 0),
+                    Position = UDim2.new(1,0,0,0),
+                    Children = {getUiCorner()}
+                })
+                
             }
            
     } :: Frame
@@ -252,10 +365,13 @@ function interface.ColdFusion.new(
         Name = "Handle",
         LayoutOrder = 2,
         Parent = out:FindFirstChild("Container"),
-        ZIndex = 2,
+        ZIndex = 4,
         AnchorPoint = Vector2.new(0.5,0.5),
         BackgroundTransparency = 1,
         Size = UDim2.fromScale(buttonSeparatorSize, 1),
+        Position = _Computed(function(ratio : number)
+            return UDim2.fromScale(if isContinuous then ratio else math.round(ratio*10)/10, 0.5)
+        end, ratioState),
         Children = {
             _new("TextButton")({
                 AnchorPoint = Vector2.new(0.5,0.5),
@@ -268,7 +384,8 @@ function interface.ColdFusion.new(
                         maid, 
                         0, 
                         _Computed(function(ratio : number)
-                            return tostring(math.round(ratio*100))
+                            return if isContinuous then tostring(math.round(ratio*100))
+                            else tostring((math.round(ratio*10)/10)*100)
                         end, ratioState),
                         labelTextColorState, 
                         typographyDataState, 

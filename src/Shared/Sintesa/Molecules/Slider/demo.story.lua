@@ -55,6 +55,7 @@ return function(target : CoreGui)
         maid,
         isDark,
         300,
+        false,
         _Value(0.5)
     )
     out.Position = UDim2.fromScale(0.4, 0.4)

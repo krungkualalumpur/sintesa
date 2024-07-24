@@ -38,6 +38,9 @@ export type TypographyStyle = CustomEnumItem<TypographyStyleEnum, "DisplayLarge"
 type ButtonStateEnum = CustomEnum<"ButtonState">
 export type ButtonState = CustomEnumItem<ButtonStateEnum, "Enabled"|"Disabled"|"Hovered"|"Focused"|"Pressed"|"Dragged">
 
+type TextBoxStateEnum = CustomEnum<"TextBoxState">
+export type TextBoxState = CustomEnumItem<TextBoxStateEnum, "Empty"|"Populated">
+
 export type CustomEnums = {
 
 	ColorRole : 	{		
@@ -165,6 +168,11 @@ export type CustomEnums = {
 		Pressed : CustomEnumItem <ButtonStateEnum, "Pressed">,
 		Dragged : CustomEnumItem <ButtonStateEnum, "Dragged">,
 	} & ButtonStateEnum,
+
+	TextBoxState : 	{		
+		Empty : CustomEnumItem <TextBoxStateEnum, "Empty">,
+		Populated : CustomEnumItem <TextBoxStateEnum, "Populated">,
+	} & TextBoxStateEnum,
 
 }
 --constants
@@ -888,6 +896,31 @@ ButtonState.Dragged = {
 	EnumType = ButtonState
 }
 
+local TextBoxState = {
+	Name = "TextBoxState",
+	GetEnumItems = function(self)
+		local t = {}
+		for _,v in pairs(self) do
+			if type(v) == "table" then 
+				 table.insert(t, v)  
+			end
+		end
+		return t
+	end,
+}
+
+TextBoxState.Empty = {
+	Name = "Empty",
+	Value = 1,
+	EnumType = TextBoxState
+}
+
+TextBoxState.Populated = {
+	Name = "Populated",
+	Value = 2,
+	EnumType = TextBoxState
+}
+
 local CustomEnum = {	
 	ColorRole = ColorRole :: any,
 	ElevationResting = ElevationResting :: any,
@@ -897,6 +930,7 @@ local CustomEnum = {
 	ShapeSymmetry = ShapeSymmetry :: any,
 	TypographyStyle = TypographyStyle :: any,
 	ButtonState = ButtonState :: any,
+	TextBoxState = TextBoxState :: any,
 } :: CustomEnums
 
 return CustomEnum

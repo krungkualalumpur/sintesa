@@ -25,5 +25,9 @@
     "ButtonState" : [
         "Enabled", "Disabled", "Hovered", 
         "Focused", "Pressed", "Dragged"
+    ],
+
+    "TextBoxState" : [
+        "Empty", "Populated"
     ]
 }

@@ -6,17 +6,17 @@ local UserInputService =  game:GetService("UserInputService")
 local Maid = require(_Packages:WaitForChild("Maid"))
 local ColdFusion = require(_Packages:WaitForChild("ColdFusion8"))
 --modules
-local Types = require(script.Parent.Parent:WaitForChild("Types"))
-local Enums = require(script.Parent.Parent:WaitForChild("Enums"))
+local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
+local Enums = require(script.Parent.Parent.Parent:WaitForChild("Enums"))
 
 local MaterialColor = require(
-    script.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
+    script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
 )
 
-local DynamicTheme = require(script.Parent:WaitForChild("dynamic_theme"))
+local DynamicTheme = require(script.Parent.Parent:WaitForChild("dynamic_theme"))
 
-local ShapeStyle = require(script.Parent.Parent:WaitForChild("Styles"):WaitForChild("Shape"))
-local ElevationStyle = require(script.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
+local ShapeStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Shape"))
+local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
 
 --types
 type Maid = Maid.Maid
@@ -41,15 +41,7 @@ local PADDING_SIZE = UDim.new(0,12)
 --remotes
 --variables
 --references
---local functions
-local function mouseIsInButton(button : GuiObject)
-    local mouse = UserInputService:GetMouseLocation()
-    if ((mouse.X > button.AbsolutePosition.X) and (mouse.X < (button.AbsolutePosition.X + button.AbsoluteSize.X))) 
-    and ((mouse.Y > button.AbsolutePosition.Y) and (mouse.Y < (button.AbsolutePosition.Y + button.AbsoluteSize.Y))) then
-        return true
-    end
-    return false
-end
+--local functions   
 --class
 local interface = {}
 
@@ -122,9 +114,7 @@ function interface.ColdFusion.new(
     end
 
     local out = _new("Frame")({
-        
         AutomaticSize = Enum.AutomaticSize.XY,
-        AnchorPoint = Vector2.new(0.5,0.5),
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return appearance.ShadowColor
         end, appearanceDataState),

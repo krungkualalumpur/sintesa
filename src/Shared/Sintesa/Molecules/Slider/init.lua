@@ -86,20 +86,6 @@ function interface.ColdFusion.new(
         )
     end, isDarkState)
 
-    local containerColorState = _Computed(function(appearance : AppearanceData)
-        local dynamicScheme = MaterialColor.getDynamicScheme(
-            appearance.PrimaryColor, 
-            appearance.SecondaryColor, 
-            appearance.TertiaryColor, 
-            appearance.NeutralColor, 
-            appearance.NeutralVariantColor,
-            appearance.IsDark
-        )
-        local outlineVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_outlineVariant())
-            
-        return  outlineVariant
-    end, appearanceDataState)
-
     local getUiCorner = function()
         return _new("UICorner")({
             CornerRadius = _Computed(function(appearance : AppearanceData) 

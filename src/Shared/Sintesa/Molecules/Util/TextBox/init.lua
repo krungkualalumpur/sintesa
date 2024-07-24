@@ -70,7 +70,7 @@ function util.ColdFusion.new(
     local textState = _import(text, text) :: State<string?>
     local textColor3State = _import(textColor3, Color3.fromRGB())
 
-    return _new("TextBox")({
+    local out =  _new("TextBox")({
         LayoutOrder = layoutOrder,
         Size = _Computed(function(num : number, str : string ?) 
             return UDim2.fromOffset(if str then 75 else num, num)
@@ -98,17 +98,39 @@ function util.ColdFusion.new(
                 end
             end
             return Font.fromName(typography.TypeScale.Font.Name, Enum.FontWeight.Regular) 
-        end, typographyDataState),
-        
+        end, typographyDataState)
+    }) :: TextBox
+
+    _bind(out)({
         Events = {
+            Changed = function(propertyName : string)
+                if propertyName == "Text" then
+                    if buttonState:Get() == Enums.ButtonState.Disabled then
+                        out.Text = ""
+                        return
+                    end
+                    if #out.Text > 0 then 
+                        textBoxState:Set(Enums.TextBoxState.Populated) 
+                    else 
+                        textBoxState:Set(Enums.TextBoxState.Empty) 
+                    end
+                    
+                end
+
+            end,
             Focused = function()
-                
+                if buttonState:Get() ~= Enums.ButtonState.Disabled then 
+                    buttonState:Set(Enums.ButtonState.Focused)
+                end
             end,
             FocusLost = function()
-                print('lostfocus')
+                if buttonState:Get() ~= Enums.ButtonState.Disabled then 
+                    buttonState:Set(Enums.ButtonState.Enabled)
+                end
             end
         }
-    }) 
+    })
+    return out
 end
 
 return util

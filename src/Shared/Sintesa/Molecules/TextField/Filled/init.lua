@@ -21,6 +21,7 @@ local ShapeStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):Wa
 local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
 
 local StandartButton = require(script.Parent.Parent:WaitForChild("Buttons"):WaitForChild("IconButton"):WaitForChild("Standard"))
+local TextLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
 local TextBox = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextBox"))
 --types
 type Maid = Maid.Maid
@@ -55,7 +56,13 @@ function Interface.ColdFusion.new(
     layoutOrder : CanBeState<number>,
     isDark : CanBeState<boolean>,
     text : CanBeState<string?>,
-    height : CanBeState<number>)
+    height : CanBeState<number>,
+
+    leadingIconId : CanBeState<number | Types.IconData>,
+    trailingIconId : CanBeState<number | Types.IconData>,
+
+    leadingIconFn : () -> (),
+    trailingIconFn : () -> ())
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -92,7 +99,7 @@ function Interface.ColdFusion.new(
         )
     end, isDarkState)
 
-    local containerColorState = _Computed(function(appearance : AppearanceData)
+    local containerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -101,21 +108,26 @@ function Interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local surfaceContainerHighest = MaterialColor.Color3FromARGB(dynamicScheme:get_surfaceContainerHighest())
-            
-        return  surfaceContainerHighest
-    end, appearanceDataState)
+        local surfaceContainerHighest =  MaterialColor.Color3FromARGB(dynamicScheme:get_surfaceContainerHighest())
+        local onSurface =  MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
 
+        return if _buttonState ~= Enums.ButtonState.Disabled then 
+            surfaceContainerHighest
+        else onSurface
+    end, appearanceDataState, buttonState)
+ 
     local typographyDataState = _Value(Types.createTypographyData(
         Styles.Typography.get(Enums.TypographyStyle.BodyLarge)
+    ))
+    local textSupporterTypographyDataState = _Value(Types.createTypographyData(
+        Styles.Typography.get(Enums.TypographyStyle.BodySmall)
     ))
 
     local heightState = _import(height, height)
     local textState = _import(text, text) :: State<string?>
     local textBoxState = _Value(Enums.TextBoxState.Empty :: Enums.TextBoxState) 
-    local textBoxButtonState = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState) 
 
-
+   
     local textColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
@@ -130,31 +142,80 @@ function Interface.ColdFusion.new(
             
         return if _buttonState == Enums.ButtonState.Enabled then onSurfaceVariant elseif _buttonState == Enums.ButtonState.Disabled then onSurface else onSurfaceVariant
     end, appearanceDataState, buttonState)
-    
-    local leadingIconInstance =  StandartButton.ColdFusion.new(maid, Icons.search.manage_search, _Value(false), function() end, isDarkState, 24)
-    local trailingIconInstance =  StandartButton.ColdFusion.new(maid, Icons.navigation.close, _Value(false), function() end, isDarkState, 24)
+
+    local activeIndicatorState  = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+        local dynamicScheme = MaterialColor.getDynamicScheme(
+            appearance.PrimaryColor, 
+            appearance.SecondaryColor, 
+            appearance.TertiaryColor, 
+            appearance.NeutralColor, 
+            appearance.NeutralVariantColor,
+            appearance.IsDark
+        ) 
+        local onSurfaceVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurfaceVariant())
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+                                        
+        return if _buttonState == Enums.ButtonState.Enabled then  onSurfaceVariant else primary
+    end, appearanceDataState, buttonState) 
+
+    local leadingIconInstance =  StandartButton.ColdFusion.new(maid, leadingIconId, _Value(false), leadingIconFn, isDarkState, 24, nil, textColorState)
+    local trailingIconInstance =  StandartButton.ColdFusion.new(maid, trailingIconId, _Value(false), trailingIconFn, isDarkState, 24, nil, textColorState)
     local base = _new("Frame")({
-        AutomaticSize = Enum.AutomaticSize.X,
-        Size = UDim2.fromOffset(280, 56),
+        AutomaticSize = Enum.AutomaticSize.XY,
+        BackgroundTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+            return if _buttonState ~= Enums.ButtonState.Disabled then 1 - 1 else 1 - 0.04 
+        end, buttonState),
+        Size = UDim2.fromOffset(180, 56),
         BackgroundColor3 = containerColorState,
         Children = {
-            _new("UIPadding")({
-                PaddingTop = UDim.new(0, 16),
-                PaddingBottom = UDim.new(0, 16),
-                PaddingLeft = UDim.new(0, 16),
-                PaddingRight = UDim.new(0, 16) 
+            _new("Frame")({
+                BackgroundTransparency = 1,
+                Size = UDim2.new(1,0,1,0),
+                Children = {
+                    _new("UIPadding")({
+                        PaddingTop = UDim.new(0, 16),
+                        PaddingBottom = UDim.new(0, 16),
+                        PaddingLeft = UDim.new(0, 16),
+                        PaddingRight = UDim.new(0, 16) 
+                    }),
+                    _new("UIListLayout")({
+                        Padding = UDim.new(0, 16),
+                        SortOrder = Enum.SortOrder.LayoutOrder,
+                        FillDirection = Enum.FillDirection.Horizontal
+                    }),
+                    leadingIconInstance,
+                    _bind(TextBox.ColdFusion.new(maid, 2, text, textColorState, typographyDataState, 24, textBoxState, buttonState))({
+                        AutomaticSize = Enum.AutomaticSize.Y,
+                        TextWrapped = true,
+                        Size = UDim2.new(0,120,0,24),
+                        TextXAlignment = Enum.TextXAlignment.Left,
+                        Children = {
+                            _bind(TextLabel.ColdFusion.new(maid, layoutOrder, text, activeIndicatorState, textSupporterTypographyDataState, 10))({
+                                Position = UDim2.new(0,0,0,-12),
+                                TextXAlignment = Enum.TextXAlignment.Left,
+                                Visible = _Computed(function(tbState : Enums.TextBoxState)
+                                    return tbState == Enums.TextBoxState.Populated
+                                end, textBoxState),
+                                TextTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+                                    return if _buttonState ~= Enums.ButtonState.Disabled then 1 - 1 else 1 - 0.38
+                                end, buttonState)
+                            })
+                        }
+                    }),
+                    _bind(trailingIconInstance)({LayoutOrder = 3})
+                }
             }),
-            _new("UIListLayout")({
-                Padding = UDim.new(0, 16),
-                SortOrder = Enum.SortOrder.LayoutOrder,
-                FillDirection = Enum.FillDirection.Horizontal
-            }),
-            leadingIconInstance,
-            _bind(TextBox.ColdFusion.new(maid, 2, text, textColorState, typographyDataState, 24, textBoxState, textBoxButtonState))({
-                Size = UDim2.new(0,200,0,24),
-                TextXAlignment = Enum.TextXAlignment.Left,
-            }),
-            _bind(trailingIconInstance)({LayoutOrder = 3})
+            
+            _new("Frame")({
+                BackgroundColor3 = activeIndicatorState:Tween(),
+                Size = _Computed(function(_buttonState : Enums.ButtonState) 
+                    return if _buttonState == Enums.ButtonState.Enabled then UDim2.new(1,0,0,1) 
+                        elseif _buttonState == Enums.ButtonState.Focused then UDim2.new(1,0,0,2) 
+                        elseif _buttonState == Enums.ButtonState.Disabled then UDim2.new(1,0,0,0) 
+                    else UDim2.new(1,0,0,1)
+                end, buttonState):Tween(), 
+                Position = UDim2.new(0,0,1,0)
+            })
         }
     })
     return base

@@ -7,18 +7,18 @@ local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
 --modules
 local MaterialColor = require(
-    script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
+    script.Parent.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
 ) 
 
-local DynamicTheme = require(script.Parent.Parent:WaitForChild("dynamic_theme"))
+local DynamicTheme = require(script.Parent.Parent.Parent:WaitForChild("dynamic_theme"))
 
-local Slider: any = require(script.Parent)
-local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
-local Icons = require(script.Parent.Parent.Parent:WaitForChild("Icons"))
-local Styles = require(script.Parent.Parent.Parent:WaitForChild("Styles"))
-local Enums = require(script.Parent.Parent.Parent:WaitForChild("Enums"))
+local FilledTextField: any = require(script.Parent)
+local Types = require(script.Parent.Parent.Parent.Parent:WaitForChild("Types"))
+local Icons = require(script.Parent.Parent.Parent.Parent:WaitForChild("Icons"))
+local Styles = require(script.Parent.Parent.Parent.Parent:WaitForChild("Styles"))
+local Enums = require(script.Parent.Parent.Parent.Parent:WaitForChild("Enums"))
 
-local TextLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
+local TextLabel = require(script.Parent.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
 --types
 type Fuse = ColdFusion.Fuse
 type State<T> = ColdFusion.State<T>
@@ -51,12 +51,18 @@ return function(target : CoreGui)
     local isDark = _Value(false)
 
 
-    local out = Slider.ColdFusion.new(
+    local out = FilledTextField.ColdFusion.new(
         maid,
+        1,
         isDark,
-        300,
-        false,
-        _Value(0.5)
+        "test",
+        1,
+
+        Icons.action.search,
+        Icons.navigation.close,
+
+        function() end,
+        function() end
     )
     out.Position = UDim2.fromScale(0.4, 0.4)
 

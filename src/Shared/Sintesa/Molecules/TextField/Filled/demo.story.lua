@@ -56,7 +56,13 @@ return function(target : CoreGui)
         1,
         isDark,
         "test",
-        1
+        1,
+
+        Icons.action.search,
+        Icons.navigation.close,
+
+        function() end,
+        function() end
     )
     out.Position = UDim2.fromScale(0.4, 0.4)
 

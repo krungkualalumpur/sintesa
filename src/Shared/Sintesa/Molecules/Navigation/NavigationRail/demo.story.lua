@@ -34,7 +34,7 @@ return function(target : CoreGui)
 
     local out = NavigationRail.ColdFusion.new(
         maid, 
-        false, 
+        true, 
         "Pleang Chat Thai",
         {
               

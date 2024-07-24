@@ -60,14 +60,71 @@ return function(target : CoreGui)
     )
     out.Position = UDim2.fromScale(0.4, 0.4)
 
+    local labelLarge = Styles.Typography.get(Enums.TypographyStyle.HeadlineSmall)
+    local typographyDataState = _Value(Types.createTypographyData(
+        labelLarge
+    ))
+
+    local isDarkState = _Value(false)
+    local appearanceDataState = _Computed(
+        function(
+            dark : boolean        
+        ) 
+           
+        return Types.createAppearanceData(
+            DynamicTheme.Color[Enums.ColorRole.Primary],
+            DynamicTheme.Color[Enums.ColorRole.Secondary],
+            DynamicTheme.Color[Enums.ColorRole.Tertiary],
+
+            DynamicTheme.Color[Enums.ColorRole.Surface],
+            DynamicTheme.Color[Enums.ColorRole.SurfaceDim],
+            DynamicTheme.Color[Enums.ColorRole.Shadow],
+ 
+            Enums.ElevationResting.Level0,
+
+            Enums.ShapeSymmetry.Full,
+            Enums.ShapeStyle.None,
+            112,
+
+            dark
+        )
+    end, isDarkState)
+
+    local labelTextColorState = _Computed(function(appearance : AppearanceData)
+        local dynamicScheme = MaterialColor.getDynamicScheme(
+            appearance.PrimaryColor, 
+            appearance.SecondaryColor, 
+            appearance.TertiaryColor, 
+            appearance.NeutralColor, 
+            appearance.NeutralVariantColor,
+            appearance.IsDark
+        )
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+        local onSecondaryContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_onSecondaryContainer())
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+            
+        return onSurface
+        
+    end, appearanceDataState)
+
+
     local bg = _new("Frame")({
         Size = UDim2.fromScale(1, 1),
         Children = {
-            out
+            _new("UIListLayout")({
+                HorizontalAlignment = Enum.HorizontalAlignment.Center, 
+                VerticalAlignment = Enum.VerticalAlignment.Center,
+                FillDirection = Enum.FillDirection.Horizontal,
+                SortOrder = Enum.SortOrder.LayoutOrder
+            }),
+            TextLabel.ColdFusion.new(maid, 1, "Min", labelTextColorState, typographyDataState, 25),
+            _bind(out)({LayoutOrder = 3}),
+            TextLabel.ColdFusion.new(maid, 3, "Max", labelTextColorState, typographyDataState, 25),
+
         }
     })
     bg.Parent = target
     return function()
         maid:Destroy()
-    end
+    end  
 end

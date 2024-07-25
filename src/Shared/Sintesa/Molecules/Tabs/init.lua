@@ -59,6 +59,7 @@ function Interface.ColdFusion.new(
     buttonsList : CanBeState<{
         [number] : Types.ButtonData
     }>,
+    length : CanBeState<number>,
 
     buttonsClickFn : (Types.ButtonData) -> ())
     local _fuse = ColdFusion.fuse(maid)
@@ -68,10 +69,9 @@ function Interface.ColdFusion.new(
     local _clone = _fuse.clone
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
-
-    local length = 300
     
     local isDarkState = _import(isDark, false)
+    local lengthState = _import(length, length)
 
     local appearanceDataState = _Computed(
         function(
@@ -143,10 +143,12 @@ function Interface.ColdFusion.new(
         end, appearanceDataState, buttonState, isSelected)
 
         local imageLabel = _bind(ImageLabel.ColdFusion.new(maid, 1, iconId, textColorState:Tween()))({
-            Size = UDim2.fromOffset(24, 24)
+            Size = if data.Id then UDim2.fromOffset(24, 24) else UDim2.fromOffset(0, 0)
         })
         local textLabel = _bind(TextLabel.ColdFusion.new(maid, 2, buttonName, textColorState:Tween(), typographyDataState, 10))({
-            Size = UDim2.fromOffset(length/(#buttonsListState:Get()), 20)
+            Size = _Computed(function(length : number)
+                return if data.Id then UDim2.fromOffset(length/(#buttonsListState:Get()), 20) else UDim2.fromOffset(length/(#buttonsListState:Get()), 20 + 24)
+            end, lengthState) 
         })
         
         local activeIndicatorState  = _Computed(function(appearance : AppearanceData, selected : boolean)
@@ -166,9 +168,9 @@ function Interface.ColdFusion.new(
         local activeIndicator = _new("Frame")({
             LayoutOrder = 3,
             BackgroundColor3 = activeIndicatorState:Tween(),
-            Size = _Computed(function(selected : boolean)
+            Size = _Computed(function(selected : boolean, length : number)
                 return if selected then UDim2.new(0,length/(#buttonsListState:Get()), 0, 2) else UDim2.new(0,0, 0, 2)
-            end, isSelected):Tween()
+            end, isSelected, lengthState):Tween()
         })
         
         local out = _new("TextButton")({
@@ -196,7 +198,10 @@ function Interface.ColdFusion.new(
 
     local out = _new("Frame")({
         AutomaticSize = Enum.AutomaticSize.X,
-        Size = UDim2.fromOffset(length, 48),
+        Size = _Computed(function(length : number)
+            return UDim2.fromOffset(length, 48)
+        end, lengthState), 
+        Position = UDim2.new(0,0,1,0) - UDim2.new(0,0,0,48),
         BackgroundColor3 = containerColorState,
         Children = {
             _new("UIListLayout")({

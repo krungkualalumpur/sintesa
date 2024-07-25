@@ -129,7 +129,7 @@ end
 
 function data.createFusionButtonData(
     Name : string,
-    Id : number | IconData,
+    Id : (number | IconData)?,
     Selected : ValueState<boolean>?,
     Badge : (number | string | boolean)?) : ButtonData
 

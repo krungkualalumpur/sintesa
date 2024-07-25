@@ -60,12 +60,12 @@ return function(target : CoreGui)
         isDark,
 
         {
-            Types.createFusionButtonData("Everything", Icons.action.abc, everythingVal),
+            Types.createFusionButtonData("Everything", Icons.av["10k"], everythingVal),
             Types.createFusionButtonData("Sumb", Icons.action.accessible, accessibleVal),
             Types.createFusionButtonData("Troubleshoot", Icons.action.troubleshoot, troubleshootVal),
 
         },
-
+        800,
         function(buttonData : Types.ButtonData)
             if buttonData.Name == "Everything" then
                 everythingVal:Set(true)
@@ -82,11 +82,14 @@ return function(target : CoreGui)
             end
         end
     )
-    out.Position = UDim2.fromScale(0.4, 0.4)
 
     local bg = _new("Frame")({
         Size = UDim2.fromScale(1, 1),
         Children = {
+            _new("UIListLayout")({
+                VerticalAlignment = Enum.VerticalAlignment.Bottom,
+                HorizontalAlignment = Enum.HorizontalAlignment.Center
+            }),
             out
         }
     })

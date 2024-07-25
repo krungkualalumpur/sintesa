@@ -61,6 +61,8 @@ function Interface.ColdFusion.new(
     leadingIconId : CanBeState<number | Types.IconData>,
     trailingIconId : CanBeState<number | Types.IconData>,
 
+    width : number,
+
     leadingIconFn : () -> (),
     trailingIconFn : () -> ())
 
@@ -184,7 +186,7 @@ function Interface.ColdFusion.new(
                     _bind(TextBox.ColdFusion.new(maid, 2, text, textColorState, typographyDataState, 24, textBoxState, buttonState))({
                         AutomaticSize = Enum.AutomaticSize.Y,
                         TextWrapped = true,
-                        Size = UDim2.new(0,120,0,24),
+                        Size = UDim2.new(0,width,0,24),
                         TextXAlignment = Enum.TextXAlignment.Left,
                         Children = {
                             _bind(TextLabel.ColdFusion.new(maid, layoutOrder, text, activeIndicatorState, textSupporterTypographyDataState, 10))({

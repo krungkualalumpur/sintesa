@@ -55,6 +55,7 @@ return function(target : CoreGui)
         maid,
         isDark,
         300,
+        Vector2.new(-120,100),
         false,
         _Value(0.5)
     )

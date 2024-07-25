@@ -47,6 +47,7 @@ function interface.ColdFusion.new(
     maid : Maid,
     isDark : CanBeState<boolean>,
     size : CanBeState<number>,
+    range : CanBeState<Vector2>,
     isContinuous : boolean,
     ratioState : ValueState<number>,
     ratioState2 : ValueState<number>? -- for range
@@ -62,6 +63,8 @@ function interface.ColdFusion.new(
    
     local buttonState = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState)
     local isDarkState = _import(isDark, isDark)
+    local rangeState = _import(range, range)
+
     local appearanceDataState = _Computed(
         function(
             dark : boolean
@@ -341,7 +344,7 @@ function interface.ColdFusion.new(
             local v2 = UserInputService:GetMouseLocation()
             local min = out.AbsolutePosition.X
             local max = out.AbsolutePosition.X + out.AbsoluteSize.X
-            ratioState:Set(math.clamp((v2.X - min)/(max - min), 0, 1))
+            ratioState:Set(math.clamp(math.round(((v2.X - min)/(max - min))*100)/100, 0, 1))
 
         end)
         buttonState:Set(Enums.ButtonState.Pressed)
@@ -369,10 +372,10 @@ function interface.ColdFusion.new(
                     _bind(TextLabel.ColdFusion.new(
                         maid, 
                         0, 
-                        _Computed(function(ratio : number)
-                            return if isContinuous then tostring(math.round(ratio*100))
-                            else tostring((math.round(ratio*10)/10)*100)
-                        end, ratioState),
+                        _Computed(function(ratio : number, rangeV2 : Vector2)
+                            return if isContinuous then tostring(MathUtil.lerp(rangeV2.X, rangeV2.Y, ratio)) --tostring(math.round(ratio*100))
+                            else tostring(MathUtil.lerp(rangeV2.X, rangeV2.Y, math.round(ratio*10)/10))
+                        end, ratioState, rangeState),
                         labelTextColorState, 
                         typographyDataState, 
                         12

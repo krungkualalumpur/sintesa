@@ -55,8 +55,8 @@ return function(target : CoreGui)
         maid,
         isDark,
         300,
-        Vector2.new(-120,100),
-        false,
+        NumberRange.new(-120,100),
+        true,
         _Value(0.5)
     )
     out.Position = UDim2.fromScale(0.4, 0.4)

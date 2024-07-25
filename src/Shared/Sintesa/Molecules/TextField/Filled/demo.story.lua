@@ -61,6 +61,7 @@ return function(target : CoreGui)
         Icons.action.search,
         Icons.navigation.close,
 
+        100,
         function() end,
         function() end
     )

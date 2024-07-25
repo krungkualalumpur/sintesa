@@ -47,7 +47,7 @@ function interface.ColdFusion.new(
     maid : Maid,
     isDark : CanBeState<boolean>,
     size : CanBeState<number>,
-    range : CanBeState<Vector2>,
+    range : CanBeState<NumberRange>,
     isContinuous : boolean,
     ratioState : ValueState<number>,
     ratioState2 : ValueState<number>? -- for range
@@ -364,7 +364,7 @@ function interface.ColdFusion.new(
         Children = {
             _new("TextButton")({
                 AnchorPoint = Vector2.new(0.5,0.5),
-                BackgroundColor3 = handleColorState,
+                BackgroundColor3 = handleColorState, 
                 Position = UDim2.fromScale(0.5, 0.5),    
                 Size = UDim2.fromOffset(6, 44),
                 Children = {
@@ -372,9 +372,9 @@ function interface.ColdFusion.new(
                     _bind(TextLabel.ColdFusion.new(
                         maid, 
                         0, 
-                        _Computed(function(ratio : number, rangeV2 : Vector2)
-                            return if isContinuous then tostring(MathUtil.lerp(rangeV2.X, rangeV2.Y, ratio)) --tostring(math.round(ratio*100))
-                            else tostring(MathUtil.lerp(rangeV2.X, rangeV2.Y, math.round(ratio*10)/10))
+                        _Computed(function(ratio : number, rangeV2 : NumberRange)
+                            return if isContinuous then ("%.0f"):format(MathUtil.lerp(rangeV2.Min, rangeV2.Max, ratio)) --tostring(math.round(ratio*100))
+                            else ("%.0f"):format(MathUtil.lerp(rangeV2.Min, rangeV2.Max, math.round(ratio*10)/10))
                         end, ratioState, rangeState),
                         labelTextColorState, 
                         typographyDataState, 

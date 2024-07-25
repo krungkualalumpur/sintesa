@@ -35,13 +35,13 @@ return function(target : CoreGui)
 
     }
     for i = 1, 3 do
-         table.insert(lists, {LeadingIcon = Icons.action.sticky_note_2, Name = "Surya", TrailingIcon = Icons.action.abc, TrailingSupportingText = "G"})
-         table.insert(lists, {Name = "Bedu", HasDividor = true})
+         table.insert(lists, {LeadingIcon = Icons.action.sticky_note_2, Name = "Suryo to paste this Roy", TrailingIcon = Icons.action.abc, TrailingSupportingText = "G"})
+         table.insert(lists, {Name = "Bedu nuthin' blud", HasDividor = true})
 
     end
     local out = Lists.ColdFusion.new(maid, false,true, lists,  function(menu)
       print("menu ", menu.Name)
-   end, 250) 
+   end, 240) 
     out.Position = UDim2.fromOffset(0,0)
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),

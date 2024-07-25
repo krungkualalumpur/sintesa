@@ -91,6 +91,8 @@ function interface.ColdFusion.new(
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
   
+    local width = 48
+    
     local listLength = length
     local isDarkState = _import(isDark, false)
 
@@ -273,7 +275,7 @@ function interface.ColdFusion.new(
                     end, buttonState):Tween(),
                     BackgroundColor3 = stateLayerColorState:Tween() ,
                     AutomaticSize = Enum.AutomaticSize.Y,
-                    Size = UDim2.new(1,0,0,56),
+                    Size = UDim2.new(1,0,0,48),
                     Children = {
                         _new("UIPadding")({
                             PaddingTop = UDim.new(0,8),
@@ -308,8 +310,9 @@ function interface.ColdFusion.new(
                                 _bind(TextLabel.ColdFusion.new(maid, 1, list.Name, textColorState, headlineTypographyDataState, 2))({
                                     AutomaticSize = Enum.AutomaticSize.Y,
                                     BackgroundTransparency = 1,
-                                    Size = UDim2.new(0, 56, 0, 0),
+                                    Size = UDim2.new(0, listLength - 140, 0, 0),
                                     TextXAlignment = Enum.TextXAlignment.Left,
+                                    TextWrapped = true,
                                     TextTransparency = _Computed(function(_buttonState : Enums.ButtonState)
                                         return if _buttonState == Enums.ButtonState.Disabled then 1 - 0.38 else 1 - 1
                                     end, buttonState)

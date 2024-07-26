@@ -50,17 +50,17 @@ return function(target : CoreGui)
   
     local isDark = _Value(false)
 
-    local leadingIconId = Icons.action.list
+    local leadingIconId = Icons.navigation.arrow_back
     local text = "Search heah"
-    local trailingIconId = Icons.action.search
+    local trailingIconId = Icons.navigation.close
 
-    local width = 350
+    local width = _Value(950)
 
     local inputText = _Value("")
-
+    
     local out = Search.ColdFusion.new(
         maid,
-        false,
+        isDark,
         leadingIconId,
         text,
         width,
@@ -68,14 +68,18 @@ return function(target : CoreGui)
 
         trailingIconId
     )
-    out.Position = UDim2.fromScale(0.4, 0.4)
 
     local bg = _new("Frame")({
         Size = UDim2.fromScale(1, 1),
         Children = {
             out
         }
-    })
+    }) ::Frame
+
+    maid:GiveTask(bg.Changed:Connect(function()
+        width:Set(bg.AbsoluteSize.X) 
+        print(inputText:Get())
+    end))
     bg.Parent = target
     return function()
         maid:Destroy()

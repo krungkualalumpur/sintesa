@@ -7,24 +7,19 @@ local Maid = require(_Packages:WaitForChild("Maid"))
 local ColdFusion = require(_Packages:WaitForChild("ColdFusion8"))
 --modules
 local Types = require(script.Parent.Parent.Parent:WaitForChild("Types"))
-local Icons = require(script.Parent.Parent.Parent:WaitForChild("Icons"))
 local Enums = require(script.Parent.Parent.Parent:WaitForChild("Enums"))
-local Styles = require(script.Parent.Parent.Parent:WaitForChild("Styles"))
 
 local MaterialColor = require(
     script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("MaterialColor")
 )
+local Styles = require(script.Parent.Parent.Parent:WaitForChild("Styles"))
 
 local DynamicTheme = require(script.Parent.Parent:WaitForChild("dynamic_theme"))
 
 local ShapeStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Shape"))
 local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
 
-local StandartButton = require(script.Parent.Parent:WaitForChild("Buttons"):WaitForChild("IconButton"):WaitForChild("Standard"))
 local TextLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
-local TextBox = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextBox"))
-
-local Divider = require(script.Parent.Parent:WaitForChild("Divider"))
 --types
 type Maid = Maid.Maid
 
@@ -44,25 +39,30 @@ export type ButtonStates = {
     }
 }
 --constants
+local PADDING_SIZE = UDim.new(0,12)
 --remotes
 --variables
 --references
 --local functions
-
+local function mouseIsInButton(button : GuiObject)
+    local mouse = UserInputService:GetMouseLocation()
+    if ((mouse.X > button.AbsolutePosition.X) and (mouse.X < (button.AbsolutePosition.X + button.AbsoluteSize.X))) 
+    and ((mouse.Y > button.AbsolutePosition.Y) and (mouse.Y < (button.AbsolutePosition.Y + button.AbsoluteSize.Y))) then
+        return true
+    end
+    return false
+end
 --class
-local Interface = {}
-Interface.ColdFusion = {}
+local interface = {}
 
-function Interface.ColdFusion.new(
+interface.ColdFusion = {}
+
+function interface.ColdFusion.new(
     maid : Maid,
+
     isDark : CanBeState<boolean>,
-    leadingIconId : CanBeState<Types.IconData | number>,
-    text : CanBeState<string>,
-    width : CanBeState<number>,
-    inputText : ValueState<string>,
-    
-    trailingIconId : CanBeState<Types.IconData | number> ?)
-    
+    text : CanBeState<string>)
+
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -70,11 +70,9 @@ function Interface.ColdFusion.new(
     local _clone = _fuse.clone
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
-
+  
     local isDarkState = _import(isDark, false)
-
-    local textBoxState = _Value(Enums.TextBoxState.Empty :: Enums.TextBoxState)
-    local textBoxButtonState = _Value(Enums.ButtonState.Enabled :: Enums.ButtonState)
+    local textState = _import(text,text)
 
     local appearanceDataState = _Computed(
         function(
@@ -93,7 +91,7 @@ function Interface.ColdFusion.new(
             Enums.ElevationResting.Level0,
 
             Enums.ShapeSymmetry.Full,
-            Enums.ShapeStyle.ExtraLarge,
+            Enums.ShapeStyle.ExtraSmall,
             1,
 
             dark
@@ -109,12 +107,11 @@ function Interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local surfaceContainerHigh = MaterialColor.Color3FromARGB(dynamicScheme:get_surfaceContainerHigh())
-            
-        return  surfaceContainerHigh
+        local inverseSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_inverseSurface())
+        return  inverseSurface
     end, appearanceDataState)
 
-    local textColorState = _Computed(function(appearance : AppearanceData, tbState : Enums.TextBoxState)
+    local textColorState = _Computed(function(appearance : AppearanceData)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -123,17 +120,13 @@ function Interface.ColdFusion.new(
             appearance.NeutralVariantColor,
             appearance.IsDark
         )
-        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
-        local onSurfaceVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurfaceVariant())
-
-        return if tbState == Enums.TextBoxState.Empty then onSurfaceVariant else onSurface
-    end, appearanceDataState, textBoxState)
-
+        local inverseOnSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_inverseOnSurface())
+            
+        return inverseOnSurface 
+    end, appearanceDataState)
     local typographyDataState = _Value(Types.createTypographyData(
-        Styles.Typography.get(Enums.TypographyStyle.BodyLarge)
+        Styles.Typography.get(Enums.TypographyStyle.BodySmall)
     ))
-
-    local widthState = _import(width, width)
 
     local getUiCorner = function()
         return _new("UICorner")({
@@ -146,45 +139,71 @@ function Interface.ColdFusion.new(
         })
     end
 
-  
-
     local out = _new("Frame")({
-        AutomaticSize = Enum.AutomaticSize.Y,
-        BackgroundColor3 = containerColorState,
-        Size =_Computed(function(width : number) 
-            return UDim2.new(0,width,0,72)
-        end, widthState) ,
+        
+        AutomaticSize = Enum.AutomaticSize.XY,
+        AnchorPoint = Vector2.new(0.5,0.5),
+        BackgroundColor3 = _Computed(function(appearance : AppearanceData)
+            return appearance.ShadowColor
+        end, appearanceDataState),
+        BackgroundTransparency =  _Computed(function(appearance : AppearanceData)
+            return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
+        end, appearanceDataState),
+        Size = UDim2.new(0,0,0,24 ),
+        BorderSizePixel = 2,
         Children = {
-            _new("UIPadding")({               
-                PaddingLeft = UDim.new(0, 16),
-                PaddingRight = UDim.new(0, 16),
+           
+            _new("Frame")({
+                Name = "Main",
+                AutomaticSize = Enum.AutomaticSize.XY,
+                AnchorPoint = Vector2.new(0.5,0.5),
+                ClipsDescendants = false,
+                Size = --[[if hasShadow then UDim2.new(0.92, 0, 0.92,0) else]] UDim2.new(0.92, 0, 0.92,0),
+                BackgroundColor3 = containerColorState,
+                Position = UDim2.fromScale(0.5,0.5),
+                Children = {
+                    _new("UIPadding")({
+                        PaddingLeft = UDim.new(0, 8),
+                        PaddingRight = UDim.new(0, 8),
+                    }),
+                    getUiCorner(),
+                    _new("UIListLayout")({
+                        HorizontalAlignment=  Enum.HorizontalAlignment.Center
+                    }),
+                    _bind(TextLabel.ColdFusion.new(maid, 1, _Computed(function(text : string)
+                        -- local _text = ""
+                        -- local index = 1
+                        -- for str in text:gmatch(".") do 
+                        --     local fill = ""
+                        --     if index >= 10 then 
+                        --         fill = "\n"
+                        --         index = 0
+                        --     end
+                        --     _text = `{_text}{fill}{str}`
+                          
+                        --     index += 1
+                        -- end
+                        return text 
+                    end, textState), textColorState, typographyDataState, 24))({
+                        AutomaticSize = Enum.AutomaticSize.XY,
+                        TextWrapped = true,
+                        Size = UDim2.new(0,0,0,24),
+                        
+                    })
+                },
             }),
-            _new("UIListLayout"){
-                Padding = UDim.new(0, 16),
-                FillDirection = Enum.FillDirection.Horizontal,
-                SortOrder = Enum.SortOrder.LayoutOrder,
-                VerticalAlignment = Enum.VerticalAlignment.Center
-            },
-            StandartButton.ColdFusion.new(maid, leadingIconId, _Value(false), function() end, isDarkState, 24),
-            _bind(TextBox.ColdFusion.new(maid, 2, text, textColorState, typographyDataState, 16, textBoxState, textBoxButtonState, inputText))({
-                AutomaticSize = Enum.AutomaticSize.Y,
-                Size = _Computed(function(width : number) 
-                    return UDim2.new(0,width - 112,0,0)
-                end, widthState),
-                TextWrapped = true
-            }),
-            if trailingIconId then
-                _bind(StandartButton.ColdFusion.new(maid, trailingIconId, _Value(false), function() end, isDarkState, 24))({
-                    LayoutOrder = 3,
+            
+            getUiCorner(),
+            Children = {
+                _new("UISizeConstraint")({
+                    MaxSize = Vector2.new(500,500)
                 })
-            else nil :: any,
-            _bind(Divider.ColdFusion.new(maid, isDark, true))({
-                LayoutOrder = 4,
-            })
+            }
         }
-    })
-    
-    return out
+    }) 
+
+    return out :: Frame
 end
 
-return Interface
+
+return interface

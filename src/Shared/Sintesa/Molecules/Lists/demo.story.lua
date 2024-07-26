@@ -73,7 +73,8 @@ return function(target : CoreGui)
             true
          ))
     end
-    local out = Lists.ColdFusion.new(maid, false,true, lists, 500) 
+    local length = _Value(450)
+    local out = Lists.ColdFusion.new(maid, false,true, lists, length) 
     out.Position = UDim2.fromOffset(0,0)
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),

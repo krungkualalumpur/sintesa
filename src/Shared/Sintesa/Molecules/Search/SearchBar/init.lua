@@ -21,6 +21,7 @@ local ShapeStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):Wa
 local ElevationStyle = require(script.Parent.Parent.Parent:WaitForChild("Styles"):WaitForChild("Elevation"))
 
 local StandartButton = require(script.Parent.Parent:WaitForChild("Buttons"):WaitForChild("IconButton"):WaitForChild("Standard"))
+
 local TextLabel = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextLabel"))
 local TextBox = require(script.Parent.Parent:WaitForChild("Util"):WaitForChild("TextBox"))
 --types
@@ -178,9 +179,10 @@ function Interface.ColdFusion.new(
                 _bind(StandartButton.ColdFusion.new(maid, trailingIconId, _Value(false), function() end, isDarkState, 24))({
                     LayoutOrder = 3,
                 })
-            else nil :: any
+            else nil :: any,
+            
         }
-    })
+    }) :: Frame
     
     return out
 end

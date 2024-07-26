@@ -44,7 +44,9 @@ function interface.ColdFusion.new(
 
     isDark : CanBeState<boolean>?,
     height : CanBeState<number>?,
-    iconId : CanBeState<number | IconData?>?)
+    iconId : CanBeState<number | IconData?>?,
+
+    textColor : CanBeState<Color3>?)
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
     local _import = _fuse.import
@@ -115,7 +117,7 @@ function interface.ColdFusion.new(
         else outline)
     end, appearanceDataState, buttonState)
 
-    local labelTextColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
+    local labelTextColorState = textColor or _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
             appearance.SecondaryColor, 
@@ -130,6 +132,7 @@ function interface.ColdFusion.new(
             
         return if _buttonState == Enums.ButtonState.Enabled then primary elseif _buttonState == Enums.ButtonState.Disabled then onSurface elseif _buttonState == Enums.ButtonState.Focused then secondary else primary
     end, appearanceDataState, buttonState)
+    local _labelTextColorState = _import(labelTextColorState, labelTextColorState)
 
     local stateLayerColorState = _Computed(function(appearance : AppearanceData, _buttonState : Enums.ButtonState)
         local dynamicScheme = MaterialColor.getDynamicScheme(
@@ -174,9 +177,9 @@ function interface.ColdFusion.new(
 
         text,
         iconId, 
-        labelTextColorState,
+        _labelTextColorState,
         opacityState,
-        labelTextColorState,
+        _labelTextColorState,
         0
     )
   

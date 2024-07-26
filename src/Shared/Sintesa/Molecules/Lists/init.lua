@@ -70,7 +70,7 @@ function interface.ColdFusion.new(
     
     hasShadow : boolean,
     lists : CanBeState<{ListData}>,
-    length : number)
+    length : CanBeState<number>)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -80,8 +80,8 @@ function interface.ColdFusion.new(
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
   
-    local listLength = length
     local isDarkState = _import(isDark, false)
+    local lengthState = _import(length, length)
 
     local appearanceDataState = _Computed(
         function(
@@ -368,7 +368,9 @@ function interface.ColdFusion.new(
         BackgroundTransparency =  _Computed(function(appearance : AppearanceData)
             return (100 - ElevationStyle.getLevelData(appearance.Elevation))/100
         end, appearanceDataState),
-        Size = UDim2.new(0,listLength,1,0),
+        Size = _Computed(function(listLength : number)
+            return UDim2.new(0,listLength,1,0)
+        end, lengthState),
         BorderSizePixel = 2,
         ClipsDescendants = true,
         Children = {

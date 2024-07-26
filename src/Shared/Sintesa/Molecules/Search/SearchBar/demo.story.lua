@@ -60,7 +60,7 @@ return function(target : CoreGui)
 
     local out = Search.ColdFusion.new(
         maid,
-        false,
+        isDark,
         leadingIconId,
         text,
         width,

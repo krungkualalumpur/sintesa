@@ -153,17 +153,18 @@ function interface.ColdFusion.new(
         })
     end
     
+    local radius = 15
+    
     local out = _new("Frame")({
-        BackgroundColor3 = containerColorState,
-        Size = UDim2.fromOffset(100, 100),
+        BackgroundTransparency = 1,
+        Size = UDim2.fromOffset(radius*2, radius*2),
         Children = {
             -- _bind(ImageLabel.ColdFusion.new(maid, 1, Icons.image.blur_circular))({
             --     Size = UDim2.fromOffset(100, 100)
             -- })
         }
-    }) 
+    })  :: Frame
 
-    local radius = 15
     local interval = 0.3
     for i = 0, math.pi*2, interval do
         _new("Frame")({
@@ -184,7 +185,7 @@ function interface.ColdFusion.new(
                 return if num > (i/(math.pi*2)) then primary else secondaryContainer
             end, progress, appearanceDataState):Tween(),
             Size = UDim2.fromOffset(2*math.pi*radius/(math.pi*2*(1/(interval))), 3),
-            Position = UDim2.fromOffset(math.cos(i - math.pi/2)*radius, math.sin(i - math.pi/2)*radius),
+            Position = UDim2.fromOffset(math.cos(i - math.pi/2)*radius + out.AbsoluteSize.X*0.5, math.sin(i - math.pi/2)*radius + out.AbsoluteSize.Y*0.5),
             Children = {
                 _new("UICorner")({
                     CornerRadius = UDim.new(0, 200)

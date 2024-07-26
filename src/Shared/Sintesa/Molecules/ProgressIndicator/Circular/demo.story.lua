@@ -25,7 +25,8 @@ return function(target : CoreGui)
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local out = ProgressIndicator.ColdFusion.new(maid, false) 
+    local progress = _Value(0.3)
+    local out = ProgressIndicator.ColdFusion.new(maid, false, progress) 
     out.Position = UDim2.fromScale(0.5,0.5)
     print(out)
    _new("Frame")({

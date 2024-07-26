@@ -61,7 +61,8 @@ interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
 
-    isDark : CanBeState<boolean>)
+    isDark : CanBeState<boolean>,
+    progress : State<number>)
     
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -97,6 +98,7 @@ function interface.ColdFusion.new(
         )
     end, isDarkState)
 
+    
     local containerColorState = _Computed(function(appearance : AppearanceData)
         local dynamicScheme = MaterialColor.getDynamicScheme(
             appearance.PrimaryColor, 
@@ -111,6 +113,35 @@ function interface.ColdFusion.new(
         return  outlineVariant
     end, appearanceDataState)
     
+    local activeTrackColorState = _Computed(function(appearance : AppearanceData)
+        local dynamicScheme = MaterialColor.getDynamicScheme(
+            appearance.PrimaryColor, 
+            appearance.SecondaryColor, 
+            appearance.TertiaryColor, 
+            appearance.NeutralColor, 
+            appearance.NeutralVariantColor,
+            appearance.IsDark
+        )
+        local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+        local onSurface = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurface())
+
+        return primary 
+    end, appearanceDataState)
+
+    local inactiveTrackColorState = _Computed(function(appearance : AppearanceData)
+        local dynamicScheme = MaterialColor.getDynamicScheme(
+            appearance.PrimaryColor, 
+            appearance.SecondaryColor, 
+            appearance.TertiaryColor, 
+            appearance.NeutralColor, 
+            appearance.NeutralVariantColor,
+            appearance.IsDark
+        )
+        local secondaryContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_secondaryContainer())
+        local onSurfaceVariant = MaterialColor.Color3FromARGB(dynamicScheme:get_onSurfaceVariant())
+        return secondaryContainer 
+    end, appearanceDataState)
+
     local getUiCorner = function()
         return _new("UICorner")({
             CornerRadius = _Computed(function(appearance : AppearanceData) 
@@ -123,22 +154,41 @@ function interface.ColdFusion.new(
     end
     
     local out = _new("Frame")({
+        BackgroundColor3 = containerColorState,
         Size = UDim2.fromOffset(100, 100),
         Children = {
-            _bind(ImageLabel.ColdFusion.new(maid, 1, Icons.image.blur_circular))({
-                Size = UDim2.fromOffset(100, 100)
-            })
+            -- _bind(ImageLabel.ColdFusion.new(maid, 1, Icons.image.blur_circular))({
+            --     Size = UDim2.fromOffset(100, 100)
+            -- })
         }
     }) 
 
-    local radius = 10
-    for i = 1, 10, 0.01 do
+    local radius = 15
+    local interval = 0.3
+    for i = 0, math.pi*2, interval do
         _new("Frame")({
             Parent = out,
-            Position = UDim2.fromOffset(math.cos(i)*10, math.sin(i)*10),
-            Children = {
+            Rotation = math.deg(i),
+            BackgroundColor3 = _Computed(function(num : number, appearance : AppearanceData)
+                local dynamicScheme = MaterialColor.getDynamicScheme(
+                    appearance.PrimaryColor, 
+                    appearance.SecondaryColor, 
+                    appearance.TertiaryColor, 
+                    appearance.NeutralColor, 
+                    appearance.NeutralVariantColor,
+                    appearance.IsDark
+                )
+                local primary = MaterialColor.Color3FromARGB(dynamicScheme:get_primary())
+                local secondaryContainer = MaterialColor.Color3FromARGB(dynamicScheme:get_secondaryContainer())
 
-                getUiCorner()
+                return if num > (i/(math.pi*2)) then primary else secondaryContainer
+            end, progress, appearanceDataState):Tween(),
+            Size = UDim2.fromOffset(2*math.pi*radius/(math.pi*2*(1/(interval))), 3),
+            Position = UDim2.fromOffset(math.cos(i - math.pi/2)*radius, math.sin(i - math.pi/2)*radius),
+            Children = {
+                _new("UICorner")({
+                    CornerRadius = UDim.new(0, 200)
+                })
             }
         })
     end

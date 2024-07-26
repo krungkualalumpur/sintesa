@@ -55,7 +55,8 @@ function util.ColdFusion.new(
     typographyData : CanBeState<TypographyData>,
     height : CanBeState<number>,
     textBoxState : ValueState<Enums.TextBoxState>,
-    buttonState : ValueState<Enums.ButtonState>)
+    buttonState : ValueState<Enums.ButtonState>,
+    inputText : ValueState<string>)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -98,7 +99,8 @@ function util.ColdFusion.new(
                 end
             end
             return Font.fromName(typography.TypeScale.Font.Name, Enum.FontWeight.Regular) 
-        end, typographyDataState)
+        end, typographyDataState),
+        TextXAlignment = Enum.TextXAlignment.Left
     }) :: TextBox
 
     _bind(out)({
@@ -114,7 +116,7 @@ function util.ColdFusion.new(
                     else 
                         textBoxState:Set(Enums.TextBoxState.Empty) 
                     end
-                    
+                    inputText:Set(out.Text)
                 end
 
             end,

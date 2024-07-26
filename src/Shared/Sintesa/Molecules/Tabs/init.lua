@@ -208,7 +208,7 @@ function Interface.ColdFusion.new(
                 FillDirection = Enum.FillDirection.Horizontal,
                 VerticalAlignment = Enum.VerticalAlignment.Top,
             }),
-            children
+            children :: any
         }
     })
     return out

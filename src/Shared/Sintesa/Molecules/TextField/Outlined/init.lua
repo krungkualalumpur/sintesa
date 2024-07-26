@@ -64,7 +64,9 @@ function Interface.ColdFusion.new(
     width : number,
 
     leadingIconFn : () -> (),
-    trailingIconFn : () -> ())
+    trailingIconFn : () -> (),
+    
+    inputText : ValueState<string>)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -183,7 +185,7 @@ function Interface.ColdFusion.new(
                         FillDirection = Enum.FillDirection.Horizontal
                     }),
                     leadingIconInstance,
-                    _bind(TextBox.ColdFusion.new(maid, 2, text, textColorState, typographyDataState, 24, textBoxState, buttonState))({
+                    _bind(TextBox.ColdFusion.new(maid, 2, text, textColorState, typographyDataState, 24, textBoxState, buttonState, inputText))({
                         AutomaticSize = Enum.AutomaticSize.Y,
                         TextWrapped = true,
                         Size = UDim2.new(0,width,0,24),

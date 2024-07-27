@@ -249,7 +249,12 @@ function interface.ColdFusion.new(
         --Icons.image.image,
         leadingIconColorState,
         opacityState,
-        labelTextColorState
+        labelTextColorState,
+        _Computed(function(_buttonState : Enums.ButtonState)
+            return (if _buttonState == Enums.ButtonState.Disabled then 
+                 0.12
+            else 1) 
+        end, buttonState)
     )
      
     local canvasGroup = base:FindFirstChild("CanvasGroup")

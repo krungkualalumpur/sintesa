@@ -30,7 +30,7 @@ return function(target : CoreGui)
    end, nil, nil, 12072054746)
    out.Parent = target
    out.Position = UDim2.fromScale(0.5, 0.5)
-
+   
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),
       Parent = target,

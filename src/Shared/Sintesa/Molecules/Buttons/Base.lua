@@ -281,14 +281,24 @@ function interface.ColdFusion.new(
     _bind(out)({
         Events = {
             MouseButton1Up = function()
-                if mouseIsInButton(out) then
-                    buttonState:Set(Enums.ButtonState.Hovered)
-                else
-                    buttonState:Set(Enums.ButtonState.Enabled)
+                if buttonState:Get() ~= Enums.ButtonState.Disabled then
+                    if mouseIsInButton(out) then
+                        buttonState:Set(Enums.ButtonState.Hovered)
+                    else
+                        buttonState:Set(Enums.ButtonState.Enabled)
+                    end
                 end
             end
         }
-    })
+    }) 
+
+    maid:GiveTask(out:GetPropertyChangedSignal("Active"):Connect(function()
+        if out.Active then
+            buttonState:Set(Enums.ButtonState.Enabled)
+        else
+            buttonState:Set(Enums.ButtonState.Disabled)
+        end
+    end))
     return out :: TextButton
 end
 

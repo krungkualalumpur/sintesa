@@ -203,9 +203,9 @@ function interface.ColdFusion.new(
             else 0)
         end, buttonState),
         nil,
-        _Computed(function(selected : boolean)
-            return if selected then 1 else 0
-        end, isSelected),
+        _Computed(function(selected : boolean, _buttonState : Enums.ButtonState)
+            return if _buttonState ~= Enums.ButtonState.Disabled then (if selected then 1 else 0) else (0.12)
+        end, isSelected, buttonState),
         badge
     ))({
         Children = {

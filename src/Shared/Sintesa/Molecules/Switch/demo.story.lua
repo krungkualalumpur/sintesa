@@ -100,6 +100,7 @@ return function(target : CoreGui)
         }
     })
     bg.Parent = target
+    
     return function()
         maid:Destroy()
     end

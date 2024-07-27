@@ -179,7 +179,11 @@ function interface.ColdFusion.new(
             else 0)
         end, buttonState),
         nil,
-        nil,
+        _Computed(function(_buttonState : Enums.ButtonState)
+            return (if _buttonState == Enums.ButtonState.Disabled then 
+                 0.12
+            else 1) 
+        end, buttonState),
         badge
     ))({
         Children = {

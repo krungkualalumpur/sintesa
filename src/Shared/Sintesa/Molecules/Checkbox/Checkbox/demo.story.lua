@@ -32,7 +32,6 @@ return function(target : CoreGui)
     end,
     isError)
    out.Parent = target
-
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),
       Parent = target,

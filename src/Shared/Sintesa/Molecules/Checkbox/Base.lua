@@ -113,7 +113,7 @@ function interface.ColdFusion.new(
         BackgroundColor3 = _Computed(function(appearance : AppearanceData)
             return appearance.ShadowColor
         end, appearanceDataState),
-        BackgroundTransparency = 1,
+        BackgroundTransparency = backgroundOpacity,
         Children = {
             _new("Frame")({
                 Name = "CanvasGroup",
@@ -219,6 +219,14 @@ function interface.ColdFusion.new(
             end
         }
     })
+
+    maid:GiveTask(out:GetPropertyChangedSignal("Active"):Connect(function()
+        if out.Active then
+            buttonState:Set(Enums.ButtonState.Enabled)
+        else
+            buttonState:Set(Enums.ButtonState.Disabled)
+        end
+    end))
     return out :: TextButton
 end
 

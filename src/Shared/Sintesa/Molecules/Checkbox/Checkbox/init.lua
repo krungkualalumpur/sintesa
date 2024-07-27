@@ -230,6 +230,12 @@ function interface.ColdFusion.new(
                 elseif _buttonState == Enums.ButtonState.Hovered then
                     0.08
             else 0)
+        end, buttonState),
+        nil,
+        _Computed(function(_buttonState : Enums.ButtonState)
+            return (if _buttonState == Enums.ButtonState.Disabled then 
+                 0.12
+            else 1) 
         end, buttonState)
     ))({
         Children = {

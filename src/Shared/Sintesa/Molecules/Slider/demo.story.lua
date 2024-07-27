@@ -60,7 +60,7 @@ return function(target : CoreGui)
         _Value(0.5)
     )
     out.Position = UDim2.fromScale(0.4, 0.4)
-
+    
     local labelLarge = Styles.Typography.get(Enums.TypographyStyle.HeadlineSmall)
     local typographyDataState = _Value(Types.createTypographyData(
         labelLarge
@@ -125,6 +125,10 @@ return function(target : CoreGui)
         }
     })
     bg.Parent = target
+
+
+    out.Interactable = true
+    
     return function()
         maid:Destroy()
     end  

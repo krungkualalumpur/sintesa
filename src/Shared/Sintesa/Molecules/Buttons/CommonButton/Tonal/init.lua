@@ -180,7 +180,12 @@ function interface.ColdFusion.new(
         iconId, 
         labelTextColorState,
         opacityState,
-        labelTextColorState
+        labelTextColorState,
+        _Computed(function(_buttonState : Enums.ButtonState)
+            return (if _buttonState == Enums.ButtonState.Disabled then 
+                 0.12
+            else 1) 
+        end, buttonState)
     )
 
     return out

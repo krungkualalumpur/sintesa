@@ -38,7 +38,7 @@ return function(target : CoreGui)
          out
       }
    })
-
+   
    return function()
       maid:Destroy()
    end

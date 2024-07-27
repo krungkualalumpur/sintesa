@@ -28,7 +28,6 @@ return function(target : CoreGui)
 
     local isError = _Value(false)
     local out = Assist.ColdFusion.new(maid, "Assist Chip", function()  
-
    end, false, Icons.maps.local_taxi)
     out.Parent = target
 

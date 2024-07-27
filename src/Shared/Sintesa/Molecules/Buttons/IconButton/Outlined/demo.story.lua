@@ -30,7 +30,7 @@ return function(target : CoreGui)
       print("Click!")
    end)
    out.Parent = target
-
+   
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),
       Parent = target,

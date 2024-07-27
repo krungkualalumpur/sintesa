@@ -237,6 +237,11 @@ function interface.ColdFusion.new(
                             _new("Frame")({
                                 LayoutOrder = 1,
                                 Name = "Active",
+                                BackgroundTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+                                    return (if _buttonState == Enums.ButtonState.Disabled then 
+                                         1 - 0.12
+                                    else 1 - 1) 
+                                end, buttonState),
                                 BackgroundColor3 = activeTrackColorState,
                                 --ClipsDescendants = true,
                                 Size = _Computed(function(ratio : number)
@@ -258,6 +263,11 @@ function interface.ColdFusion.new(
                                 LayoutOrder = 3,
                                 Name = "Inactive",
                                 ZIndex = 0,
+                                BackgroundTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+                                    return (if _buttonState == Enums.ButtonState.Disabled then 
+                                         1 - 0.12
+                                    else 1 - 1) 
+                                end, buttonState),
                                 BackgroundColor3 = inactiveTrackColorState,
                                 --ClipsDescendants = true,
                                 Size = _Computed(function(ratio : number) 
@@ -315,6 +325,11 @@ function interface.ColdFusion.new(
                     AnchorPoint = Vector2.new(0.5,0),
                     ZIndex = 0,
                     BackgroundColor3 = activeTrackColorState,
+                    BackgroundTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+                        return (if _buttonState == Enums.ButtonState.Disabled then 
+                             1 
+                        else 1 - 1) 
+                    end, buttonState),
                     Size = UDim2.new(0, 16, 1, 0),
                     Children = {getUiCorner()}
                 }),
@@ -323,6 +338,11 @@ function interface.ColdFusion.new(
                     AnchorPoint = Vector2.new(0.5,0),
                     ZIndex = 0,
                     BackgroundColor3 = inactiveTrackColorState,
+                    BackgroundTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+                        return (if _buttonState == Enums.ButtonState.Disabled then 
+                             1 
+                        else 1 - 1) 
+                    end, buttonState),
                     Size = UDim2.new(0, 16, 1, 0),
                     Position = UDim2.new(1,0,0,0),
                     Children = {getUiCorner()}
@@ -337,15 +357,17 @@ function interface.ColdFusion.new(
 
         local conn
         conn = RunService.Heartbeat:Connect(function()
-            if not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then 
+            if not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) or (buttonState:Get() == Enums.ButtonState.Disabled) then 
                 if conn then conn:Disconnect() end
-                buttonState:Set(Enums.ButtonState.Enabled)
+                if (buttonState:Get() ~= Enums.ButtonState.Disabled) then
+                    buttonState:Set(Enums.ButtonState.Enabled :: Enums.ButtonState)
+                end
             end
             local v2 = UserInputService:GetMouseLocation()
             local min = out.AbsolutePosition.X
             local max = out.AbsolutePosition.X + out.AbsoluteSize.X
             ratioState:Set(math.clamp(math.round(((v2.X - min)/(max - min))*100)/100, 0, 1))
-
+            
         end)
         buttonState:Set(Enums.ButtonState.Pressed)
     end
@@ -365,6 +387,11 @@ function interface.ColdFusion.new(
             _new("TextButton")({
                 AnchorPoint = Vector2.new(0.5,0.5),
                 BackgroundColor3 = handleColorState, 
+                BackgroundTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+                    return (if _buttonState == Enums.ButtonState.Disabled then 
+                         1 - 0.38
+                    else 1 - 1) 
+                end, buttonState),
                 Position = UDim2.fromScale(0.5, 0.5),    
                 Size = UDim2.fromOffset(6, 44),
                 Children = {
@@ -435,6 +462,16 @@ function interface.ColdFusion.new(
            
         }
     })
+
+    maid:GiveTask(out:GetPropertyChangedSignal("Interactable"):Connect(function()
+        if out.Interactable then
+            buttonState:Set(Enums.ButtonState.Enabled)
+        else
+            buttonState:Set(Enums.ButtonState.Disabled)
+        end
+        print(out.Interactable)
+    end))
+
     return out
 
 end

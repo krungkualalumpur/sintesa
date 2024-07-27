@@ -32,7 +32,7 @@ return function(target : CoreGui)
 
     end, false, selected, Icons.image.image, Icons.navigation.close)
     out.Parent = target
-
+    
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),
       Parent = target,

@@ -217,6 +217,9 @@ function Interface.ColdFusion.new(
                         TextWrapped = true,
                         Size = UDim2.new(0,width,0,24),
                         TextXAlignment = Enum.TextXAlignment.Left,
+                        TextTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+                            return if _buttonState ~= Enums.ButtonState.Disabled then 1 - 1 else 1 - 0.38
+                        end, buttonState),
                         Children = {
                             _bind(TextLabel.ColdFusion.new(maid, layoutOrder, text, activeIndicatorState, textSupporterTypographyDataState, 10))({
                                 Position = UDim2.new(0,0,0,-12),
@@ -234,12 +237,17 @@ function Interface.ColdFusion.new(
                         LayoutOrder = 3,
                         Visible = isError
                     }),
-                    _bind(trailingIconInstance)({LayoutOrder = 4})
+                    _bind(trailingIconInstance)({
+                        LayoutOrder = 4,
+                    })
                 }
             }),
             
             _new("Frame")({
                 Name = "ActiveIndicatorFrame",
+                BackgroundTransparency = _Computed(function(_buttonState : Enums.ButtonState)
+                    return if _buttonState ~= Enums.ButtonState.Disabled then 1 - 1 else 1 - 0.38
+                end, buttonState),
                 BackgroundColor3 = activeIndicatorState:Tween(),
                 Size = _Computed(function(_buttonState : Enums.ButtonState) 
                     return if _buttonState == Enums.ButtonState.Enabled then UDim2.new(1,0,0,1) 
@@ -264,7 +272,15 @@ function Interface.ColdFusion.new(
             --     Text = "Testos"
             -- })
         }
-    })
+    }) :: Frame
+
+    maid:GiveTask(base:GetPropertyChangedSignal("Interactable"):Connect(function()
+        if base.Interactable then
+            buttonState:Set(Enums.ButtonState.Enabled)
+        else
+            buttonState:Set(Enums.ButtonState.Disabled)
+        end
+    end))
     return base
 end
 

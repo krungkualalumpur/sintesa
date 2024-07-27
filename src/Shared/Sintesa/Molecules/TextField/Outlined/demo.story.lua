@@ -77,6 +77,7 @@ return function(target : CoreGui)
         }
     })
     bg.Parent = target
+    out.Interactable = true
     return function()
         maid:Destroy()
     end

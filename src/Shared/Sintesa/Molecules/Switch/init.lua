@@ -252,6 +252,9 @@ function interface.ColdFusion.new(
     
     local handleSize = _Value(UDim2.fromOffset(24, 24))
     local out = _new("TextButton")({
+        BackgroundTransparency = _Computed(function(selected : boolean, _buttonState : Enums.ButtonState)
+            return if _buttonState ~= Enums.ButtonState.Disabled then 1 - 1 else 1 - 0.12 
+        end, isSelectedState, buttonState),
         BackgroundColor3 = trackColorState:Tween(),
         Size = UDim2.fromOffset(52,32),
         Children = {
@@ -310,7 +313,7 @@ function interface.ColdFusion.new(
                         handleSize:Set(UDim2.fromOffset(16,16)) 
                     end
                     
-                    return 0
+                    return if _buttonState ~= Enums.ButtonState.Disabled then 1 - 1 else 1 - 0.38 
                 end, isSelectedState, buttonState),
                 BackgroundColor3 = handleColorState:Tween(),
                 Size = handleSize:Tween(),
@@ -336,6 +339,9 @@ function interface.ColdFusion.new(
                         Visible = _Computed(function(selected : boolean)
                             return selected
                         end, isSelectedState),
+                        ImageTransparency = _Computed(function(selected : boolean, _buttonState : Enums.ButtonState)
+                            return if _buttonState ~= Enums.ButtonState.Disabled then 1 - 1 else 1 - 0.38
+                        end, isSelectedState, buttonState),
                         Size = UDim2.new(0,16,0,16),
                         Position = UDim2.fromScale(0.5,0.5)
                     })
@@ -367,6 +373,14 @@ function interface.ColdFusion.new(
             end,
         }
     }) :: TextButton
+    
+    maid:GiveTask(out:GetPropertyChangedSignal("Active"):Connect(function()
+        if out.Active then
+            buttonState:Set(Enums.ButtonState.Enabled)
+        else
+            buttonState:Set(Enums.ButtonState.Disabled)
+        end
+    end))
     
     return out 
 end

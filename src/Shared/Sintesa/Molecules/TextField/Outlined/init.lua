@@ -214,6 +214,9 @@ function Interface.ColdFusion.new(
                             else 1
                         end, buttonState):Tween(),
                         Color = activeIndicatorState:Tween(),
+                        Transparency = _Computed(function(_buttonState : Enums.ButtonState)
+                            return if _buttonState ~= Enums.ButtonState.Disabled then 1 - 1 else 1 - 0.38
+                        end, buttonState)
                     }),
         
                     _new("UIPadding")({
@@ -261,7 +264,15 @@ function Interface.ColdFusion.new(
                 Visible = isError
             }),
         },
-    })
+    }) :: Frame
+
+    maid:GiveTask(base:GetPropertyChangedSignal("Interactable"):Connect(function()
+        if base.Interactable then
+            buttonState:Set(Enums.ButtonState.Enabled)
+        else
+            buttonState:Set(Enums.ButtonState.Disabled)
+        end
+    end))
     return base
 end
 

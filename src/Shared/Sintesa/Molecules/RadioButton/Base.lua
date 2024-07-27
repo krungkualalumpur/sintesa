@@ -201,6 +201,14 @@ function interface.ColdFusion.new(
             end
         }
     })
+
+    maid:GiveTask(out:GetPropertyChangedSignal("Active"):Connect(function()
+        if out.Active then
+            buttonState:Set(Enums.ButtonState.Enabled)
+        else
+            buttonState:Set(Enums.ButtonState.Disabled)
+        end
+    end))
     return out :: TextButton
 end
 

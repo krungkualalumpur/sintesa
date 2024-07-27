@@ -100,7 +100,7 @@ return function(target : CoreGui)
         }
     })
     bg.Parent = target
-    
+    out.Active = true
     return function()
         maid:Destroy()
     end

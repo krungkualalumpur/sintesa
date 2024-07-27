@@ -25,16 +25,22 @@ return function(target : CoreGui)
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local out = ProgressIndicator.ColdFusion.new(maid, false, _Value(0.25)) 
+    local progress = _Value(0.25)
+    local out = ProgressIndicator.ColdFusion.new(maid, false, progress) 
     out.Position = UDim2.fromScale(0.5,0.5)
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),
-      Parent = target,
+      Parent = target, 
       Children = {
          out
       }
    })
-
+   spawn(function()
+      for i = 1, 3, 0.1 do 
+         wait()
+         progress:Set(i/3)
+      end
+   end)
    return function()
       maid:Destroy()
    end

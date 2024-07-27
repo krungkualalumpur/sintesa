@@ -37,6 +37,13 @@ return function(target : CoreGui)
       }
    })
 
+   spawn(function()
+      for i = 1, 3, 0.1 do 
+         wait()
+         progress:Set(i/3)
+      end
+   end)
+
    return function()
       maid:Destroy()
    end

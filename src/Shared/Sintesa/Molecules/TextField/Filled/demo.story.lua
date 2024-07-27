@@ -12,7 +12,7 @@ local MaterialColor = require(
 
 local DynamicTheme = require(script.Parent.Parent.Parent:WaitForChild("dynamic_theme"))
 
-local FilledTextField: any = require(script.Parent)
+local FilledTextField = require(script.Parent)
 local Types = require(script.Parent.Parent.Parent.Parent:WaitForChild("Types"))
 local Icons = require(script.Parent.Parent.Parent.Parent:WaitForChild("Icons"))
 local Styles = require(script.Parent.Parent.Parent.Parent:WaitForChild("Styles"))
@@ -49,8 +49,8 @@ return function(target : CoreGui)
     local _Value = _fuse.Value
   
     local isDark = _Value(false)
-
-
+    local inputText = _Value("")
+    local isError = _Value(false)
     local out = FilledTextField.ColdFusion.new(
         maid,
         1,
@@ -63,7 +63,10 @@ return function(target : CoreGui)
 
         100,
         function() end,
-        function() end
+        function() end,
+
+        inputText,
+        isError
     )
     out.Position = UDim2.fromScale(0.4, 0.4)
 

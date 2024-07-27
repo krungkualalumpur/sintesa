@@ -178,7 +178,7 @@ function Interface.ColdFusion.new(
                     LayoutOrder = 3,
                 })
             else nil :: any,
-            _bind(Divider.ColdFusion.new(maid, isDark, true))({
+            _bind(Divider.ColdFusion.new(maid, isDark))({
                 LayoutOrder = 4,
             })
         }

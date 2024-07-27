@@ -344,13 +344,13 @@ function interface.ColdFusion.new(
             supportingTextInstance,
             if contentFrame then
                 {
-                    _bind(Divider.ColdFusion.new(maid, isDark, false)){
+                    _bind(Divider.ColdFusion.new(maid, isDark)){
                         LayoutOrder = 3,
                         Size = UDim2.new(0,width,0,1),
                         AnchorPoint = Vector2.new(0.5,0.5),
                     },
                     contentFrame,
-                    _bind(Divider.ColdFusion.new(maid, isDark, false)){
+                    _bind(Divider.ColdFusion.new(maid, isDark)){
                         LayoutOrder = 5,
                         Size = UDim2.new(0,width,0,1),
                         AnchorPoint = Vector2.new(0.5,0.5), 

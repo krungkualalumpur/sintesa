@@ -5,7 +5,7 @@ local Package = ReplicatedStorage:WaitForChild("Packages")
 --packages
 local Maid = require(Package:WaitForChild("Maid"))
 local ColdFusion = require(Package:WaitForChild("ColdFusion8"))
-local Divider = require(script.Parent)
+local BottomSheet = require(script.Parent)
 --modules
 --types
 --constants
@@ -25,7 +25,7 @@ return function(target : CoreGui)
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local out = Divider.ColdFusion.new(maid, false,{
+    local out = BottomSheet.ColdFusion.new(maid, false,{
       _new("UIListLayout")({
          FillDirection = Enum.FillDirection.Vertical
       }),

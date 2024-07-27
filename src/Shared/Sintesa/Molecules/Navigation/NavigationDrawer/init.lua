@@ -193,7 +193,7 @@ function Interface.ColdFusion.new(
         -- })
         local buttons = {}
         if k > 1 then
-            table.insert(buttons, Divider.ColdFusion.new(maid, isDark, false) :: any)
+            table.insert(buttons, Divider.ColdFusion.new(maid, isDark) :: any)
         end
         table.insert(buttons, 
             _bind(TextLabel.ColdFusion.new(maid, k - 2, buttonsData.Name, textColorState, typographyDataState, 12))({

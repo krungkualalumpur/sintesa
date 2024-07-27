@@ -25,7 +25,7 @@ return function(target : CoreGui)
     local _Computed = _fuse.Computed
     local _Value = _fuse.Value
 
-    local out = Divider.ColdFusion.new(maid, false,true) 
+    local out = Divider.ColdFusion.new(maid, false) 
     out.Position = UDim2.fromScale(0,0.5)
    _new("Frame")({
       Size = UDim2.fromScale(1, 1),

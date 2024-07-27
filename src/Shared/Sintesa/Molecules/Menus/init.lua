@@ -334,7 +334,7 @@ function interface.ColdFusion.new(
                     Position = UDim2.new(1,0,0.5,0) - UDim2.new(0,24,0,0)
                     --BackgroundColor3 = Color3.fromRGB(25,5,55)
                 }),
-                if list.HasDividor then _bind(Divider.ColdFusion.new(maid, isDark, hasShadow))({
+                if list.HasDividor then _bind(Divider.ColdFusion.new(maid, isDark))({
                     AnchorPoint = Vector2.new(0,1),
                     Position = UDim2.new(0,0,1,0)
                     --BackgroundColor3 = Color3.fromRGB(25,5,55)

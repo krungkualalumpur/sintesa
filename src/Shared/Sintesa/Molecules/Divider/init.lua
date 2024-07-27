@@ -58,9 +58,7 @@ interface.ColdFusion = {}
 function interface.ColdFusion.new(
     maid : Maid,
 
-    isDark : CanBeState<boolean>,
-    
-    hasShadow : boolean)
+    isDark : CanBeState<boolean>)
 
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new

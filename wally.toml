@@ -1,15 +1,10 @@
 [package]
 name = "krungkualalumpur/sintesa"
-version = "0.1.0"
+version = "0.1.1"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
 [dependencies]
 Maid = "nightcycle/maid@1.1.1"
-Signal = "nightcycle/signal@1.0.2"
-ProfileService = "brittonfischer/profileservice@2.1.5"
 Fusion = "elttob/fusion@^0.1.1-beta"
 ColdFusion8 = "nightcycle/cold-fusion@8.0.0"
-ServiceProxy = "nightcycle/service-proxy@1.0.0"
-Signal = "nightcycle/signal@1.0.2"
-NetworkUtil = "nightcycle/network-util@1.6.0"

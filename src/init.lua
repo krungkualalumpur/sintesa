@@ -3,6 +3,10 @@
 local _Package = script
 local _Packages = _Package.Parent
 
+local Enums = require(_Package:WaitForChild("Enums"))
+local DynamicTheme = require(_Package:WaitForChild("Molecules"):WaitForChild("dynamic_theme"))
+local Types = require(_Package:WaitForChild("Types"))
+
 local Icons = require(_Package:WaitForChild("Icons"))
 local BottomAppBar = require(_Package:WaitForChild("Molecules"):WaitForChild("AppBar"):WaitForChild("BottomAppBar"))
 local CenterAlignedTopAppBar = require(_Package:WaitForChild("Molecules"):WaitForChild("AppBar"):WaitForChild("TopAppBar"):WaitForChild("CenterAligned"))
@@ -78,6 +82,13 @@ local TextBox = require(_Package:WaitForChild("Molecules"):WaitForChild("Util"):
 local TextLabel = require(_Package:WaitForChild("Molecules"):WaitForChild("Util"):WaitForChild("TextLabel"))
 local ViewportFrame = require(_Package:WaitForChild("Molecules"):WaitForChild("Util"):WaitForChild("ViewportFrame"))
 
+export type ButtonData = Types.ButtonData
+export type AppearanceData = Types.AppearanceData
+export type IconData = Types.IconData
+export type TypographyData = Types.TypographyData
+export type TypeScaleData = Types.TypeScaleData
+export type DynamicScheme = Types.DynamicScheme
+export type ListData = Types.ListData
 
 local sintesa = {}
 
@@ -158,5 +169,23 @@ sintesa.InterfaceUtil.ImageLabel = ImageLabel
 sintesa.InterfaceUtil.TextBox = TextBox
 sintesa.InterfaceUtil.TextLabel = TextLabel
 sintesa.InterfaceUtil.ViewportFrame = ViewportFrame
+
+function sintesa.setColorTheme(
+    primary_color : Color3,
+    secondary_color : Color3,
+    tertiary_color : Color3,
+    surface : Color3,
+    surface_dim : Color3,
+    shadow : Color3)
+
+    DynamicTheme.Color[Enums.ColorRole.Primary] = primary_color
+    DynamicTheme.Color[Enums.ColorRole.Secondary] = secondary_color
+    DynamicTheme.Color[Enums.ColorRole.Tertiary] = tertiary_color
+    DynamicTheme.Color[Enums.ColorRole.Surface] = surface
+    DynamicTheme.Color[Enums.ColorRole.SurfaceDim] = surface_dim
+    DynamicTheme.Color[Enums.ColorRole.Shadow] = shadow
+end
+
+sintesa.TypeUtil = Types
 
 return sintesa

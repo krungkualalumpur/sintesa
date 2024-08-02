@@ -102,7 +102,6 @@ function interface.ColdFusion.new(
                         _new("UIPadding")({
                             PaddingTop = PADDING_SIZE,
                             PaddingBottom = PADDING_SIZE,
-                            PaddingLeft = PADDING_SIZE,
                             PaddingRight = PADDING_SIZE
                         }),
                         _new("UIListLayout")({

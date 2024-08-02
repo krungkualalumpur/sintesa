@@ -190,7 +190,7 @@ function TopAppBar.ColdFusion.new(
         ))({
             AutomaticSize = Enum.AutomaticSize.None,
             TextXAlignment = Enum.TextXAlignment.Left,
-            Size = UDim2.fromScale(0.75, 1)
+            Size = UDim2.fromScale(0.7, 1)
         }),
         _new("Frame")({
             LayoutOrder = 2,
@@ -201,7 +201,7 @@ function TopAppBar.ColdFusion.new(
                     Padding = PADDING_SIZE,
                     FillDirection = Enum.FillDirection.Horizontal,
                     HorizontalAlignment = Enum.HorizontalAlignment.Right,
-                    VerticalAlignment = Enum.VerticalAlignment.Top
+                    VerticalAlignment = Enum.VerticalAlignment.Center
                 }) :: any,
                 trailingIcons
             }

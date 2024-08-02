@@ -6,6 +6,7 @@ local _Packages = _Package.Parent
 local Enums = require(_Package:WaitForChild("Enums"))
 local DynamicTheme = require(_Package:WaitForChild("Molecules"):WaitForChild("dynamic_theme"))
 local Types = require(_Package:WaitForChild("Types"))
+local Styles = require(_Package:WaitForChild("Styles"))
 
 local Icons = require(_Package:WaitForChild("Icons"))
 local BottomAppBar = require(_Package:WaitForChild("Molecules"):WaitForChild("AppBar"):WaitForChild("BottomAppBar"))
@@ -170,7 +171,9 @@ sintesa.InterfaceUtil.TextBox = TextBox
 sintesa.InterfaceUtil.TextLabel = TextLabel
 sintesa.InterfaceUtil.ViewportFrame = ViewportFrame
 
-function sintesa.setColorTheme(
+sintesa.ColorUtil = {}
+
+function sintesa.ColorUtil.setColorTheme(
     primary_color : Color3,
     secondary_color : Color3,
     tertiary_color : Color3,
@@ -186,6 +189,30 @@ function sintesa.setColorTheme(
     DynamicTheme.Color[Enums.ColorRole.Shadow] = shadow
 end
 
+function sintesa.ColorUtil.getColorTheme() 
+    return  DynamicTheme.Color[Enums.ColorRole.Primary] ,
+        DynamicTheme.Color[Enums.ColorRole.Secondary] ,
+        DynamicTheme.Color[Enums.ColorRole.Tertiary] ,
+        DynamicTheme.Color[Enums.ColorRole.Surface], 
+        DynamicTheme.Color[Enums.ColorRole.SurfaceDim], 
+        DynamicTheme.Color[Enums.ColorRole.Shadow]
+end
+
+function sintesa.ColorUtil.getDynamicScheme(isDark : boolean)
+    return Styles.MaterialColor.getDynamicScheme(
+        DynamicTheme.Color[Enums.ColorRole.Primary] ,
+        DynamicTheme.Color[Enums.ColorRole.Secondary] ,
+        DynamicTheme.Color[Enums.ColorRole.Tertiary] ,
+        DynamicTheme.Color[Enums.ColorRole.Surface], 
+        DynamicTheme.Color[Enums.ColorRole.SurfaceDim], 
+        isDark
+    )
+end
+
+sintesa.StyleUtil = Styles
+     
 sintesa.TypeUtil = Types
+
+sintesa.SintesaEnum = Enums
 
 return sintesa

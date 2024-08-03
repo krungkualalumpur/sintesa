@@ -60,7 +60,10 @@ function Interface.ColdFusion.new(
     width : CanBeState<number>,
     inputText : ValueState<string>,
     
-    trailingIconId : CanBeState<Types.IconData | number> ?)
+    leadingIconFn : () -> (),
+
+    trailingIconId : CanBeState<Types.IconData | number> ?,
+    TrailingIconFn : (() -> ())?)
     
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new
@@ -167,7 +170,7 @@ function Interface.ColdFusion.new(
                 SortOrder = Enum.SortOrder.LayoutOrder,
                 VerticalAlignment = Enum.VerticalAlignment.Center
             },
-            StandartButton.ColdFusion.new(maid, leadingIconId, _Value(false), function() end, isDarkState, 24),
+            StandartButton.ColdFusion.new(maid, leadingIconId, _Value(false), leadingIconFn, isDarkState, 24),
             _bind(TextBox.ColdFusion.new(maid, 2, text, textColorState, typographyDataState, 16, textBoxState, textBoxButtonState, inputText))({
                 AutomaticSize = Enum.AutomaticSize.Y,
                 Size = _Computed(function(width : number) 
@@ -176,7 +179,7 @@ function Interface.ColdFusion.new(
                 TextWrapped = true
             }),
             if trailingIconId then
-                _bind(StandartButton.ColdFusion.new(maid, trailingIconId, _Value(false), function() end, isDarkState, 24))({
+                _bind(StandartButton.ColdFusion.new(maid, trailingIconId, _Value(false), TrailingIconFn or function() end, isDarkState, 24))({
                     LayoutOrder = 3,
                 })
             else nil :: any,

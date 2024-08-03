@@ -1,6 +1,6 @@
 [package]
 name = "krungkualalumpur/sintesa"
-version = "0.1.72"
+version = "0.1.8"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 

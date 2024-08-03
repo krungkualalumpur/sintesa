@@ -108,7 +108,7 @@ function interface.ColdFusion.new(
                             Padding = UDim.new(0, 40),
                             SortOrder = Enum.SortOrder.LayoutOrder,
                             FillDirection = Enum.FillDirection.Horizontal,
-                            HorizontalAlignment = Enum.HorizontalAlignment.Center,
+                            HorizontalAlignment = Enum.HorizontalAlignment.Left,
                             VerticalAlignment = Enum.VerticalAlignment.Center
                         }),
                         getUiCorner(),

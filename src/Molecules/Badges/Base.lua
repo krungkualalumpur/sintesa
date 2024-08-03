@@ -91,7 +91,7 @@ function interface.ColdFusion.new(
             return appearance.Height
         end, appearanceDataState)
     )
-    print(textLabel, " sisnd")
+
     local out = _new("Frame")({
         AutomaticSize = Enum.AutomaticSize.X,
         Size = _Computed(function(appearence : AppearanceData)

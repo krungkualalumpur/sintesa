@@ -61,7 +61,10 @@ function Interface.ColdFusion.new(
     width : CanBeState<number>,
     inputText : ValueState<string>,
     
-    trailingIconId : CanBeState<Types.IconData | number> ?)
+    leadingIconFn : () -> (),
+
+    trailingIconId : CanBeState<Types.IconData | number> ?,
+    TrailingIconFn : (() -> ())?)
     
     local _fuse = ColdFusion.fuse(maid)
     local _new = _fuse.new

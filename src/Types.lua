@@ -47,7 +47,7 @@ export type IconData = Icons.IconData
 
 export type ButtonData = {
     Name : string?,
-    Selected : ValueState<boolean>?,
+    Selected : State<boolean>?,
     Id : (number | IconData)?,
     Badge : (number | string | boolean)?
 }
@@ -130,7 +130,7 @@ end
 function data.createFusionButtonData(
     Name : string,
     Id : (number | IconData)?,
-    Selected : ValueState<boolean>?,
+    Selected : State<boolean>?,
     Badge : (number | string | boolean)?) : ButtonData
 
     return {

@@ -33,6 +33,8 @@ end
 --class
 local MaterialColor = {}
 
+local dynamicScheme
+local isDark = false
 function MaterialColor.Color3FromARGB(argb : number)
     local color3 = ColorUtil.rgbaFromArgb(argb) 
     local R,G,B = getRGBComponentsFromColor3(Color3.fromRGB(color3.r, color3.g, color3.b))
@@ -46,8 +48,10 @@ function MaterialColor.getDynamicScheme(
 
     neutral : Color3,
     neutralVariant : Color3,
-    isDarkMode : boolean?): DynamicScheme
+    isDarkMode : boolean): DynamicScheme
    -- print(primary.R*255, primary.G*255, primary.B*255) 
+    if dynamicScheme and isDark == isDarkMode then return dynamicScheme end
+    isDark = isDarkMode
     local primaryR, primaryG, primaryB = getRGBComponentsFromColor3(primary)
     local secondaryR, secondaryG, secondaryB = getRGBComponentsFromColor3(secondary)
     local tertiaryR, tertiaryG, tertiaryB = getRGBComponentsFromColor3(tertiary)
@@ -153,8 +157,8 @@ function MaterialColor.getDynamicScheme(
  
     local sourceColor = ColorUtil.argbFromRgb(primaryR,primaryG, primaryB)
 
-    local dynamic_Scheme = DynamicScheme.DynamicScheme.new({
-        sourceColorArgb = sourceColor,
+    dynamicScheme = DynamicScheme.DynamicScheme.new({
+       sourceColorArgb = sourceColor,
         isDark = if isDarkMode ~= nil then isDarkMode else false,
         contrastLevel = 0,
         variant = Variant.Variant,
@@ -170,7 +174,7 @@ function MaterialColor.getDynamicScheme(
    -- local secondary_argb = dynamic_Scheme:getArgb(secondary_dynamicColor)
    -- print(ColorUtil.rgbaFromArgb(primary_argb), "\n", ColorUtil.rgbaFromArgb(secondary_argb), "\n", ColorUtil.rgbaFromArgb(primary_dynamicColor:getArgb(dynamic_Scheme)))
     
-    return dynamic_Scheme :: DynamicScheme
+    return dynamicScheme :: DynamicScheme
 end
 
 return MaterialColor

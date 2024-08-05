@@ -3,6 +3,8 @@
 local _Package = script
 local _Packages = _Package.Parent
 
+local Maid = require(_Packages:WaitForChild("Maid"))
+
 local Enums = require(_Package:WaitForChild("Enums"))
 local DynamicTheme = require(_Package:WaitForChild("Molecules"):WaitForChild("dynamic_theme"))
 local Types = require(_Package:WaitForChild("Types"))
@@ -82,6 +84,8 @@ local ImageLabel = require(_Package:WaitForChild("Molecules"):WaitForChild("Util
 local TextBox = require(_Package:WaitForChild("Molecules"):WaitForChild("Util"):WaitForChild("TextBox"))
 local TextLabel = require(_Package:WaitForChild("Molecules"):WaitForChild("Util"):WaitForChild("TextLabel"))
 local ViewportFrame = require(_Package:WaitForChild("Molecules"):WaitForChild("Util"):WaitForChild("ViewportFrame"))
+
+type Maid = Maid.Maid
 
 export type ButtonData = Types.ButtonData
 export type AppearanceData = Types.AppearanceData
@@ -214,5 +218,28 @@ sintesa.StyleUtil = Styles
 sintesa.TypeUtil = Types
 
 sintesa.SintesaEnum = Enums
+
+function sintesa.init(
+    maid : Maid,
+    isDarkMode : boolean,
+    
+    primary : Color3?,
+    secondary : Color3?,
+    tertiary : Color3?,
+
+    neutral : Color3?,
+    neutralVariant : Color3?,
+    shadow : Color3)
+    
+    sintesa.ColorUtil.setColorTheme(
+        primary or DynamicTheme.Color[Enums.ColorRole.Primary] ,
+        secondary or DynamicTheme.Color[Enums.ColorRole.Secondary],
+        tertiary or DynamicTheme.Color[Enums.ColorRole.Tertiary],
+        neutral or DynamicTheme.Color[Enums.ColorRole.Surface],
+        neutralVariant or DynamicTheme.Color[Enums.ColorRole.SurfaceDim] ,
+        shadow or DynamicTheme.Color[Enums.ColorRole.Shadow]
+    )
+    
+end
 
 return sintesa

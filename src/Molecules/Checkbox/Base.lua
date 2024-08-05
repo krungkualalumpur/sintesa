@@ -147,7 +147,6 @@ function interface.ColdFusion.new(
                                     return _id
                                 end, iconIdState) ,
                                 ImageRectOffset = _Computed(function(id : (number | IconData?)? )
-                                    print(id)
                                     local offset = if type(id) == "table" then Vector2.new(id.OffsetPerSize[1]*id.Size[1], id.OffsetPerSize[2]*id.Size[2]) else Vector2.new()
                                     return offset
                                 end, iconIdState) ,

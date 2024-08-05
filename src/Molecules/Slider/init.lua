@@ -467,7 +467,6 @@ function interface.ColdFusion.new(
         else
             buttonState:Set(Enums.ButtonState.Disabled)
         end
-        print(out.Interactable)
     end))
 
     return out

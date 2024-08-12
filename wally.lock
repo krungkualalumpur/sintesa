@@ -9,7 +9,7 @@ dependencies = []
 
 [[package]]
 name = "krungkualalumpur/sintesa"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [["ColdFusion8", "nightcycle/cold-fusion@8.0.0"], ["Fusion", "elttob/fusion@0.1.1-beta"], ["Maid", "nightcycle/maid@1.1.4"]]
 
 [[package]]

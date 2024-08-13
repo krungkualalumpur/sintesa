@@ -63,9 +63,12 @@ interface.ColdFusion = {}
 
 function interface.ColdFusion.new(
     maid : Maid,
+    
     isDark : CanBeState<boolean>,
-    onAction : () -> (),
+    actionText : CanBeState<string>,
+    supportingText : CanBeState<string>,
 
+    onAction : () -> (),
     onClose : (() -> ())?)
 
     local _fuse = ColdFusion.fuse(maid)
@@ -169,10 +172,6 @@ function interface.ColdFusion.new(
             end, appearanceDataState),
         })
     end
-
-
-    local actionText = "Action"
-    local supportingText = "Single-line snackbar with aticon"
 
     local out = _new("Frame")({
         AutomaticSize = Enum.AutomaticSize.XY,
